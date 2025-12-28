@@ -57,3 +57,38 @@ dependencies {
     testImplementation(libs.insert.koin.koin.test)
     testImplementation(libs.koin.test.junit5)
 }
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+kotlin {
+    jvmToolchain(21)
+}
+
+tasks.named("build") {
+    dependsOn(":shared:kspKotlinMetadata")
+}
+
+ksp {
+    arg("sourceSet", "main")
+}
+
+tasks.named<JavaExec>("run") {
+    val envFile = file(".env")
+    if (envFile.exists()) {
+        val envVars = envFile.readLines()
+            .mapNotNull { line ->
+                val trimmed = line.trim()
+                if (trimmed.isNotEmpty() && !trimmed.startsWith("#") && "=" in trimmed) {
+                    val (key, value) = trimmed.split("=", limit = 2)
+                    key.trim() to value.trim()
+                } else null
+            }.toMap()
+
+        environment(envVars)
+        println(".env loaded: (${envFile.absolutePath})")
+    } else {
+        println(".env not found: ${envFile.absolutePath}")
+    }
+}

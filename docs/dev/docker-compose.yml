@@ -1,0 +1,24 @@
+services:
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWD}
+    command:
+      - '--auth'
+      - '-f'
+      - '/etc/mongod.conf'
+    ports:
+      - "27017:27017"
+    volumes:
+      - /srv/mongo/data:/data/db
+      - /etc/localtime:/etc/localtime:ro
+      - ./conf/mongod.conf:/etc/mongod.conf
+      - /srv/mongo/log:/var/log/mongodb
+    networks:
+      database:
+        ipv4_address: 172.25.0.5
+        aliases:
+          - mongo
