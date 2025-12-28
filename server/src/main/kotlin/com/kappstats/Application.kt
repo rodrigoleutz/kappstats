@@ -1,5 +1,10 @@
 package com.kappstats
 
+import com.kappstats.plugin.configureKoin
+import com.kappstats.plugin.configureLogger
+import com.kappstats.plugin.configureRoutes
+import com.kappstats.plugin.configureSerialization
+import com.kappstats.plugin.configureWebSocket
 import io.ktor.server.application.Application
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
@@ -13,9 +18,9 @@ fun main() {
 }
 
 fun Application.module() {
-    routing {
-        get("/") {
-            call.respondText("Ktor: ${Greeting().greet()}")
-        }
-    }
+    configureLogger()
+    configureSerialization()
+    configureKoin()
+    configureRoutes()
+    configureWebSocket()
 }
