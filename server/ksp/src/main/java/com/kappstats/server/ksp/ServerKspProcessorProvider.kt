@@ -1,0 +1,12 @@
+package com.kappstats.server.ksp
+
+import com.google.devtools.ksp.processing.SymbolProcessor
+import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
+import com.google.devtools.ksp.processing.SymbolProcessorProvider
+
+class ServerKspProcessorProvider: SymbolProcessorProvider {
+
+    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
+        return ServerKspProcessor(environment)
+    }
+}

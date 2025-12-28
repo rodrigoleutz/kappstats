@@ -1,7 +1,7 @@
 [versions]
-agp = "8.11.2"
+agp = "8.13.1"
 android-compileSdk = "36"
-android-minSdk = "24"
+android-minSdk = "26"
 android-targetSdk = "36"
 androidx-activity = "1.12.2"
 androidx-appcompat = "1.7.1"
@@ -15,12 +15,40 @@ junit = "4.13.2"
 kotlin = "2.3.0"
 kotlinx-coroutines = "1.10.2"
 ktor = "3.3.3"
-logback = "1.5.22"
+
+# Custom
+constraintlayoutComposeMultiplatform = "0.6.1"
+cryptographyCore = "0.5.0"
+bignum = "0.3.10"
+commonsCodec = "1.20.0"
+composeIcons = "1.1.1"
+coreKtx = "1.7.0"
+filekitCore = "0.12.0"
+firebase-crashlytics = "3.0.6"
+google-services = "4.4.4"
+jakartaMail = "2.0.5"
+jakartaMailApi = "2.1.5"
+junit5 = "5.13.4"
+koin = "4.1.1"
+kermit = "2.0.8"
+kotlinxCoroutinesTest = "1.10.2"
+kotlinpoet = "2.2.0"
+kotlinxDatetime = "0.7.1"
+kotlinxSerializationJson = "1.9.0"
+krypto = "4.0.10"
+ksp = "2.3.0"
+lifecycleProcess = "2.10.0"
+logback = "1.5.23"
+mockkVersion = "1.14.7"
+mongodbDriverBom = "5.6.2"
+multiplatformSettings = "1.3.0"
+navigationCompose = "2.9.1"
+room = "2.8.4"
+sqlite = "2.6.2"
+
 
 [libraries]
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
-kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-junit = { module = "junit:junit", version.ref = "junit" }
+# Default
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-testExt-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-testExt" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso" }
@@ -29,10 +57,131 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
-logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+# ConstraintLayout
+constraintlayout-compose-multiplatform = { module = "tech.annexflow.compose:constraintlayout-compose-multiplatform", version.ref = "constraintlayoutComposeMultiplatform" }
+
+# Crypt
+cryptography-core = { module = "dev.whyoleg.cryptography:cryptography-core", version.ref = "cryptographyCore" }
+cryptography-provider-optimal = { module = "dev.whyoleg.cryptography:cryptography-provider-optimal", version.ref = "cryptographyCore" }
+
+# FileKit
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekitCore" }
+filekit-coil = { module = "io.github.vinceglb:filekit-coil", version.ref = "filekitCore" }
+filekit-dialogs = { module = "io.github.vinceglb:filekit-dialogs", version.ref = "filekitCore" }
+filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekitCore" }
+
+# Logger KMP
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+
+# BigNum KMP
+bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "bignum" }
+
+# SaltedHash
+commons-codec = { module = "commons-codec:commons-codec", version.ref = "commonsCodec" }
+
+# Email
+jakarta-mail = { module = "org.eclipse.angus:jakarta.mail", version.ref = "jakartaMail" }
+jakarta-mail-api = { module = "jakarta.mail:jakarta.mail-api", version.ref = "jakartaMailApi" }
+
+# JUnit 5 BOM
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit5" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+# Krypto
+krypto = { module = "com.soywiz.korlibs.krypto:krypto", version.ref = "krypto" }
+
+# Ktor
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth" }
+ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt" }
+ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation" }
+ktor-server-sessions = { module = "io.ktor:ktor-server-sessions" }
+ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages" }
+ktor-server-thymeleaf = { module = "io.ktor:ktor-server-thymeleaf" }
+ktor-server-websockets = { module = "io.ktor:ktor-server-websockets" }
 ktor-serverCore = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
-ktor-serverNetty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
+ktor-serverCio = { module = "io.ktor:ktor-server-cio-jvm", version.ref = "ktor" }
+ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
 ktor-serverTestHost = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+# Koin
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-compose = { module = "io.insert-koin:koin-compose" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
+koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation" }
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
+koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
+koin-test = { module = "io.insert-koin:koin-test" }
+koin-test-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin" }
+insert-koin-koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+
+# Test
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+junit = { module = "junit:junit", version.ref = "junit" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+
+# DateTime
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+
+# Serialization
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+# Mongo
+mongodb-driver-bom = { module = "org.mongodb:mongodb-driver-bom", version.ref = "mongodbDriverBom" }
+mongodb-driver-kotlin-coroutine = { module = "org.mongodb:mongodb-driver-kotlin-coroutine" }
+bson-kotlin = { module = "org.mongodb:bson-kotlin" }
+bson-kotlinx = { module = "org.mongodb:bson-kotlinx" }
+
+# Navigation
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+
+# Settings
+multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
+multiplatform-settings-serialization = { module = "com.russhwolf:multiplatform-settings-serialization", version.ref = "multiplatformSettings" }
+
+# Room
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+# Icons
+composeIcons-cssGg = { module = "br.com.devsrsouza.compose.icons:css-gg", version.ref = "composeIcons" }
+composeIcons-weatherIcons = { module = "br.com.devsrsouza.compose.icons:erikflowers-weather-icons", version.ref = "composeIcons" }
+composeIcons-evaIcons = { module = "br.com.devsrsouza.compose.icons:eva-icons", version.ref = "composeIcons" }
+composeIcons-feather = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "composeIcons" }
+composeIcons-fontAwesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "composeIcons" }
+composeIcons-lineAwesome = { module = "br.com.devsrsouza.compose.icons:line-awesome", version.ref = "composeIcons" }
+composeIcons-linea = { module = "br.com.devsrsouza.compose.icons:linea", version.ref = "composeIcons" }
+composeIcons-octicons = { module = "br.com.devsrsouza.compose.icons:octicons", version.ref = "composeIcons" }
+composeIcons-simpleIcons = { module = "br.com.devsrsouza.compose.icons:simple-icons", version.ref = "composeIcons" }
+composeIcons-tablerIcons = { module = "br.com.devsrsouza.compose.icons:tabler-icons", version.ref = "composeIcons" }
+
+# KSP
+symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+
+# KSP - KotlinPoet
+kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
+kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
+
+# Android Lifecycle Ads need
+androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -40,6 +189,11 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+androidx-room = { id = "androidx.room", version.ref = "room" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

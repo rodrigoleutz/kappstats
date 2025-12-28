@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
     application
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.ksp)
 }
 
 group = "com.kappstats"
@@ -14,10 +16,44 @@ application {
 }
 
 dependencies {
+
+    // Default -> Change engine to CIO
     implementation(projects.shared)
-    implementation(libs.logback)
-    implementation(libs.ktor.serverCore)
-    implementation(libs.ktor.serverNetty)
     testImplementation(libs.ktor.serverTestHost)
     testImplementation(libs.kotlin.testJunit)
+
+    implementation(projects.server.ksp)
+    ksp(projects.server.ksp)
+    implementation(libs.logback)
+    implementation(libs.ktor.serverCore)
+    implementation(libs.ktor.serverCio)
+    implementation(libs.ktor.server.call.logging)
+    implementation(libs.ktor.server.auth)
+    implementation(libs.ktor.server.auth.jwt)
+    implementation(libs.ktor.server.websockets)
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.server.thymeleaf)
+    implementation(libs.ktor.server.status.pages)
+    implementation(libs.ktor.server.cors)
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.logger.slf4j)
+    implementation(platform(libs.mongodb.driver.bom))
+    implementation(libs.mongodb.driver.kotlin.coroutine)
+    implementation(libs.bson.kotlin)
+    implementation(libs.bson.kotlinx)
+    implementation(libs.jakarta.mail.api)
+    implementation(libs.jakarta.mail)
+    implementation(libs.commons.codec)
+
+    // Test
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.ktor.serverTestHost)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
+    testImplementation(libs.insert.koin.koin.test)
+    testImplementation(libs.koin.test.junit5)
 }
