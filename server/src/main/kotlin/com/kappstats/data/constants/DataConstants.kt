@@ -6,4 +6,5 @@ object DataConstants {
     val databaseUser = System.getenv()["MONGODB_USER"] ?: "username"
     val databasePasswd = System.getenv()["MONGODB_PASSWD"] ?: "userpassword"
     val databaseString = "mongodb://$databaseUser:$databasePasswd@$databaseUrl"
+    val databaseName = "KAppStats"
 }
