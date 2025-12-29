@@ -12,6 +12,7 @@ androidx-testExt = "1.3.0"
 composeHotReload = "1.0.0"
 composeMultiplatform = "1.9.3"
 junit = "4.13.2"
+junitJupiter = "1.21.4"
 kotlin = "2.3.0"
 kotlinx-coroutines = "1.10.2"
 ktor = "3.3.3"
@@ -40,11 +41,13 @@ ksp = "2.3.0"
 lifecycleProcess = "2.10.0"
 logback = "1.5.23"
 mockkVersion = "1.14.7"
+mongodb = "1.21.4"
 mongodbDriverBom = "5.6.2"
 multiplatformSettings = "1.3.0"
 navigationCompose = "2.9.1"
 room = "2.8.4"
 sqlite = "2.6.2"
+testcontainers = "2.0.3"
 
 
 [libraries]
@@ -182,6 +185,10 @@ kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlin
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }
 core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
 
+# TestContainers
+testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
+mongodb = { module = "org.testcontainers:mongodb", version.ref = "mongodb" }
+junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "junitJupiter" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

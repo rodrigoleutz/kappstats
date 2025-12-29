@@ -56,6 +56,9 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.insert.koin.koin.test)
     testImplementation(libs.koin.test.junit5)
+    testImplementation(libs.testcontainers)
+    testImplementation(libs.mongodb)
+    testImplementation(libs.junit.jupiter)
 }
 
 tasks.test {

@@ -6,7 +6,9 @@ import com.kappstats.data.entity.Entity
 import com.kappstats.data.entity.EntityMapper
 import com.kappstats.model.user.Auth
 import org.bson.codecs.pojo.annotations.BsonId
+import org.bson.codecs.pojo.annotations.BsonIgnore
 import org.bson.types.ObjectId
+import kotlin.reflect.KProperty1
 
 data class AuthEntity(
     @field:BsonId override val _id: ObjectId,
@@ -15,9 +17,12 @@ data class AuthEntity(
     val salt: String,
     val hash: String,
     override val createdAt: AppDateTime,
-    override val updatedAt: List<AppDateTime>,
-    @field:Transient override val mapper: EntityMapper<Auth, AuthEntity> = Companion,
+    override val updatedAt: List<AppDateTime>
 ) : Entity<Auth> {
+
+    @get:BsonIgnore
+    override val mapper: EntityMapper<Auth, AuthEntity> = Companion
+
     companion object : EntityMapper<Auth, AuthEntity> {
         override fun fromModel(value: Auth, vararg args: Any): AuthEntity? {
             if (args.size != 2 || args.any { arg -> arg !is String }) return null
@@ -32,6 +37,39 @@ data class AuthEntity(
                 createdAt = value.createdAt,
                 updatedAt = value.updatedAt
             )
+        }
+
+        override fun propertyFromModel(property: KProperty1<Auth, Any>): KProperty1<AuthEntity, Any> =
+            when (property) {
+                Auth::id -> AuthEntity::_id
+                Auth::profileId -> AuthEntity::profileId
+                Auth::email -> AuthEntity::email
+                Auth::createdAt -> AuthEntity::createdAt
+                Auth::updatedAt -> AuthEntity::updatedAt
+                else -> AuthEntity::_id
+            }
+
+        override fun propertyWithValueFromModel(
+            property: KProperty1<Auth, Any>,
+            value: Any
+        ): Pair<KProperty1<AuthEntity, Any>, Any?> {
+            val responseValue = valueFromModelProperty(property, value)
+            val responseProperty = propertyFromModel(property)
+            return responseProperty to responseValue
+        }
+
+        override fun valueFromModelProperty(
+            property: KProperty1<Auth, Any>,
+            value: Any
+        ): Any? {
+            return when (property) {
+                Auth::id -> if (value is String) ObjectId(value) else null
+                Auth::profileId -> value
+                Auth::email -> if (value is Email) value.asString else null
+                Auth::createdAt -> value
+                Auth::updatedAt -> value
+                else -> null
+            }
         }
     }
 
