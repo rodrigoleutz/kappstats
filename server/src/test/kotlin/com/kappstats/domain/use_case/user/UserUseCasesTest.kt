@@ -13,14 +13,16 @@ import com.kappstats.domain.constants.DomainConstants
 import com.kappstats.domain.core.security.hashing.HashingService
 import com.kappstats.domain.core.security.hashing.SHA256HashingServiceImpl
 import com.kappstats.domain.core.security.token.JwtTokenServiceImpl
-import com.kappstats.domain.core.security.token.TokenConfig
 import com.kappstats.domain.core.security.token.TokenService
 import com.kappstats.dto.request.user.SignInRequest
 import com.kappstats.dto.request.user.SignUpRequest
+import com.mongodb.client.model.Filters
+import com.mongodb.kotlin.client.coroutine.MongoCollection
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertInstanceOf
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
@@ -65,6 +67,21 @@ class UserUseCasesTest {
                 hashingService = hashingService
             )
         )
+    }
+
+    @AfterEach
+    fun setDown() = runTest {
+        clearDatabase()
+    }
+
+    private suspend fun MongoCollection<*>.deleteMany() {
+        val result = this.deleteMany(Filters.empty())
+        println("Deleted documents: ${result.deletedCount}")
+    }
+
+    suspend fun clearDatabase() {
+        authRepository.generic.database.collection.deleteMany()
+        profileRepository.generic.database.collection.deleteMany()
     }
 
     @Test
