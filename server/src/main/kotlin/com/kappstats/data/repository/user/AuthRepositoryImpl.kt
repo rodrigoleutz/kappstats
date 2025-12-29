@@ -64,7 +64,7 @@ class AuthRepositoryImpl(
             val entity = database.getByProperty(AuthEntity::email, email.asString)
                 ?: return null
             val auth = entity.toModel() ?: return null
-            val saltedHash = SaltedHash(entity.salt, entity.hash)
+            val saltedHash = SaltedHash(salt = entity.salt, hash = entity.hash)
             auth to saltedHash
         } catch (e: Exception) {
             e.printStackTrace()
