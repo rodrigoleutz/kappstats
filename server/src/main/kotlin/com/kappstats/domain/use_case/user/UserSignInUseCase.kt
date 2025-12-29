@@ -8,6 +8,7 @@ import com.kappstats.domain.core.security.token.TokenClaim
 import com.kappstats.domain.core.security.token.TokenService
 import com.kappstats.dto.request.user.SignInRequest
 import io.ktor.http.HttpStatusCode
+import java.util.UUID
 
 class UserSignInUseCase(
     private val authRepository: AuthRepository,
@@ -16,7 +17,7 @@ class UserSignInUseCase(
 ) {
     suspend operator fun invoke(signInRequest: SignInRequest): Resource<String> {
         return try {
-            val authAndSaltedHash = authRepository.getSaltedHash(signInRequest.email)
+            val authAndSaltedHash = authRepository.getAuthAndSaltedHash(signInRequest.email)
                 ?: return Resource.Failure(
                     status = HttpStatusCode.Unauthorized,
                     message = "User not exists.",
@@ -34,6 +35,9 @@ class UserSignInUseCase(
                 ),
                 TokenClaim(
                     DomainConstants.PROFILE_ID, authAndSaltedHash.first.profileId
+                ),
+                TokenClaim(
+                    DomainConstants.TOKEN_ID, UUID.randomUUID().toString()
                 )
             )
             Resource.Success(data = token)

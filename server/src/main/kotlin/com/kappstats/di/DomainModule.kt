@@ -5,6 +5,7 @@ import com.kappstats.domain.core.security.hashing.HashingService
 import com.kappstats.domain.core.security.hashing.SHA256HashingServiceImpl
 import com.kappstats.domain.core.security.token.JwtTokenServiceImpl
 import com.kappstats.domain.core.security.token.TokenService
+import com.kappstats.domain.use_case.user.UserSignInUseCase
 import com.kappstats.domain.use_case.user.UserSignUpUseCase
 import com.kappstats.domain.use_case.user.UserUseCases
 import org.koin.core.module.dsl.factoryOf
@@ -16,6 +17,7 @@ val domainModule = module {
     singleOf(::SHA256HashingServiceImpl) bind HashingService::class
     single<TokenService> { JwtTokenServiceImpl(DomainConstants.tokenConfig) }
 
+    factoryOf(::UserSignInUseCase)
     factoryOf(::UserSignUpUseCase)
     factoryOf(::UserUseCases)
 }

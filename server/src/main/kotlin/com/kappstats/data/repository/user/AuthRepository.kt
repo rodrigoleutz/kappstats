@@ -9,5 +9,5 @@ import com.kappstats.model.user.Auth
 interface AuthRepository : Repository<Auth, AuthEntity> {
     suspend fun add(value: Auth, saltedHash: SaltedHash): Auth?
     suspend fun deleteById(value: String): Boolean
-    suspend fun getSaltedHash(email: Email): Pair<Auth, SaltedHash>?
+    suspend fun getAuthAndSaltedHash(email: Email): Pair<Auth, SaltedHash>?
 }

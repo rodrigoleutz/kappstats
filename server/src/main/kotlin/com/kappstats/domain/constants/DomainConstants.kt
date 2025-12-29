@@ -18,4 +18,5 @@ object DomainConstants {
 
     const val AUTH_ID = "authId"
     const val PROFILE_ID = "profileId"
+    const val TOKEN_ID = "tokenId"
 }

@@ -59,7 +59,7 @@ class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun getSaltedHash(email: Email): Pair<Auth,SaltedHash>? {
+    override suspend fun getAuthAndSaltedHash(email: Email): Pair<Auth, SaltedHash>? {
         return try {
             val entity = database.getByProperty(AuthEntity::email, email.asString)
                 ?: return null
