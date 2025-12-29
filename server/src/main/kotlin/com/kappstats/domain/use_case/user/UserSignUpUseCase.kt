@@ -10,7 +10,6 @@ import com.kappstats.model.user.Profile
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import org.bson.types.ObjectId
@@ -21,14 +20,12 @@ class UserSignUpUseCase(
     private val hashingService: HashingService
 ) {
 
-    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-
     suspend operator fun invoke(signUpRequest: SignUpRequest): Resource<Boolean> {
         val saltedHash = hashingService.generateSaltedHash(signUpRequest.password.asString)
         val profileId = ObjectId().toHexString()
         val authId = ObjectId().toHexString()
         return try {
-            val authAddTask = scope.async {
+            val authAddTask = CoroutineScope(Dispatchers.IO).async {
                 val auth = Auth(
                     id = authId,
                     profileId = profileId,
@@ -36,7 +33,7 @@ class UserSignUpUseCase(
                 )
                 authRepository.add(auth, saltedHash)
             }
-            val profileAddTask = scope.async {
+            val profileAddTask = CoroutineScope(Dispatchers.IO).async {
                 val profile = Profile(
                     id = profileId,
                     name = signUpRequest.name,
@@ -48,10 +45,13 @@ class UserSignUpUseCase(
             awaitAll(authAddTask, profileAddTask)
             Resource.Success(data = true, status = HttpStatusCode.Created)
         } catch (e: Exception) {
-            e.printStackTrace()
-            val deleteProfile = profileRepository.generic.deleteById(profileId)
-            val deleteAuth = authRepository.deleteById(authId)
-            Resource.Failure(status = HttpStatusCode.ExpectationFailed)
+            profileRepository.generic.deleteById(profileId)
+            authRepository.deleteById(authId)
+            Resource.Failure(
+                status = HttpStatusCode.ExpectationFailed,
+                message = e.message,
+                origin = this@UserSignUpUseCase
+            )
         }
     }
 }

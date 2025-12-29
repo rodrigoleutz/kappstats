@@ -16,6 +16,7 @@ import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 
 class UserUseCasesTest {
@@ -35,7 +36,7 @@ class UserUseCasesTest {
     private lateinit var userUseCases: UserUseCases
 
     @BeforeEach
-    fun setUp(){
+    fun setUp() {
         val mongoApi = MongoApi(
             serverUrl = MongoTestContainer.connectionString,
             databaseName = "KAppStatsTest"
@@ -57,5 +58,27 @@ class UserUseCasesTest {
         val signUp = userUseCases.signUp.invoke(signUpRequest)
         assert(signUp.isSuccess)
         assertEquals(HttpStatusCode.Created, signUp.statusCode)
+    }
+
+    @Test
+    fun `SignUp use case email failure`() = runTest {
+        assertThrows<IllegalArgumentException> {
+            userUseCases.signUp.invoke(
+                signUpRequest.copy(
+                    email = Email("teste@teste")
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `SignUp use case name blank failure`() = runTest {
+        assertThrows<IllegalArgumentException> {
+            userUseCases.signUp.invoke(
+                signUpRequest.copy(
+                    name = ""
+                )
+            )
+        }
     }
 }

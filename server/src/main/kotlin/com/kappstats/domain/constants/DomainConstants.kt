@@ -15,4 +15,7 @@ object DomainConstants {
         realm = jwtRealm,
         secret = jwtSecret
     )
+
+    const val AUTH_ID = "authId"
+    const val PROFILE_ID = "profileId"
 }
