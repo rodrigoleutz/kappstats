@@ -144,4 +144,30 @@ class UserUseCasesTest {
         val authList = authRepository.generic.database.getAllWithLimitAndSkip()
         assertEquals(1, authList.size)
     }
+
+    @Test
+    fun `Decode token service`() = runTest {
+        val signUp = userUseCases.signUp.invoke(signUpRequest)
+        assert(signUp.isSuccess)
+        val signInRequest = SignInRequest(
+            email = signUpRequest.email,
+            password = signUpRequest.password
+        )
+        val signIn = userUseCases.signIn.invoke(signInRequest)
+        val token = signIn.asDataOrNull
+        assert(signIn.isSuccess)
+        assertInstanceOf<String>(token)
+        val authList = authRepository.generic.database.getAllWithLimitAndSkip()
+        assertEquals(1, authList.size)
+        val auth = authList.first()
+        val decodedToken = tokenService.decode(token)
+        assertEquals(auth._id.toHexString(), decodedToken?.get(DomainConstants.AUTH_ID))
+        assertEquals(auth.profileId, decodedToken?.get(DomainConstants.PROFILE_ID))
+    }
+
+    @Test
+    fun `Decode token error`() = runTest {
+        val decodedToken = tokenService.decode("kjadlkajkhdkjfhalk")
+        assertEquals(null, decodedToken)
+    }
 }

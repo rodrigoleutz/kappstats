@@ -3,6 +3,7 @@ package com.kappstats
 import com.kappstats.plugin.configureKoin
 import com.kappstats.plugin.configureLogger
 import com.kappstats.plugin.configureRoutes
+import com.kappstats.plugin.configureSecurity
 import com.kappstats.plugin.configureSerialization
 import com.kappstats.plugin.configureWebSocket
 import io.ktor.server.application.Application
@@ -21,6 +22,7 @@ fun Application.module() {
     configureLogger()
     configureSerialization()
     configureKoin()
+    configureSecurity()
     configureRoutes()
     configureWebSocket()
 }

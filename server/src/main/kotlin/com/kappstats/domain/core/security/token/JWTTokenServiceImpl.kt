@@ -1,18 +1,17 @@
 package com.kappstats.domain.core.security.token
 
 import com.auth0.jwt.JWT
+import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import io.ktor.server.auth.jwt.JWTCredential
+import io.ktor.server.auth.jwt.JWTPrincipal
 import java.util.Date
 
-class JwtTokenServiceImpl(private val config: TokenConfig) : TokenService {
+class JwtTokenServiceImpl(override val config: TokenConfig) : TokenService {
 
     override fun decode(token: String): Map<String, String>? {
         return try {
-            val decodedJWT = JWT.require(Algorithm.HMAC256(config.secret))
-                .withIssuer(config.issuer)
-                .withAudience(config.audience)
-                .build()
-                .verify(token)
+            val decodedJWT = verifier().verify(token)
             decodedJWT.claims.mapValues { (_, claim) ->
                 claim.asString() ?: claim.asInt()?.toString()
                 ?: claim.asBoolean()?.toString()
@@ -35,4 +34,16 @@ class JwtTokenServiceImpl(private val config: TokenConfig) : TokenService {
         }
         return token.sign(Algorithm.HMAC256(config.secret))
     }
+
+    override fun validate(credential: JWTCredential): Any? {
+        //TODO: Validate token in database
+        return if (credential.payload.audience.contains(config.audience)) JWTPrincipal(credential.payload) else null
+    }
+
+    override fun verifier(): JWTVerifier =
+        JWT.require(Algorithm.HMAC256(config.secret))
+            .withIssuer(config.issuer)
+            .withAudience(config.audience)
+            .build()
+
 }
