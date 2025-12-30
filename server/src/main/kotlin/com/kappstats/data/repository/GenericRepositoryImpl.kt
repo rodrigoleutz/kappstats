@@ -12,41 +12,13 @@ class GenericRepositoryImpl<M : Model, E : Entity<M>>(
 ) : GenericRepository<M, E> {
 
     override suspend fun add(value: M): M? {
-        return try {
-            val entityValue = entityMapper.fromModel(value) as E
-            database.add(entityValue)?.toModel()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        val entityValue = entityMapper.fromModel(value) as E
+        return database.add(entityValue)?.toModel()
     }
 
-    override suspend fun delete(value: M): Boolean {
-        return try {
-            database.delete(value.id)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
-    }
-
-    override suspend fun deleteById(value: String): Boolean {
-        return try {
-            database.delete(value)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
-    }
-
-    override suspend fun getById(value: String): M? {
-        return try {
-            database.getById(value)?.toModel()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
+    override suspend fun delete(value: M): Boolean = database.delete(value.id)
+    override suspend fun deleteById(value: String): Boolean = database.delete(value)
+    override suspend fun getById(value: String): M? = database.getById(value)?.toModel()
 
     override suspend fun getListByProperty(
         property: KProperty1<M, Any>,
@@ -54,14 +26,9 @@ class GenericRepositoryImpl<M : Model, E : Entity<M>>(
         limit: Int,
         skip: Int
     ): List<M> {
-        return try {
-            val entityProperty = entityMapper.propertyFromModel(property) as KProperty1<E, Any>
-            return database.getListByProperty(entityProperty, value, limit, skip)
-                .mapNotNull { it.toModel() }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
+        val entityProperty = entityMapper.propertyFromModel(property) as KProperty1<E, Any>
+        return database.getListByProperty(entityProperty, value, limit, skip)
+            .mapNotNull { it.toModel() }
     }
 
     override suspend fun getListByPropertyList(
@@ -70,25 +37,15 @@ class GenericRepositoryImpl<M : Model, E : Entity<M>>(
         limit: Int,
         skip: Int
     ): List<M> {
-        return try {
-            val entityProperty = entityMapper.propertyFromModel(property) as KProperty1<E, Any>
-            val entityValueList =
-                value.map { entityMapper.valueFromModelProperty(property, value) }
-            return database.getListByPropertyList(entityProperty, entityValueList, limit, skip)
-                .mapNotNull { it.toModel() }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
+        val entityProperty = entityMapper.propertyFromModel(property) as KProperty1<E, Any>
+        val entityValueList =
+            value.map { entityMapper.valueFromModelProperty(property, value) }
+        return database.getListByPropertyList(entityProperty, entityValueList, limit, skip)
+            .mapNotNull { it.toModel() }
     }
 
     override suspend fun update(value: M): M? {
-        return try {
-            val entityValue = entityMapper.fromModel(value) as E
-            return database.update(value.id, entityValue)?.toModel()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        val entityValue = entityMapper.fromModel(value) as E
+        return database.update(value.id, entityValue)?.toModel()
     }
 }

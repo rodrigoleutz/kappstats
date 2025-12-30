@@ -39,36 +39,19 @@ class AuthRepositoryImpl(
     override suspend fun add(
         value: Auth,
         saltedHash: SaltedHash
-    ): Auth? {
-        return try {
-            AuthEntity.fromModel(value, saltedHash.salt, saltedHash.hash)?.let { entity ->
-                database.add(entity)?.toModel()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+    ): Auth? = AuthEntity.fromModel(value, saltedHash.salt, saltedHash.hash)?.let { entity ->
+        database.add(entity)?.toModel()
     }
 
     override suspend fun deleteById(value: String): Boolean {
-        return try {
-            database.delete(value)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
+        return database.delete(value)
     }
 
     override suspend fun getAuthAndSaltedHash(email: Email): Pair<Auth, SaltedHash>? {
-        return try {
-            val entity = database.getByProperty(AuthEntity::email, email.asString)
-                ?: return null
-            val auth = entity.toModel() ?: return null
-            val saltedHash = SaltedHash(salt = entity.salt, hash = entity.hash)
-            auth to saltedHash
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        val entity = database.getByProperty(AuthEntity::email, email.asString)
+            ?: return null
+        val auth = entity.toModel() ?: return null
+        val saltedHash = SaltedHash(salt = entity.salt, hash = entity.hash)
+        return auth to saltedHash
     }
 }

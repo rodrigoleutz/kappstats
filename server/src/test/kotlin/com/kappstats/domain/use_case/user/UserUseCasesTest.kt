@@ -129,4 +129,19 @@ class UserUseCasesTest {
         assert(signIn.isSuccess)
         assertInstanceOf<String>(signIn.asDataOrNull)
     }
+
+    @Test
+    fun `SignUp failure conflict`() = runTest {
+        val signUp = userUseCases.signUp.invoke(signUpRequest)
+        assert(signUp.isSuccess)
+        val errorSignUp = userUseCases.signUp.invoke(signUpRequest.copy(
+            username = Username("hello123")
+        ))
+        assert(!errorSignUp.isSuccess)
+        assertEquals(HttpStatusCode.Conflict, errorSignUp.statusCode)
+        val profileList = profileRepository.generic.database.getAllWithLimitAndSkip()
+        assertEquals(1, profileList.size)
+        val authList = authRepository.generic.database.getAllWithLimitAndSkip()
+        assertEquals(1, authList.size)
+    }
 }

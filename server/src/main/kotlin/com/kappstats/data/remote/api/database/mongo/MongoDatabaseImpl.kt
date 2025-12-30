@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.bson.conversions.Bson
 import org.bson.types.ObjectId
-import org.koin.core.component.inject
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.jvm.jvmErasure
@@ -61,52 +60,25 @@ class MongoDatabaseImpl<M: Model, T: Entity<M>>(
         }
     }
 
-    override suspend fun delete(id: String): Boolean {
-        return try {
-            collection.deleteOne("_id" eq ObjectId(id)).deletedCount > 0
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
-    }
+    override suspend fun delete(id: String): Boolean =
+        collection.deleteOne("_id" eq ObjectId(id)).deletedCount > 0
 
     override suspend fun deleteByProperty(
         property: KProperty1<T, Any?>,
         value: Any?,
-    ): Boolean {
-        return try {
-            collection.deleteOne(property.name eq value).deletedCount > 0
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
-    }
+    ): Boolean = collection.deleteOne(property.name eq value).deletedCount > 0
 
     override suspend fun getByProperty(
         property: KProperty1<T, Any?>,
         value: Any?,
-    ): T? {
-        return try {
-            collection.find(property eq value).firstOrNull()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
+    ): T? = collection.find(property eq value).firstOrNull()
 
     override suspend fun getListByProperty(
         property: KProperty1<T, Any?>,
         value: Any?,
         limit: Int,
         skip: Int,
-    ): List<T> {
-        return try {
-            collection.find(property eq value).skip(skip).limit(limit).toList()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
-    }
+    ): List<T> = collection.find(property eq value).skip(skip).limit(limit).toList()
 
     override suspend fun <R> getListByPropertyList(
         property: KProperty1<T, R>,
@@ -114,21 +86,16 @@ class MongoDatabaseImpl<M: Model, T: Entity<M>>(
         limit: Int,
         skip: Int,
     ): List<T> {
-        return try {
-            val filterList = mutableListOf<Bson>()
-            value.forEach {
-                filterList.add(
-                    property eq if (property.returnType.jvmErasure == ObjectId::class)
-                        ObjectId(it.toString())
-                    else it
-                )
-            }
-            val filters = Filters.or(filterList)
-            collection.find(filters).skip(skip).limit(limit).toList()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
+        val filterList = mutableListOf<Bson>()
+        value.forEach {
+            filterList.add(
+                property eq if (property.returnType.jvmErasure == ObjectId::class)
+                    ObjectId(it.toString())
+                else it
+            )
         }
+        val filters = Filters.or(filterList)
+        return collection.find(filters).skip(skip).limit(limit).toList()
     }
 
     override suspend fun getListByPropertyContains(
@@ -136,14 +103,7 @@ class MongoDatabaseImpl<M: Model, T: Entity<M>>(
         value: Any?,
         limit: Int,
         skip: Int,
-    ): List<T> {
-        return try {
-            collection.find(property containsIgnoreCase value).skip(skip).limit(limit).toList()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
-    }
+    ): List<T> = collection.find(property containsIgnoreCase value).skip(skip).limit(limit).toList()
 
     override suspend fun getById(id: String, limit: Int, skip: Int): T? {
         val objectId = try {
@@ -164,9 +124,8 @@ class MongoDatabaseImpl<M: Model, T: Entity<M>>(
         return if (result.modifiedCount > 0) item else null
     }
 
-    override suspend fun getAllWithLimitAndSkip(limit: Int, skip: Int): List<T> {
-        return collection.find().toList()
-    }
+    override suspend fun getAllWithLimitAndSkip(limit: Int, skip: Int): List<T> =
+        collection.find().toList()
 
     override suspend fun <V : Any> setField(
         id: String,

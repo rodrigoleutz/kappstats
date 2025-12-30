@@ -7,6 +7,7 @@ import com.kappstats.domain.core.security.hashing.HashingService
 import com.kappstats.dto.request.user.SignUpRequest
 import com.kappstats.model.user.Auth
 import com.kappstats.model.user.Profile
+import com.mongodb.MongoWriteException
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,14 +45,25 @@ class UserSignUpUseCase(
             }
             awaitAll(authAddTask, profileAddTask)
             Resource.Success(data = true, status = HttpStatusCode.Created)
+        } catch (e: MongoWriteException) {
+            removeData(authId, profileId)
+            return Resource.Failure(
+                status = HttpStatusCode.Conflict,
+                message = e.toString(),
+                origin = this@UserSignUpUseCase
+            )
         } catch (e: Exception) {
-            profileRepository.generic.deleteById(profileId)
-            authRepository.deleteById(authId)
+            removeData(authId, profileId)
             Resource.Failure(
                 status = HttpStatusCode.ExpectationFailed,
                 message = e.message,
                 origin = this@UserSignUpUseCase
             )
         }
+    }
+
+    private suspend fun removeData(authId: String, profileId: String) {
+        profileRepository.generic.deleteById(profileId)
+        authRepository.deleteById(authId)
     }
 }
