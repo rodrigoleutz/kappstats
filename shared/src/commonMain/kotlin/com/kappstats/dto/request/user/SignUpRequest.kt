@@ -14,12 +14,6 @@ data class SignUpRequest(
 ) {
 
     init {
-        require(isValid(this)) { "Invalid name, string is blank." }
-    }
-
-    companion object {
-        fun isValid(signUpRequest: SignUpRequest): Boolean {
-            return signUpRequest.name.isNotBlank()
-        }
+        require(name.isNotBlank()) { "Invalid name, string is blank." }
     }
 }
