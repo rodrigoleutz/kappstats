@@ -16,6 +16,7 @@ import com.kappstats.plugin.configureRoutes
 import com.kappstats.plugin.configureSecurity
 import com.kappstats.plugin.configureSerialization
 import com.kappstats.plugin.configureWebSocket
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -27,7 +28,6 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
-import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import kotlinx.coroutines.test.runTest
@@ -95,7 +95,7 @@ class UserRoutesTest {
     }
 
     fun ApplicationTestBuilder.configuredClient() = createClient {
-        this@createClient.install(io.ktor.client.plugins.contentnegotiation.ContentNegotiation) {
+        this@createClient.install(ContentNegotiation) {
             json()
         }
     }

@@ -1,5 +1,5 @@
 package com.kappstats.data.service
 
-interface Service<T> {
-    suspend fun <R> run(value: R): T?
+interface Service<R, T> {
+    suspend fun run(value: R): T?
 }
