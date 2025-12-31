@@ -43,15 +43,40 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(projects.shared)
+            // Default
+            api(compose.runtime)
+            api(compose.foundation)
+            api(compose.material3)
+            api(compose.ui)
+            api(compose.components.resources)
+            api(compose.components.uiToolingPreview)
+            api(libs.androidx.lifecycle.viewmodelCompose)
+            api(libs.androidx.lifecycle.runtimeCompose)
+            api(projects.shared)
+
+            // Serialization
+            api(libs.kotlinx.serialization.json)
+
+            // Logger
+            api(libs.kermit)
+
+            // Navigation
+            api(libs.navigation.compose)
+
+            // Icons
+            api(libs.composeIcons.cssGg)
+            api(libs.composeIcons.weatherIcons)
+            api(libs.composeIcons.evaIcons)
+            api(libs.composeIcons.feather)
+            api(libs.composeIcons.fontAwesome)
+            api(libs.composeIcons.lineAwesome)
+            api(libs.composeIcons.linea)
+            api(libs.composeIcons.octicons)
+            api(libs.composeIcons.simpleIcons)
+            api(libs.composeIcons.tablerIcons)
+
+            // Settings
+            api(libs.multiplatform.settings.no.arg)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
