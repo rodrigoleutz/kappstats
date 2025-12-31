@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.1"
+agp = "8.13.2"
 android-compileSdk = "36"
 android-minSdk = "26"
 android-targetSdk = "36"
@@ -23,13 +23,16 @@ cryptographyCore = "0.5.0"
 bignum = "0.3.10"
 commonsCodec = "1.20.0"
 composeIcons = "1.1.1"
+compose-multiplatform-adaptive = "1.3.0-alpha03"
+compose-multiplatform-lifecycle = "2.10.0-alpha07"
+compose-multiplatform-navigation3-browser = "0.2.0"
 coreKtx = "1.7.0"
 filekitCore = "0.12.0"
 firebase-crashlytics = "3.0.6"
 google-services = "4.4.4"
 jakartaMail = "2.0.5"
 jakartaMailApi = "2.1.5"
-junit5 = "5.13.4"
+junit5 = "6.0.1"
 koin = "4.1.1"
 kermit = "2.0.8"
 kotlinxCoroutinesTest = "1.10.2"
@@ -39,12 +42,13 @@ kotlinxSerializationJson = "1.9.0"
 krypto = "4.0.10"
 ksp = "2.3.0"
 lifecycleProcess = "2.10.0"
+lifecycleViewmodelNav3 = "2.10.0"
 logback = "1.5.23"
 mockkVersion = "1.14.7"
 mongodb = "1.21.4"
 mongodbDriverBom = "5.6.2"
 multiplatformSettings = "1.3.0"
-navigationCompose = "2.9.1"
+multiplatform-nav3-ui = "1.0.0-alpha06"
 room = "2.8.4"
 sqlite = "2.6.2"
 testcontainers = "2.0.3"
@@ -151,7 +155,10 @@ bson-kotlin = { module = "org.mongodb:bson-kotlin" }
 bson-kotlinx = { module = "org.mongodb:bson-kotlinx" }
 
 # Navigation
-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+navigation-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "multiplatform-nav3-ui" }
+navigation-material3-adaptiveNavigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "compose-multiplatform-adaptive" }
+navigation-lifecycle-viewmodelNavigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "compose-multiplatform-lifecycle" }
+navigation3-browser = { module = "com.github.terrakok:navigation3-browser", version.ref = "compose-multiplatform-navigation3-browser" }
 
 # Settings
 multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }

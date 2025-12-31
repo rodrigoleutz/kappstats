@@ -2,11 +2,12 @@ package com.kappstats
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.rememberNavBackStack
 import com.kappstats.di.dataModule
 import com.kappstats.di.domainModule
 import com.kappstats.di.presentationModule
 import com.kappstats.presentation.core.MainScreen
+import com.kappstats.presentation.core.navigation.AppScreens
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.core.context.startKoin
 import org.koin.mp.KoinPlatformTools
@@ -16,8 +17,11 @@ import org.koin.mp.KoinPlatformTools
 fun App() {
     commonStartKoin()
     MaterialTheme {
-        val navHostController = rememberNavController()
-        MainScreen(navHostController)
+        val backStack = rememberNavBackStack(
+            configuration = AppScreens.configuration,
+            AppScreens.Splash
+        )
+        MainScreen(backStack)
     }
 }
 

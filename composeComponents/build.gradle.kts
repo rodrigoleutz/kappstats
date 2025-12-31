@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.androidLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -10,12 +11,8 @@ plugins {
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
-    
+    androidTarget()
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -40,7 +37,6 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
             // Default
@@ -61,7 +57,9 @@ kotlin {
             api(libs.kermit)
 
             // Navigation
-            api(libs.navigation.compose)
+            api(libs.navigation.navigation3.ui)
+            api(libs.navigation.material3.adaptiveNavigation3)
+            api(libs.navigation.lifecycle.viewmodelNavigation3)
 
             // Icons
             api(libs.composeIcons.cssGg)
@@ -85,6 +83,9 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
         }
+        webMain.dependencies {
+            api(libs.navigation3.browser)
+        }
     }
 }
 
@@ -100,9 +101,6 @@ android {
     namespace = "com.kappstats.components"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -112,8 +110,4 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-}
-
-dependencies {
-    debugImplementation(compose.uiTooling)
 }
