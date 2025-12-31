@@ -33,6 +33,7 @@ plugins {
 }
 
 include(":composeApp")
+include(":composeComponents")
 include(":server")
 include(":shared")
 include(":server:ksp")
