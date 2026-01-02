@@ -2,6 +2,7 @@ package com.kappstats.data.entity
 
 import com.kappstats.contracts.Model
 import com.kappstats.custom_object.app_date_time.AppDateTime
+import com.kappstats.data.entity.user.AuthEntity
 import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
 import kotlin.reflect.KProperty1
@@ -20,7 +21,11 @@ interface EntityMapper<M : Model, E : Entity<M>> {
     fun propertyWithValueFromModel(
         property: KProperty1<M, Any>,
         value: Any
-    ): Pair<KProperty1<E, Any>, Any?>
+    ): Pair<KProperty1<E, Any>, Any?> {
+        val responseValue = valueFromModelProperty(property, value)
+        val responseProperty = propertyFromModel(property)
+        return responseProperty to responseValue
+    }
     fun valueFromModelProperty(
         property: KProperty1<M, Any>,
         value: Any

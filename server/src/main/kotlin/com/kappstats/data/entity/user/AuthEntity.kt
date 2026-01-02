@@ -49,15 +49,6 @@ data class AuthEntity(
                 else -> AuthEntity::_id
             }
 
-        override fun propertyWithValueFromModel(
-            property: KProperty1<Auth, Any>,
-            value: Any
-        ): Pair<KProperty1<AuthEntity, Any>, Any?> {
-            val responseValue = valueFromModelProperty(property, value)
-            val responseProperty = propertyFromModel(property)
-            return responseProperty to responseValue
-        }
-
         override fun valueFromModelProperty(
             property: KProperty1<Auth, Any>,
             value: Any

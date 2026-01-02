@@ -48,15 +48,6 @@ data class ProfileEntity(
                 else -> ProfileEntity::_id
             }
 
-        override fun propertyWithValueFromModel(
-            property: KProperty1<Profile, Any>,
-            value: Any
-        ): Pair<KProperty1<ProfileEntity, Any>, Any?> {
-            val responseProperty = propertyFromModel(property)
-            val responseValue = valueFromModelProperty(property, value)
-            return responseProperty to responseValue
-        }
-
         override fun valueFromModelProperty(
             property: KProperty1<Profile, Any>,
             value: Any

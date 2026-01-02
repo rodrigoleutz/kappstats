@@ -3,6 +3,7 @@ package com.kappstats.presentation.core
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +16,7 @@ import com.kappstats.components.part.widget.top_bar.TopBarWidget
 import com.kappstats.presentation.core.navigation.AppNavigation
 import com.kappstats.presentation.core.state.MainStateHolder
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 
 @Composable
@@ -28,7 +30,7 @@ fun MainScreen(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-
+            
         }
     ) {
         Scaffold(

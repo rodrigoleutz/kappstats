@@ -37,6 +37,7 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
+            api(libs.ktor.client.cio)
         }
         commonMain.dependencies {
             // Default
@@ -75,6 +76,14 @@ kotlin {
 
             // Settings
             api(libs.multiplatform.settings.no.arg)
+
+            // Ktor
+            api(libs.ktor.client.core)
+            api(libs.ktor.client.auth)
+            api(libs.ktor.client.content.negotiation)
+            api(libs.ktor.serialization.kotlinx.json)
+            api(libs.ktor.client.websockets)
+            api(libs.ktor.client.logging)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -82,9 +91,11 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            api(libs.ktor.client.cio)
         }
         webMain.dependencies {
             api(libs.navigation3.browser)
+            api(libs.ktor.client.js)
         }
     }
 }
