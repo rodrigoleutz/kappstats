@@ -2,7 +2,7 @@ package com.kappstats.data.entity.user
 
 import com.kappstats.custom_object.app_date_time.AppDateTime
 import com.kappstats.custom_object.email.Email
-import com.kappstats.data.entity.Entity
+import com.kappstats.data.entity.EntityWithModel
 import com.kappstats.data.entity.EntityMapper
 import com.kappstats.model.user.Auth
 import org.bson.codecs.pojo.annotations.BsonId
@@ -18,7 +18,7 @@ data class AuthEntity(
     val hash: String,
     override val createdAt: AppDateTime,
     override val updatedAt: List<AppDateTime>
-) : Entity<Auth> {
+) : EntityWithModel<Auth> {
 
     @get:BsonIgnore
     override val mapper: EntityMapper<Auth, AuthEntity> = Companion

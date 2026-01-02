@@ -19,7 +19,7 @@ import java.util.UUID
 
 class EmailServiceImpl : EmailService {
 
-    override suspend fun run(value: EmailRequest): EmailResponse {
+    override suspend fun exec(value: EmailRequest): EmailResponse {
         val result = send(
             smtp = value.smtp,
             username = value.username,

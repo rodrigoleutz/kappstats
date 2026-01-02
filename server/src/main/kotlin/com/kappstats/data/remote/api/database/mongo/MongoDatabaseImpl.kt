@@ -1,6 +1,5 @@
 package com.kappstats.data.remote.api.database.mongo
 
-import com.kappstats.contracts.Model
 import com.kappstats.data.entity.Entity
 import com.kappstats.data.remote.api.database.Database
 import com.kappstats.data.remote.api.database.TableIndex
@@ -18,10 +17,10 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.jvm.jvmErasure
 
-class MongoDatabaseImpl<M: Model, T: Entity<M>>(
+class MongoDatabaseImpl<T: Entity>(
     private val api: MongoApi,
     private val clazz: KClass<T>,
-    private vararg val indexes: TableIndex<M, T> = arrayOf(),
+    private vararg val indexes: TableIndex<T> = arrayOf(),
 ) : Database<T> {
 
     override val collection: MongoCollection<T> =

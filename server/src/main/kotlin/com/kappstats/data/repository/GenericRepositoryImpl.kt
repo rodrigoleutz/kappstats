@@ -1,12 +1,12 @@
 package com.kappstats.data.repository
 
 import com.kappstats.contracts.Model
-import com.kappstats.data.entity.Entity
+import com.kappstats.data.entity.EntityWithModel
 import com.kappstats.data.entity.EntityMapper
 import com.kappstats.data.remote.api.database.Database
 import kotlin.reflect.KProperty1
 
-class GenericRepositoryImpl<M : Model, E : Entity<M>>(
+class GenericRepositoryImpl<M : Model, E : EntityWithModel<M>>(
     private val entityMapper: EntityMapper<M, E>,
     override val database: Database<E>
 ) : GenericRepository<M, E> {

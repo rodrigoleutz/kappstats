@@ -1,12 +1,12 @@
 package com.kappstats.data.repository
 
 import com.kappstats.contracts.Model
-import com.kappstats.data.entity.Entity
+import com.kappstats.data.entity.EntityWithModel
 import com.kappstats.data.remote.api.database.Database
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KProperty1
 
-interface GenericRepository<M: @Serializable Model, E: Entity<M>> {
+interface GenericRepository<M: @Serializable Model, E: EntityWithModel<M>> {
     val database: Database<E>
     suspend fun add(value: M): M?
     suspend fun delete(value: M): Boolean

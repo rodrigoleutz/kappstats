@@ -2,7 +2,7 @@ package com.kappstats.data.entity.user
 
 import com.kappstats.custom_object.app_date_time.AppDateTime
 import com.kappstats.custom_object.username.Username
-import com.kappstats.data.entity.Entity
+import com.kappstats.data.entity.EntityWithModel
 import com.kappstats.data.entity.EntityMapper
 import com.kappstats.model.user.Profile
 import org.bson.codecs.pojo.annotations.BsonId
@@ -17,7 +17,7 @@ data class ProfileEntity(
     val bio: String,
     override val createdAt: AppDateTime,
     override val updatedAt: List<AppDateTime>,
-): Entity<Profile> {
+): EntityWithModel<Profile> {
 
     @get:BsonIgnore
     override val mapper: EntityMapper<Profile, ProfileEntity> = Companion
