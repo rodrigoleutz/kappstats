@@ -4,8 +4,8 @@ import com.mongodb.kotlin.client.coroutine.MongoCollection
 import org.koin.core.component.KoinComponent
 import kotlin.reflect.KProperty1
 
-interface Database<T : Any> : KoinComponent {
-    val collection: MongoCollection<T>
+interface Database<T> {
+    val collection: MongoCollection<*>
     suspend fun add(item: T): T?
     suspend fun addMany(items: List<T>): List<T>?
     suspend fun getById(id: String, limit: Int = 100, skip: Int = 0): T?

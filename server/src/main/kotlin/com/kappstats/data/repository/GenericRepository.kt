@@ -1,28 +1,25 @@
 package com.kappstats.data.repository
 
-import com.kappstats.contracts.Model
-import com.kappstats.data.entity.EntityWithModel
 import com.kappstats.data.remote.api.database.Database
-import kotlinx.serialization.Serializable
 import kotlin.reflect.KProperty1
 
-interface GenericRepository<M: @Serializable Model, E: EntityWithModel<M>> {
-    val database: Database<E>
-    suspend fun add(value: M): M?
-    suspend fun delete(value: M): Boolean
+interface GenericRepository<T, D> {
+    val database: Database<D>
+    suspend fun add(value: T): T?
+    suspend fun delete(value: T): Boolean
     suspend fun deleteById(value: String): Boolean
-    suspend fun getById(value: String): M?
+    suspend fun getById(value: String): T?
     suspend fun getListByProperty(
-        property: KProperty1<M, Any>,
+        property: KProperty1<T, Any>,
         value: Any,
         limit: Int = 100,
         skip: Int = 0
-    ): List<M>
+    ): List<T>
     suspend fun getListByPropertyList(
-        property: KProperty1<M, Any>,
+        property: KProperty1<T, Any>,
         value: List<Any>,
         limit: Int = 100,
         skip: Int = 0
-    ): List<M>
-    suspend fun update(value: M): M?
+    ): List<T>
+    suspend fun update(value: T): T?
 }

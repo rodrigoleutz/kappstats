@@ -6,7 +6,7 @@ import com.kappstats.data.remote.api.database.TableIndex
 import com.kappstats.data.remote.api.database.mongo.MongoApi
 import com.kappstats.data.remote.api.database.mongo.MongoDatabaseImpl
 import com.kappstats.data.repository.GenericRepository
-import com.kappstats.data.repository.GenericRepositoryImpl
+import com.kappstats.data.repository.GenericRepositoryWithModelImpl
 import com.kappstats.domain.core.security.hashing.SaltedHash
 import com.kappstats.model.user.Auth
 
@@ -31,7 +31,7 @@ class AuthRepositoryImpl(
 
     @Deprecated("Do not use generic in this repository")
     override val generic: GenericRepository<Auth, AuthEntity> =
-        GenericRepositoryImpl(
+        GenericRepositoryWithModelImpl(
             entityMapper = AuthEntity,
             database = database
         )
