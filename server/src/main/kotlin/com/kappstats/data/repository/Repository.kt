@@ -1,5 +1,7 @@
 package com.kappstats.data.repository
 
-interface Repository<T, D> {
+import com.kappstats.data.entity.Entity
+
+interface Repository<T, D: Entity> {
     val generic: GenericRepository<T, D>
 }

@@ -1,10 +1,11 @@
 package com.kappstats.data.repository
 
+import com.kappstats.data.entity.Entity
 import com.kappstats.data.remote.api.database.Database
 import kotlin.reflect.KProperty1
 
-interface GenericRepository<T, D> {
-    val database: Database<D>
+interface GenericRepository<T, E: Entity> {
+    val database: Database<E>
     suspend fun add(value: T): T?
     suspend fun delete(value: T): Boolean
     suspend fun deleteById(value: String): Boolean

@@ -1,10 +1,11 @@
 package com.kappstats.data.remote.api.database
 
+import com.kappstats.data.entity.Entity
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import org.koin.core.component.KoinComponent
 import kotlin.reflect.KProperty1
 
-interface Database<T> {
+interface Database<T: Entity> {
     val collection: MongoCollection<*>
     suspend fun add(item: T): T?
     suspend fun addMany(items: List<T>): List<T>?
