@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "### Tests"
-./gradlew :server:test
+./gradlew :server:test --no-daemon
