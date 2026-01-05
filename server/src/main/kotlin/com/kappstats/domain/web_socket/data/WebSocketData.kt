@@ -1,0 +1,12 @@
+package com.kappstats.domain.web_socket.data
+
+import com.kappstats.domain.web_socket.model.WebSocketConnection
+import io.ktor.websocket.DefaultWebSocketSession
+
+interface WebSocketData {
+    val connections: Map<String, WebSocketConnection>
+
+    fun addConnection(webSocketConnection: WebSocketConnection): Boolean
+    fun removeWebSocketSessionById(id: String): Boolean
+    fun removeConnectionBySession(defaultWebSocketSession: DefaultWebSocketSession): Boolean
+}

@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.ktor.server.status.pages)
     implementation(libs.ktor.server.cors)
     implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.websockets)
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
     implementation(platform(libs.mongodb.driver.bom))

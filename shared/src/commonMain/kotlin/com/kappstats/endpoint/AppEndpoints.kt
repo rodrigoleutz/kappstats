@@ -11,4 +11,8 @@ object AppEndpoints: Route(null, SERVER_URL) {
             object SignUp: Route(User, "/sign_up")
         }
     }
+
+    object WebSocket: Route(AppEndpoints, "/ws") {
+        object Auth: Route(WebSocket, "/auth")
+    }
 }
