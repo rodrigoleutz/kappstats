@@ -8,6 +8,8 @@ import com.kappstats.domain.core.security.token.TokenService
 import com.kappstats.domain.use_case.user.UserSignInUseCase
 import com.kappstats.domain.use_case.user.UserSignUpUseCase
 import com.kappstats.domain.use_case.user.UserUseCases
+import com.kappstats.domain.web_socket.action.WebSocketActions
+import com.kappstats.domain.web_socket.action.WebSocketActionsImpl
 import com.kappstats.domain.web_socket.data.WebSocketData
 import com.kappstats.domain.web_socket.data.WebSocketDataImpl
 import org.koin.core.module.dsl.factoryOf
@@ -24,4 +26,5 @@ val domainModule = module {
     factoryOf(::UserUseCases)
 
     singleOf(::WebSocketDataImpl) bind WebSocketData::class
+    singleOf(::WebSocketActionsImpl) bind WebSocketActions::class
 }

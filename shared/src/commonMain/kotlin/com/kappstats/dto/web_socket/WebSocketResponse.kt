@@ -5,4 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WebSocketResponse(
     val id: String,
+    val action: WsActionType
 )

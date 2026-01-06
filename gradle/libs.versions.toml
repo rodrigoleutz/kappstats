@@ -121,7 +121,6 @@ ktor-serverCore = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor
 ktor-serverCio = { module = "io.ktor:ktor-server-cio-jvm", version.ref = "ktor" }
 ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
 ktor-serverTestHost = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
-logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 
 # Koin
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
@@ -187,6 +186,10 @@ symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-ap
 # KSP - KotlinPoet
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
+
+# Logback
+logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 
 # Android Lifecycle Ads need
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }

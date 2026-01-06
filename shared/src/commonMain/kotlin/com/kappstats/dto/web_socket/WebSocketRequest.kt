@@ -6,5 +6,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WebSocketRequest(
-    val id: String = IdGenerator.createUuid
-)
+    val id: String = IdGenerator.createUuid,
+    val action: WsActionType
+) {
+    fun toResponse() = WebSocketResponse(
+        id = id,
+        action = action
+    )
+}

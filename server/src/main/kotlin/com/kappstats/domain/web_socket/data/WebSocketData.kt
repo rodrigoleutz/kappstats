@@ -7,6 +7,7 @@ interface WebSocketData {
     val connections: Map<String, WebSocketConnection>
 
     fun addConnection(webSocketConnection: WebSocketConnection): Boolean
+    fun addMessageSent(): Int
     fun removeWebSocketSessionById(id: String): Boolean
     fun removeConnectionBySession(defaultWebSocketSession: DefaultWebSocketSession): Boolean
 }

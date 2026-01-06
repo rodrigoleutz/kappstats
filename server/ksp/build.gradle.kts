@@ -15,6 +15,8 @@ kotlin {
 
 
 dependencies {
+    implementation(projects.shared)
+
     // KSP
     implementation(libs.symbol.processing.api)
     implementation(libs.kotlinpoet)

@@ -28,6 +28,8 @@ dependencies {
     implementation(libs.ktor.serverCore)
     implementation(libs.ktor.serverCio)
     implementation(libs.ktor.server.call.logging)
+    implementation(libs.logback.core)
+    implementation(libs.logback)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.server.websockets)
