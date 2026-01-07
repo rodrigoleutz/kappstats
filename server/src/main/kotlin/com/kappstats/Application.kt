@@ -1,6 +1,7 @@
 package com.kappstats
 
 import com.kappstats.constants.SERVER_PORT
+import com.kappstats.constants.config.ProjectConfig
 import com.kappstats.plugin.configureKoin
 import com.kappstats.plugin.configureLogger
 import com.kappstats.plugin.configureRoutes
@@ -12,6 +13,7 @@ import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
 
 fun main() {
+    System.setProperty("GIT_BRANCH", ProjectConfig.GIT_BRANCH)
     embeddedServer(CIO, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
 }
@@ -21,6 +23,6 @@ fun Application.module() {
     configureSerialization()
     configureKoin()
     configureSecurity()
-    configureRoutes()
     configureWebSocket()
+    configureRoutes()
 }

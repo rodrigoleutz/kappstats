@@ -30,7 +30,7 @@ fun Project.getGitBranch(): String {
 }
 val currentBranch = getGitBranch()
 
-println("current branch: $currentBranch ")
+println("current branch: $currentBranch")
 extensions.configure<KspExtension> {
     arg("GIT_BRANCH", currentBranch)
 }

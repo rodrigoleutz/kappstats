@@ -32,6 +32,7 @@ firebase-crashlytics = "3.0.6"
 google-services = "4.4.4"
 jakartaMail = "2.0.5"
 jakartaMailApi = "2.1.5"
+janino = "3.1.12"
 junit5 = "6.0.1"
 koin = "4.1.1"
 kermit = "2.0.8"
@@ -179,6 +180,9 @@ composeIcons-linea = { module = "br.com.devsrsouza.compose.icons:linea", version
 composeIcons-octicons = { module = "br.com.devsrsouza.compose.icons:octicons", version.ref = "composeIcons" }
 composeIcons-simpleIcons = { module = "br.com.devsrsouza.compose.icons:simple-icons", version.ref = "composeIcons" }
 composeIcons-tablerIcons = { module = "br.com.devsrsouza.compose.icons:tabler-icons", version.ref = "composeIcons" }
+
+# Janino - for XML conditional
+janino = { module = "org.codehaus.janino:janino", version.ref = "janino" }
 
 # KSP
 symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }

@@ -5,5 +5,5 @@ import com.kappstats.dto.web_socket.WebSocketResponse
 
 interface WebSocketActions {
 
-    fun process(webSocketRequest: WebSocketRequest): WebSocketResponse
+    fun process(webSocketRequest: WebSocketRequest): WebSocketResponse?
 }

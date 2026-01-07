@@ -30,6 +30,7 @@ object WebSocketEventBus: KoinComponent {
     val authMessages = _authMessages.asSharedFlow()
 
     suspend fun sendMessage(webSocketRequest: WebSocketRequest) {
-        _messages.emit(wsActions.process(webSocketRequest))
+        val response = wsActions.process(webSocketRequest)
+        if(response != null) _messages.emit(response)
     }
 }

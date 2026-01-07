@@ -80,8 +80,8 @@ class UserRoutesTest {
         configureSerialization()
         koinTest()
         configureSecurity()
-        configureRoutes()
         configureWebSocket()
+        configureRoutes()
     }
 
     @BeforeEach

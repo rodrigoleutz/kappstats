@@ -3,7 +3,7 @@ package com.kappstats.dto.web_socket
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 
-open class WsActionBase<T: @Serializable Any?, R: @Serializable Any?>(
+open class WsActionBase<T, R>(
     val parent: WsActionType?,
     val command: String,
     val inputSerializer: KSerializer<@Serializable T>? = null,

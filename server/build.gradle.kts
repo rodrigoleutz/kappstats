@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.jakarta.mail.api)
     implementation(libs.jakarta.mail)
     implementation(libs.commons.codec)
+    implementation(libs.janino)
 
     // Test
     testImplementation(platform(libs.junit.bom))

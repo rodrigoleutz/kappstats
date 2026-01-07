@@ -11,4 +11,7 @@ object StatusPingAction: WebSocketContract<AppDateTime, AppDateTime> {
     override val base: WsActionBase<AppDateTime, AppDateTime> =
         WebSocketEvents.Status.Ping
 
+    override fun process(data: AppDateTime): AppDateTime {
+        return AppDateTime.now
+    }
 }
