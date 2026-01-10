@@ -10,6 +10,10 @@ import com.kappstats.plugin.configureSecurity
 import com.kappstats.plugin.configureSerialization
 import com.kappstats.plugin.configureWebSocket
 import com.kappstats.test_util.container.MongoTestContainer
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.websocket.WebSockets
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.testing.ApplicationTestBuilder
@@ -75,11 +79,24 @@ abstract class BaseIntegrationTest {
 
     fun baseTestApplication(
         modules: Application.() -> Unit = { testServerModules() },
-        block: suspend ApplicationTestBuilder.() -> Unit
+        block: suspend ApplicationTestBuilder.(client: HttpClient) -> Unit
     ) = testApplication {
         application {
             modules()
         }
-        block()
+        val testClient = configuredClient()
+        block(testClient)
+    }
+
+    /**
+     * Client Integration Tests Config
+     * @author Rodrigo Leutz
+     */
+
+    private fun ApplicationTestBuilder.configuredClient() = createClient {
+        this@createClient.install(ContentNegotiation) {
+            json()
+        }
+        this@createClient.install(WebSockets)
     }
 }

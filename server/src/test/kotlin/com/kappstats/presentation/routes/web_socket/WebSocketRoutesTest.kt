@@ -2,37 +2,20 @@ package com.kappstats.presentation.routes.web_socket
 
 import com.kappstats.custom_object.app_date_time.AppDateTime
 import com.kappstats.custom_object.app_date_time.seconds
-import com.kappstats.data.remote.api.database.mongo.MongoApi
-import com.kappstats.test_util.container.MongoTestContainer
-import com.kappstats.di.dataModule
-import com.kappstats.di.domainModule
-import com.kappstats.di.presentationModule
 import com.kappstats.dto.web_socket.WebSocketEvents
 import com.kappstats.dto.web_socket.WebSocketRequest
 import com.kappstats.dto.web_socket.WebSocketResponse
 import com.kappstats.endpoint.AppEndpoints
-import com.kappstats.plugin.configureLogger
-import com.kappstats.plugin.configureRoutes
-import com.kappstats.plugin.configureSecurity
-import com.kappstats.plugin.configureSerialization
-import com.kappstats.plugin.configureWebSocket
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.websocket.WebSockets
+import com.kappstats.test_util.BaseIntegrationTest
 import io.ktor.client.plugins.websocket.webSocket
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
-import io.ktor.server.testing.ApplicationTestBuilder
-import io.ktor.server.testing.testApplication
 import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
 import kotlinx.serialization.json.Json
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.Test
-import org.koin.ktor.plugin.Koin
 
-class WebSocketRoutesTest {
+class WebSocketRoutesTest: BaseIntegrationTest() {
 
     companion object {
         val webSocketRequest = WebSocketRequest(
@@ -42,19 +25,8 @@ class WebSocketRoutesTest {
         val json = Json.encodeToString(webSocketRequest)
     }
 
-    private fun ApplicationTestBuilder.configuredClient() = createClient {
-        this@createClient.install(ContentNegotiation) {
-            json()
-        }
-        this@createClient.install(WebSockets)
-    }
-
     @Test
-    fun `Test webSocket connection test ping`() = testApplication {
-        application {
-            testModules()
-        }
-        val client = configuredClient()
+    fun `Test webSocket connection test ping`() = baseTestApplication { client ->
         client.webSocket(AppEndpoints.WebSocket.route) {
             send(json)
             val frame = incoming.receive() as Frame.Text
