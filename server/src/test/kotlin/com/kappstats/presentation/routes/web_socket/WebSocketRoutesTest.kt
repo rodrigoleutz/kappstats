@@ -1,11 +1,9 @@
 package com.kappstats.presentation.routes.web_socket
 
 import com.kappstats.custom_object.app_date_time.AppDateTime
-import com.kappstats.custom_object.app_date_time.AppDateTimeUnit
-import com.kappstats.custom_object.app_date_time.minutes
 import com.kappstats.custom_object.app_date_time.seconds
 import com.kappstats.data.remote.api.database.mongo.MongoApi
-import com.kappstats.data.remote.container.MongoTestContainer
+import com.kappstats.test_util.container.MongoTestContainer
 import com.kappstats.di.dataModule
 import com.kappstats.di.domainModule
 import com.kappstats.di.presentationModule
@@ -29,9 +27,7 @@ import io.ktor.server.testing.testApplication
 import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.koin.ktor.plugin.Koin
@@ -44,34 +40,6 @@ class WebSocketRoutesTest {
             data = Json.encodeToString(AppDateTime.now)
         )
         val json = Json.encodeToString(webSocketRequest)
-    }
-
-    private fun Application.koinTest() {
-        val databaseTestModule = org.koin.dsl.module {
-            single {
-                MongoApi(
-                    MongoTestContainer.connectionString,
-                    "KAppStatsTest"
-                )
-            }
-        }
-        install(Koin) {
-            modules(
-                databaseTestModule,
-                dataModule,
-                domainModule,
-                presentationModule
-            )
-        }
-    }
-
-    private fun Application.testModules() {
-        configureLogger()
-        configureSerialization()
-        koinTest()
-        configureSecurity()
-        configureWebSocket()
-        configureRoutes()
     }
 
     private fun ApplicationTestBuilder.configuredClient() = createClient {

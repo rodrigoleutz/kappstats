@@ -1,4 +1,4 @@
-package com.kappstats.data.remote.container
+package com.kappstats.test_util.container
 
 import org.testcontainers.containers.MongoDBContainer
 import org.testcontainers.utility.DockerImageName

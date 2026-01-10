@@ -38,8 +38,6 @@ dependencies {
     implementation(libs.ktor.server.thymeleaf)
     implementation(libs.ktor.server.status.pages)
     implementation(libs.ktor.server.cors)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.client.websockets)
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
     implementation(platform(libs.mongodb.driver.bom))
@@ -64,6 +62,8 @@ dependencies {
     testImplementation(libs.testcontainers)
     testImplementation(libs.mongodb)
     testImplementation(libs.junit.jupiter)
+    testImplementation(libs.ktor.client.content.negotiation)
+    testImplementation(libs.ktor.client.websockets)
 }
 
 tasks.test {

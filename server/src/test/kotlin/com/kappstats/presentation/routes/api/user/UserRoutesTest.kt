@@ -4,7 +4,7 @@ import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
 import com.kappstats.custom_object.username.Username
 import com.kappstats.data.remote.api.database.mongo.MongoApi
-import com.kappstats.data.remote.container.MongoTestContainer
+import com.kappstats.test_util.container.MongoTestContainer
 import com.kappstats.di.dataModule
 import com.kappstats.di.domainModule
 import com.kappstats.di.presentationModule
