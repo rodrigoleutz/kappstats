@@ -48,7 +48,7 @@ KAppStats provides lightweight, reusable components to collect, aggregate, and e
 [/iosApp](/kappstats/kmp/-/tree/main/iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
 
 ---
-# Intalation
+# Installation
 
 #### TODO: ADD SESSION
 
@@ -66,7 +66,7 @@ KAppStats provides lightweight, reusable components to collect, aggregate, and e
 
 ---
 
-## Best Pratices
+## Best Practices
 
 #### TODO ADD SUB SESSION
 
@@ -103,11 +103,30 @@ git clone https://gitlab.com/kappstats/kmp.git
 git checkout dev
 </pre>
 
+## How-to develop
+### Server
+#### Create a test class by extending BaseIntegrationTest. Use the baseTestApplication helper to perform requests:
+```kotlin
+class TestClass : BaseIntegrationTest() {
+    fun `Should return OK when posting valid info`() = baseTestApplication { client ->
+        val bodyInfo = "{ \"key\": \"value\" }"
+
+        val response = client.post("route") {
+            contentType(ContentType.Application.Json)
+            bearerAuth("token")
+            
+            setBody(bodyInfo)
+        }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+    }
+}
+```
 ---
 
 # License
 
-#### TODO: ADD LICENSE
+#### GNU GENERAL PUBLIC LICENSE 2.0
 
 ---
 
