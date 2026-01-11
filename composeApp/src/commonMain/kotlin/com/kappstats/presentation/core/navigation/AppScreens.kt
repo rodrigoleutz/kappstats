@@ -26,7 +26,7 @@ import kotlinx.serialization.modules.polymorphic
 import org.jetbrains.compose.resources.StringResource
 
 @Serializable
-sealed interface AppScreens : NavKey, ComposeRoute {
+sealed interface AppScreens : ComposeRoute, NavKey {
 
     companion object {
         val all: List<ComposeRoute> = listOf(Home, Splash)
@@ -34,9 +34,9 @@ sealed interface AppScreens : NavKey, ComposeRoute {
         val configuration = SavedStateConfiguration {
             serializersModule = SerializersModule {
                 polymorphic(NavKey::class) {
-                    subclass(AppScreens.Auth::class, AppScreens.Auth.serializer())
-                    subclass(AppScreens.Auth.SignIn::class, AppScreens.Auth.SignIn.serializer())
-                    subclass(AppScreens.Auth.SignUp::class, AppScreens.Auth.SignUp.serializer())
+                    subclass(Auth::class, Auth.serializer())
+                    subclass(Auth.SignIn::class, Auth.SignIn.serializer())
+                    subclass(Auth.SignUp::class, Auth.SignUp.serializer())
                     subclass(AppScreens.Home::class, AppScreens.Home.serializer())
                     subclass(Splash::class, Splash.serializer())
                 }

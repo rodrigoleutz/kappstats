@@ -1,6 +1,18 @@
 package com.kappstats.presentation.screen.splash
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.kappstats.domain.use_case.auth.AuthUseCases
+import com.kappstats.presentation.core.view_model.StateViewModel
+import kotlinx.coroutines.launch
 
-class SplashViewModel: ViewModel() {
+class SplashViewModel(
+    private val authUseCases: AuthUseCases
+): StateViewModel() {
+
+    fun authenticate(result: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val resource = authUseCases.authenticate.invoke()
+            result(resource.isSuccess)
+        }
+    }
 }

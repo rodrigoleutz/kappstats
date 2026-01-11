@@ -2,10 +2,10 @@ package com.kappstats.domain.core
 
 import org.jetbrains.compose.resources.StringResource
 
-sealed class Resource<T, R> {
+sealed class Resource<T> {
 
-    data class Failure<T, R>(val type: R, val message: StringResource? = null) : Resource<T, R>()
-    data class Success<T, R>(val data: T? = null) : Resource<T, R>()
+    data class Failure<T>(val type: FailureType, val message: StringResource? = null) : Resource<T>()
+    data class Success<T>(val data: T? = null) : Resource<T>()
 
     val isSuccess: Boolean
         get() = this is Success

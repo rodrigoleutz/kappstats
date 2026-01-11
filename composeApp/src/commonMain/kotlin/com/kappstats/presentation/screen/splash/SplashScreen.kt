@@ -8,19 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.kappstats.presentation.core.navigation.AppScreens
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(
-    backStack: NavBackStack<NavKey>
-) {
-    LaunchedEffect(Unit) {
-        delay(3_000)
-        backStack.add(AppScreens.Home)
-    }
+fun SplashScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

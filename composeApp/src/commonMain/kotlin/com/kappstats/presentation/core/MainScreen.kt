@@ -3,34 +3,36 @@ package com.kappstats.presentation.core
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation3.runtime.NavBackStack
-import androidx.navigation3.runtime.NavKey
 import com.kappstats.components.part.widget.top_bar.TopBarWidget
-import com.kappstats.presentation.core.navigation.AppNavigation
-import com.kappstats.presentation.core.state.MainStateHolder
+import com.kappstats.presentation.core.state.MainEvent
+import com.kappstats.presentation.core.state.MainUiState
+import com.kappstats.resources.Res
+import com.kappstats.resources.back
+import com.kappstats.resources.menu
+import compose.icons.EvaIcons
+import compose.icons.evaicons.Fill
+import compose.icons.evaicons.fill.ArrowIosBack
+import compose.icons.evaicons.fill.Menu2
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun MainScreen(
-    backStack: NavBackStack<NavKey>,
-    mainStateHolder: MainStateHolder = koinInject()
+    uiState: MainUiState,
+    onEvent: (MainEvent) -> Unit,
+    content: @Composable () -> Unit
 ) {
-    val uiState by mainStateHolder.uiState.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            
+
         }
     ) {
         Scaffold(
@@ -38,10 +40,14 @@ fun MainScreen(
                 if (uiState.hasTopBar) {
                     TopBarWidget(
                         title = uiState.title,
+                        navigationIcon = if (uiState.isBackButton) EvaIcons.Fill.ArrowIosBack
+                        else EvaIcons.Fill.Menu2,
+                        navigationDescription = stringResource(
+                            if (uiState.isBackButton) Res.string.back else Res.string.menu
+                        ),
                         onNavigationClick = {
                             if (uiState.isBackButton) {
-                                backStack.removeLastOrNull()
-                                mainStateHolder.setIsBackButton(false)
+                                onEvent(MainEvent.SetIsBackButton(false))
                             } else scope.launch {
                                 drawerState.open()
                             }
@@ -51,9 +57,23 @@ fun MainScreen(
             }
         ) { innerPadding ->
             LaunchedEffect(innerPadding) {
-                mainStateHolder.setPaddingValues(innerPadding)
+                onEvent(MainEvent.SetPaddingValues(innerPadding))
             }
-            AppNavigation(backStack)
+            content()
         }
     }
+}
+
+@Preview
+@Composable
+fun MainScreenPreview() {
+    MainScreen(
+        uiState = MainUiState(
+            hasTopBar = true,
+            title = "Test title"
+        ),
+        onEvent = {},
+        content = {}
+    )
+
 }

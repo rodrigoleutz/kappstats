@@ -1,6 +1,8 @@
 package com.kappstats.presentation.screen.home
 
-import androidx.lifecycle.ViewModel
+import com.kappstats.presentation.core.state.MainEvent
+import com.kappstats.presentation.core.view_model.StateViewModel
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel: StateViewModel() {
+
 }
