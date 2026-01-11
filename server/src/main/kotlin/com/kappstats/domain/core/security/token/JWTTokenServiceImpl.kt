@@ -3,11 +3,16 @@ package com.kappstats.domain.core.security.token
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.kappstats.data.repository.user.AuthTokenRepository
+import com.kappstats.domain.constants.DomainConstants
 import io.ktor.server.auth.jwt.JWTCredential
 import io.ktor.server.auth.jwt.JWTPrincipal
 import java.util.Date
 
-class JwtTokenServiceImpl(override val config: TokenConfig) : TokenService {
+class JwtTokenServiceImpl(
+    override val config: TokenConfig,
+    private val authTokenRepository: AuthTokenRepository
+) : TokenService {
 
     override fun decode(token: String): Map<String, String>? {
         return try {
@@ -35,9 +40,15 @@ class JwtTokenServiceImpl(override val config: TokenConfig) : TokenService {
         return token.sign(Algorithm.HMAC256(config.secret))
     }
 
-    override fun validate(credential: JWTCredential): Any? {
-        //TODO: Validate token in database
-        return if (credential.payload.audience.contains(config.audience)) JWTPrincipal(credential.payload) else null
+    override suspend fun validate(credential: JWTCredential): Any? {
+        return if (credential.payload.audience.contains(config.audience)) {
+            val principal = JWTPrincipal(credential.payload)
+            val authId = principal.getClaim(DomainConstants.AUTH_ID, String::class) ?: return null
+            val tokenId = principal.getClaim(DomainConstants.TOKEN_ID, String::class) ?: return null
+            val authToken = authTokenRepository.getByAuthId(authId) ?: return null
+            if(!authToken.tokens.any { it.id == tokenId && it.isActive }) return null
+            principal
+        } else null
     }
 
     override fun verifier(): JWTVerifier =

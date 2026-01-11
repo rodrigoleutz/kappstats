@@ -1,5 +1,6 @@
 package com.kappstats.domain.use_case.user
 
+import com.kappstats.Platform
 import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
 import com.kappstats.custom_object.username.Username
@@ -7,6 +8,8 @@ import com.kappstats.data.remote.api.database.mongo.MongoApi
 import com.kappstats.test_util.container.MongoTestContainer
 import com.kappstats.data.repository.user.AuthRepository
 import com.kappstats.data.repository.user.AuthRepositoryImpl
+import com.kappstats.data.repository.user.AuthTokenRepository
+import com.kappstats.data.repository.user.AuthTokenRepositoryImpl
 import com.kappstats.data.repository.user.ProfileRepository
 import com.kappstats.data.repository.user.ProfileRepositoryImpl
 import com.kappstats.domain.constants.DomainConstants
@@ -16,6 +19,7 @@ import com.kappstats.domain.core.security.token.JwtTokenServiceImpl
 import com.kappstats.domain.core.security.token.TokenService
 import com.kappstats.dto.request.user.SignInRequest
 import com.kappstats.dto.request.user.SignUpRequest
+import com.kappstats.model.user.PlatformData
 import com.mongodb.client.model.Filters
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import io.ktor.http.HttpStatusCode
@@ -36,10 +40,16 @@ class UserUseCasesTest {
             name = "Test User",
             password = Password("#Senha123")
         )
+
+        val platform = PlatformData(
+            name = Platform.PlatformType.Desktop,
+            userAgent = "Test Agent"
+        )
         val tokenConfig = DomainConstants.tokenConfig
     }
 
     private lateinit var authRepository: AuthRepository
+    private lateinit var authTokenRepository: AuthTokenRepository
     private lateinit var profileRepository: ProfileRepository
     private lateinit var hashingService: HashingService
     private lateinit var tokenService: TokenService
@@ -52,12 +62,14 @@ class UserUseCasesTest {
             databaseName = "KAppStatsTest"
         )
         authRepository = AuthRepositoryImpl(mongoApi)
+        authTokenRepository = AuthTokenRepositoryImpl(mongoApi)
         profileRepository = ProfileRepositoryImpl(mongoApi)
         hashingService = SHA256HashingServiceImpl()
-        tokenService = JwtTokenServiceImpl(tokenConfig)
+        tokenService = JwtTokenServiceImpl(tokenConfig, authTokenRepository)
         userUseCases = UserUseCases(
             signIn = UserSignInUseCase(
                 authRepository = authRepository,
+                authTokenRepository = authTokenRepository,
                 hashingService = hashingService,
                 tokenService = tokenService
             ),
@@ -123,7 +135,8 @@ class UserUseCasesTest {
         assert(signUp.isSuccess)
         val signInRequest = SignInRequest(
             email = signUpRequestTest.email,
-            password = signUpRequestTest.password
+            password = signUpRequestTest.password,
+            platform = platform
         )
         val signIn = userUseCases.signIn.invoke(signInRequest)
         assert(signIn.isSuccess)
@@ -151,7 +164,8 @@ class UserUseCasesTest {
         assert(signUp.isSuccess)
         val signInRequest = SignInRequest(
             email = signUpRequest.email,
-            password = signUpRequest.password
+            password = signUpRequest.password,
+            platform = platform
         )
         val signIn = userUseCases.signIn.invoke(signInRequest)
         val token = signIn.asDataOrNull

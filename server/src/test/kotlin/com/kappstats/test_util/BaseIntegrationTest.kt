@@ -28,18 +28,18 @@ abstract class BaseIntegrationTest {
      * @author Rodrigo Leutz
      */
 
+    val mongoApi = MongoApi(
+        MongoTestContainer.connectionString,
+        "KAppStatsTest"
+    )
+
     /**
      * Koin for tests
      * @author Rodrigo Leutz
      */
     private fun Application.koinTest() {
         val databaseTestModule = org.koin.dsl.module {
-            single {
-                MongoApi(
-                    MongoTestContainer.connectionString,
-                    "KAppStatsTest"
-                )
-            }
+            single { mongoApi }
         }
         install(Koin) {
             modules(

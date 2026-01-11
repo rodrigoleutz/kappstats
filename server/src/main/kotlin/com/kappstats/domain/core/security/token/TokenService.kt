@@ -9,6 +9,6 @@ interface TokenService {
     fun generate(
         vararg claims: TokenClaim
     ): String
-    fun validate(credential: JWTCredential): Any?
+    suspend fun validate(credential: JWTCredential): Any?
     fun verifier(): JWTVerifier
 }

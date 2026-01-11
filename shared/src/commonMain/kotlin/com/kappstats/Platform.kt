@@ -1,5 +1,7 @@
 package com.kappstats
 
+import com.kappstats.model.user.PlatformData
+
 
 interface Platform {
     val name: PlatformType

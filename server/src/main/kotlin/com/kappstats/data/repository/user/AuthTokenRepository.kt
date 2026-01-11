@@ -5,4 +5,5 @@ import com.kappstats.data.repository.Repository
 import com.kappstats.model.user.AuthToken
 
 interface AuthTokenRepository: Repository<AuthToken, AuthTokenEntity> {
+    suspend fun getByAuthId(value: String): AuthToken?
 }

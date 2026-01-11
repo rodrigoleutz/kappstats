@@ -2,6 +2,8 @@ package com.kappstats.di
 
 import com.kappstats.data.repository.user.AuthRepository
 import com.kappstats.data.repository.user.AuthRepositoryImpl
+import com.kappstats.data.repository.user.AuthTokenRepository
+import com.kappstats.data.repository.user.AuthTokenRepositoryImpl
 import com.kappstats.data.repository.user.ProfileRepository
 import com.kappstats.data.repository.user.ProfileRepositoryImpl
 import com.kappstats.data.service.email.EmailService
@@ -13,6 +15,7 @@ import org.koin.dsl.module
 
 val dataModule = module {
     singleOf(::AuthRepositoryImpl) bind AuthRepository::class
+    singleOf(::AuthTokenRepositoryImpl) bind AuthTokenRepository::class
     singleOf(::ProfileRepositoryImpl) bind ProfileRepository::class
     factoryOf(::EmailServiceImpl) bind EmailService::class
 }

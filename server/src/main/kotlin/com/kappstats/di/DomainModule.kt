@@ -19,7 +19,7 @@ import org.koin.dsl.module
 
 val domainModule = module {
     singleOf(::SHA256HashingServiceImpl) bind HashingService::class
-    single<TokenService> { JwtTokenServiceImpl(DomainConstants.tokenConfig) }
+    single<TokenService> { JwtTokenServiceImpl(DomainConstants.tokenConfig, get()) }
 
     factoryOf(::UserSignInUseCase)
     factoryOf(::UserSignUpUseCase)
