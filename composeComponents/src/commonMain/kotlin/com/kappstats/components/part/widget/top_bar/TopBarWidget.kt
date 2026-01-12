@@ -12,6 +12,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.Menu
@@ -34,6 +36,7 @@ fun TopBarWidget(
         },
         navigationIcon = {
             IconButton(
+                modifier = Modifier.pointerHoverIcon(PointerIcon.Hand),
                 onClick = {
                     onNavigationClick()
                 }
@@ -44,6 +47,7 @@ fun TopBarWidget(
                 )
             }
         },
-        actions = actions
+        actions = actions,
+        colors = colors
     )
 }

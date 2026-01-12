@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.Dp
 import com.kappstats.components.theme.AppDimensions
 
@@ -23,10 +25,11 @@ fun ButtonComponent(
     colors: ButtonColors = ButtonDefaults.buttonColors(),
     enabled: Boolean = true,
     elevation: Dp = AppDimensions.Medium.component,
+    pointerHover: PointerIcon = PointerIcon.Hand,
     onClick: () -> Unit
 ) {
     Button(
-        modifier = modifier,
+        modifier = modifier.pointerHoverIcon(pointerHover),
         onClick = {
             onClick()
         },

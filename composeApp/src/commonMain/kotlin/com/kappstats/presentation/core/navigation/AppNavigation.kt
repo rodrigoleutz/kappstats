@@ -51,7 +51,7 @@ fun AppNavigation(
             navBackStack.removeLastOrNull()
         },
         entryProvider = entryProvider {
-            authNavigation(navBackStack)
+            authNavigation(navBackStack, stateHolder)
             entry<AppScreens.Home> {
                 val viewModel: HomeViewModel = koinViewModel()
                 HomeScreen(
