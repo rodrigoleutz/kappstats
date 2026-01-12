@@ -27,7 +27,7 @@ class WebSocketRoutesTest: BaseIntegrationTest() {
 
     @Test
     fun `Test webSocket connection test ping`() = baseTestApplication { client ->
-        client.webSocket(AppEndpoints.WebSocket.route) {
+        client.webSocket(AppEndpoints.WebSocket.fullPath) {
             send(json)
             val frame = incoming.receive() as Frame.Text
             val jsonDecoded =

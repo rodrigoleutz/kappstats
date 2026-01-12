@@ -56,7 +56,7 @@ class UserRoutesTest : BaseIntegrationTest() {
     @Test
     @Order(1)
     fun `SignUp route test`() = baseTestApplication { client ->
-        val signUpRequest = client.post(AppEndpoints.Api.User.SignUp.route) {
+        val signUpRequest = client.post(AppEndpoints.Api.User.SignUp.fullPath) {
             contentType(ContentType.Application.Json)
             setBody(signUp)
         }
@@ -66,14 +66,14 @@ class UserRoutesTest : BaseIntegrationTest() {
     @Test
     @Order(2)
     fun `SignIn and authenticate route test`() = baseTestApplication { client ->
-        val signInRequest = client.post(AppEndpoints.Api.User.SignIn.route) {
+        val signInRequest = client.post(AppEndpoints.Api.User.SignIn.fullPath) {
             contentType(ContentType.Application.Json)
             setBody(signIn)
         }
         assertEquals(HttpStatusCode.OK, signInRequest.status)
         token = signInRequest.bodyAsText()
         assert(token.isNotBlank())
-        val authenticateRequest = client.get(AppEndpoints.Api.User.Authenticate.route) {
+        val authenticateRequest = client.get(AppEndpoints.Api.User.Authenticate.fullPath) {
             bearerAuth(token)
         }
         assertEquals(HttpStatusCode.OK, authenticateRequest.status)
@@ -105,7 +105,7 @@ class UserRoutesTest : BaseIntegrationTest() {
             Updates.set(AuthTokenEntity::tokens.name, listOf(updatedToken))
         )
         assertEquals(1, update.modifiedCount)
-        val authenticateRequest = client.get(AppEndpoints.Api.User.Authenticate.route) {
+        val authenticateRequest = client.get(AppEndpoints.Api.User.Authenticate.fullPath) {
             bearerAuth(token)
         }
         assertEquals(HttpStatusCode.Unauthorized, authenticateRequest.status)

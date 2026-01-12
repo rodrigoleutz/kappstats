@@ -103,3 +103,7 @@ extensions.configure<KspExtension> {
     arg("GIT_BRANCH", currentBranch)
     arg("PROJECT_DIR", projectDir.absolutePath)
 }
+
+tasks.withType<KspAATask>().configureEach {
+    inputs.file(layout.projectDirectory.file(".env"))
+}
