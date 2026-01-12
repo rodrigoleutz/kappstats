@@ -3,7 +3,10 @@
     <string name="auth">Auth</string>
     <string name="back">Back</string>
     <string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
     <string name="email">Email</string>
+    <string name="error_email">Please enter a valid email (e.g., name@example.com).</string>
+    <string name="error_password">Password must be at least 8 characters, with one uppercase letter, one number, and one special character.</string>
     <string name="home">Home</string>
     <string name="login">Login</string>
     <string name="menu">Menu</string>

@@ -10,11 +10,11 @@ class MainStateHolder {
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState = _uiState.asStateFlow()
 
-    var onBackaction: (() -> Unit)? = null
+    var onBackAction: (() -> Unit)? = null
     var onNavigate: ((NavKey) -> Unit)? = null
 
     fun navPop() {
-        onBackaction?.invoke()
+        onBackAction?.invoke()
     }
 
     fun navPush(route: NavKey) {

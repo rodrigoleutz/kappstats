@@ -6,7 +6,6 @@ data class SignUiState(
 )
 
 sealed interface SignEvent {
-    data object SignIn: SignEvent
     data class SetEmail(val email: String): SignEvent
     data class SetPassword(val password: String): SignEvent
 }

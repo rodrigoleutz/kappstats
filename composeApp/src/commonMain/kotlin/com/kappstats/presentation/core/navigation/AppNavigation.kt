@@ -28,7 +28,7 @@ fun AppNavigation(
         AppScreens.Splash
     )
     LaunchedEffect(stateHolder) {
-        stateHolder.onBackaction = {
+        stateHolder.onBackAction = {
             navBackStack.removeLastOrNull()
         }
         stateHolder.onNavigate = { navKey ->
@@ -51,7 +51,7 @@ fun AppNavigation(
             navBackStack.removeLastOrNull()
         },
         entryProvider = entryProvider {
-            authNavigation()
+            authNavigation(navBackStack)
             entry<AppScreens.Home> {
                 val viewModel: HomeViewModel = koinViewModel()
                 HomeScreen(
@@ -61,7 +61,11 @@ fun AppNavigation(
             entry<AppScreens.Splash> {
                 val viewModel: SplashViewModel = koinViewModel()
                 viewModel.authenticate { result ->
-                    navBackStack.add( if (result) AppScreens.Home else AppScreens.Auth.SignIn)
+                    val lastIndex = navBackStack.lastIndex
+                    if(lastIndex >= 0) {
+                        navBackStack[lastIndex] =
+                            if (result) AppScreens.Home else AppScreens.Auth.SignIn
+                    }
                 }
                 SplashScreen()
             }

@@ -7,13 +7,20 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.websocket.WebSockets
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.bearerAuth
+import io.ktor.client.request.delete
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 class RemoteDataSourceImpl(
     private val remoteApi: RemoteApi
 ): RemoteDataSource {
-    private val client: HttpClient = remoteApi.client.config {
+    override val client: HttpClient = remoteApi.client.config {
         install(WebSockets) {
             pingIntervalMillis = 30_000
         }

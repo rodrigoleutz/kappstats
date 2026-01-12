@@ -21,25 +21,25 @@ class SignViewModel(
 
     fun onEvent(event: SignEvent) {
         when (event) {
-            SignEvent.SignIn -> {
-                viewModelScope.launch {
-                    val email = try {
-                        Email(uiState.value.email)
-                    } catch (e: Exception) {
-                        return@launch
-                    }
-                    val password = try {
-                        Password(uiState.value.password)
-                    } catch (e: Exception) {
-                        return@launch
-                    }
-                    val resource = authUseCases.signIn.invoke(email, password)
-                    if (resource.isSuccess) stateHolder.onMainEvent(MainEvent.NavigatePush(AppScreens.Home))
-                }
-            }
-
             is SignEvent.SetEmail -> _uiState.update { it.copy(email = event.email) }
             is SignEvent.SetPassword -> _uiState.update { it.copy(password = event.password) }
+        }
+    }
+
+    fun signIn(result: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val email = try {
+                Email(uiState.value.email)
+            } catch (e: Exception) {
+                return@launch
+            }
+            val password = try {
+                Password(uiState.value.password)
+            } catch (e: Exception) {
+                return@launch
+            }
+            val resource = authUseCases.signIn.invoke(email, password)
+            result(resource.isSuccess)
         }
     }
 

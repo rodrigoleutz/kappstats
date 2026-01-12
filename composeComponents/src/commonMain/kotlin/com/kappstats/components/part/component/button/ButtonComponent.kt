@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import com.kappstats.components.theme.AppDimensions
 
 @Composable
@@ -20,6 +21,8 @@ fun ButtonComponent(
     icon: ImageVector? = null,
     modifier: Modifier = Modifier,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
+    enabled: Boolean = true,
+    elevation: Dp = AppDimensions.Medium.component,
     onClick: () -> Unit
 ) {
     Button(
@@ -27,7 +30,13 @@ fun ButtonComponent(
         onClick = {
             onClick()
         },
-        colors = colors
+        colors = colors,
+        enabled = enabled,
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = elevation,
+            disabledElevation = AppDimensions.None.component,
+            pressedElevation = AppDimensions.None.component
+        )
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically

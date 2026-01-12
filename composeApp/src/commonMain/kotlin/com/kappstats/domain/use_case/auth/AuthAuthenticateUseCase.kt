@@ -8,6 +8,12 @@ class AuthAuthenticateUseCase(
     private val authService: AuthService
 ) {
     suspend operator fun invoke(): Resource<Boolean> {
-        return Resource.Failure(FailureType.Unauthorized)
+        return try {
+//            val response = authService.authenticate()
+            Resource.Failure(FailureType.Unauthorized)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Failure(FailureType.Network)
+        }
     }
 }
