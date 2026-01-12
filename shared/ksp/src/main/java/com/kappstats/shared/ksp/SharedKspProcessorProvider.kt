@@ -8,10 +8,12 @@ class SharedKspProcessorProvider: SymbolProcessorProvider {
 
     override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
         val gitBranch = environment.options["GIT_BRANCH"]
+        val projectDir = environment.options["PROJECT_DIR"]
         return ConfigProcessor(
             codeGenerator = environment.codeGenerator,
             logger = environment.logger,
-            gitBranch = gitBranch
+            gitBranch = gitBranch,
+            projectDir = projectDir
         )
     }
 }

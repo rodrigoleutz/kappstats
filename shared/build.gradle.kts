@@ -1,6 +1,8 @@
+import com.google.devtools.ksp.gradle.KspAATask
 import com.google.devtools.ksp.gradle.KspExtension
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,53 +11,27 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
 }
 
-fun Project.getGitBranch(): String {
-    return try {
-        val branch = providers.exec {
-            commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
-        }.standardOutput.asText.get().trim()
-
-        if (branch != "HEAD" && branch.isNotEmpty()) {
-            branch
-        } else {
-            val env = System.getenv()
-            env["CI_COMMIT_REF_NAME"]
-                ?: env["CI_COMMIT_TAG"]
-                ?: env["CI_BUILD_REF_NAME"]
-                ?: "detached"
-        }
-    } catch (e: Exception) {
-        System.getenv()["CI_COMMIT_REF_NAME"] ?: "unknown"
-    }
-}
-val currentBranch = getGitBranch()
-
-println("current branch: $currentBranch")
-extensions.configure<KspExtension> {
-    arg("GIT_BRANCH", currentBranch)
-}
-
 kotlin {
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     iosArm64()
     iosSimulatorArm64()
-    
+
     jvm()
-    
+
     js {
         browser()
     }
-    
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
     }
-    
+
     sourceSets {
         commonMain.dependencies {
             // put your Multiplatform dependencies here
@@ -98,4 +74,32 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().con
     if (name != "kspCommonMainKotlinMetadata") {
         dependsOn("kspCommonMainKotlinMetadata")
     }
+}
+
+fun Project.getGitBranch(): String {
+    return try {
+        val branch = providers.exec {
+            commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
+        }.standardOutput.asText.get().trim()
+
+        if (branch != "HEAD" && branch.isNotEmpty()) {
+            branch
+        } else {
+            val env = System.getenv()
+            env["CI_COMMIT_REF_NAME"]
+                ?: env["CI_COMMIT_TAG"]
+                ?: env["CI_BUILD_REF_NAME"]
+                ?: "detached"
+        }
+    } catch (e: Exception) {
+        System.getenv()["CI_COMMIT_REF_NAME"] ?: "unknown"
+    }
+}
+
+val currentBranch = getGitBranch()
+
+println("current branch: $currentBranch")
+extensions.configure<KspExtension> {
+    arg("GIT_BRANCH", currentBranch)
+    arg("PROJECT_DIR", projectDir.absolutePath)
 }

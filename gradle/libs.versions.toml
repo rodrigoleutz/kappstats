@@ -54,7 +54,6 @@ room = "2.8.4"
 sqlite = "2.6.2"
 testcontainers = "2.0.3"
 
-
 [libraries]
 # Default
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
