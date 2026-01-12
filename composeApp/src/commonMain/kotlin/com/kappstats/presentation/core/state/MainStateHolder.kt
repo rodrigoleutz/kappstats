@@ -30,6 +30,8 @@ class MainStateHolder {
                 if(!event.value) navPop()
                 _uiState.update { it.copy(isBackButton = event.value) }
             }
+            is MainEvent.SetIsLoading -> _uiState.update { it.copy(isLoading = event.value) }
+            is MainEvent.SetIsLogged -> _uiState.update { it.copy(isLogged = event.value) }
             is MainEvent.SetPaddingValues -> _uiState.update { it.copy(paddingValues = event.value) }
             is MainEvent.SetTitle -> _uiState.update { it.copy(title = event.value) }
         }

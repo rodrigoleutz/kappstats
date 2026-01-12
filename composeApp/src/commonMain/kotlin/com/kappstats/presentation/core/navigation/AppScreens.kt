@@ -29,7 +29,9 @@ import org.jetbrains.compose.resources.StringResource
 sealed interface AppScreens : ComposeRoute, NavKey {
 
     companion object {
-        val all: List<ComposeRoute> = listOf(Home, Splash)
+        val all: List<AppScreens> = listOf(Home, Splash, Auth.SignIn, Auth.SignUp)
+        val unlogged: List<AppScreens> = listOf(Auth.SignIn, Auth.SignUp)
+        val logged: List<AppScreens> = listOf(AppScreens.Home)
 
         val configuration = SavedStateConfiguration {
             serializersModule = SerializersModule {
