@@ -1,3 +1,5 @@
+<img src="docs/img/logo.webp" alt="KAppStats" width="300">
+
 # KAppStats
 
 KAppStats is an open-source project that makes it easy to collect metrics and statistics from websites, apps, and systems.
