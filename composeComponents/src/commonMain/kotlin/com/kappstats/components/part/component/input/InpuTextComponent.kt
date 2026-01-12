@@ -63,27 +63,27 @@ fun InputTextComponent(
             onValueChange = {
                 onChange(it)
             },
-        )
-        AnimatedVisibility(
-            visible = errorMessage != null,
-            enter = fadeIn() + slideInVertically(),
-            exit = fadeOut() + slideOutVertically()
-        ) {
-            Card(modifier = modifier) {
-                Row(
-                    modifier = modifier.padding(AppDimensions.Medium.component),
-                    verticalAlignment = Alignment.CenterVertically
+            isError = errorMessage != null,
+            supportingText = {
+                AnimatedVisibility(
+                    visible = errorMessage != null,
+                    enter = fadeIn() + slideInVertically(),
+                    exit = fadeOut() + slideOutVertically()
                 ) {
-                    Icon(
-                        imageVector = EvaIcons.Fill.AlertTriangle,
-                        contentDescription = displayError
-                    )
-                    Spacer(modifier = Modifier.width(AppDimensions.Small.component))
-                    Text(displayError)
+                    Row(
+                        modifier = modifier,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = EvaIcons.Fill.AlertTriangle,
+                            contentDescription = displayError
+                        )
+                        Spacer(modifier = Modifier.width(AppDimensions.Small.component))
+                        Text(displayError)
+                    }
                 }
             }
-
-        }
+        )
     }
 }
 
