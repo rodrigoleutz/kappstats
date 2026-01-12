@@ -20,7 +20,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,6 +54,7 @@ fun InputTextComponent(
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
     onChange: (String) -> Unit
 ) {
     var displayError by remember {
@@ -122,7 +125,8 @@ fun InputTextComponent(
                         Text(displayError)
                     }
                 }
-            }
+            },
+            colors = colors
         )
     }
 }

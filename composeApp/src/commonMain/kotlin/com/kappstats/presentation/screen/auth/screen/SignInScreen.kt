@@ -27,6 +27,7 @@ import com.kappstats.components.part.component.input.InputTextComponent
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Green20
 import com.kappstats.components.theme.Red20
+import com.kappstats.components.theme.component_color.InputTextColors
 import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
 import com.kappstats.presentation.core.state.MainEvent
@@ -80,7 +81,8 @@ fun SignInScreen(
             },
             keyboardType = KeyboardType.Email,
             errorMessage = if (uiState.email.isBlank() || Email.isValidEmail(uiState.email)) null
-            else stringResource(Res.string.error_email)
+            else stringResource(Res.string.error_email),
+            colors = InputTextColors.outlinedInputTextColors()
         )
         Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
         InputTextComponent(
@@ -98,7 +100,8 @@ fun SignInScreen(
                 }
             ),
             errorMessage = if (uiState.password.isBlank() || Password.isValidPassword(uiState.password)) null
-            else stringResource(Res.string.error_password)
+            else stringResource(Res.string.error_password),
+            colors = InputTextColors.outlinedInputTextColors()
         )
         Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
         Row(
