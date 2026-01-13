@@ -1,6 +1,7 @@
 package com.kappstats.presentation.routes.api.user
 
 import com.kappstats.Platform
+import com.kappstats.constants.USERNAME
 import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
 import com.kappstats.custom_object.username.Username
@@ -15,12 +16,15 @@ import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Updates
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
+import io.ktor.http.parameters
+import io.ktor.http.parseQueryString
 import kotlinx.coroutines.flow.toList
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.MethodOrderer
@@ -109,6 +113,36 @@ class UserRoutesTest : BaseIntegrationTest() {
             bearerAuth(token)
         }
         assertEquals(HttpStatusCode.Unauthorized, authenticateRequest.status)
+    }
+
+    @Test
+    @Order(4)
+    fun `Check if username already exists`() = baseTestApplication { client ->
+        client.get(AppEndpoints.Api.User.HasUsername.fullPath) {
+            contentType(ContentType.Application.Json)
+        }.apply {
+            assertEquals(HttpStatusCode.BadRequest, status)
+        }
+        client.get(AppEndpoints.Api.User.HasUsername.fullPath) {
+            contentType(ContentType.Application.Json)
+            parameters {
+                append(USERNAME, "anonnnnn")
+            }
+        }.apply {
+            assertEquals(HttpStatusCode.BadRequest, status)
+        }
+        client.get(AppEndpoints.Api.User.HasUsername.fullPath) {
+            contentType(ContentType.Application.Json)
+            parameter(USERNAME, signUp.username.asString)
+        }.apply {
+            assertEquals(HttpStatusCode.OK, status)
+        }
+        client.get(AppEndpoints.Api.User.HasUsername.fullPath) {
+            contentType(ContentType.Application.Json)
+            parameter(USERNAME, "anonymous1")
+        }.apply {
+            assertEquals(HttpStatusCode.NotFound, status)
+        }
     }
 
 }

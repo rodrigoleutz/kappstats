@@ -67,6 +67,9 @@ class UserUseCasesTest {
         hashingService = SHA256HashingServiceImpl()
         tokenService = JwtTokenServiceImpl(tokenConfig, authTokenRepository)
         userUseCases = UserUseCases(
+            hasUsername = UserHasUsernameUseCase(
+                profileRepository = profileRepository
+            ),
             signIn = UserSignInUseCase(
                 authRepository = authRepository,
                 authTokenRepository = authTokenRepository,

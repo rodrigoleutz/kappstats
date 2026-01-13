@@ -1,5 +1,7 @@
 package com.kappstats.presentation.routes.api.user
 
+import com.kappstats.constants.USERNAME
+import com.kappstats.custom_object.username.Username
 import com.kappstats.domain.use_case.user.UserUseCases
 import com.kappstats.dto.request.user.SignInRequest
 import com.kappstats.dto.request.user.SignUpRequest
@@ -29,6 +31,20 @@ fun Route.userRoutes() {
         }
         post<SignUpRequest>(AppEndpoints.Api.User.SignUp.path) { request ->
             val resource = userUseCases.signUp.invoke(request)
+            call.respondFromResource(resource)
+        }
+        get(AppEndpoints.Api.User.HasUsername.path) {
+            val parameter = call.queryParameters[USERNAME] ?: run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
+            }
+            val username = try {
+                Username(parameter)
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
+            }
+            val resource = userUseCases.hasUsername.invoke(username)
             call.respondFromResource(resource)
         }
     }
