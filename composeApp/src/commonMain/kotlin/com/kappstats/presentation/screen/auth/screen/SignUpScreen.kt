@@ -1,5 +1,8 @@
 package com.kappstats.presentation.screen.auth.screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,6 +39,9 @@ import com.kappstats.components.part.modifier.verticalScrollbar
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Blue20
 import com.kappstats.components.theme.Green20
+import com.kappstats.components.theme.Orange20
+import com.kappstats.components.theme.Orange60
+import com.kappstats.components.theme.Orange80
 import com.kappstats.components.theme.Red20
 import com.kappstats.components.theme.component_color.InputTextColors
 import com.kappstats.custom_object.email.Email
@@ -51,6 +58,7 @@ import com.kappstats.resources.error_email
 import com.kappstats.resources.error_password
 import com.kappstats.resources.error_password_confirm
 import com.kappstats.resources.error_username
+import com.kappstats.resources.error_username_already_exists
 import com.kappstats.resources.login
 import com.kappstats.resources.logo
 import com.kappstats.resources.name
@@ -131,9 +139,27 @@ fun SignUpScreen(
                     onEvent(SignEvent.SetUsername(it))
                 },
                 keyboardType = KeyboardType.Text,
-                errorMessage = if (uiState.username.isBlank() || Username.isValidUsername(uiState.username)) null
-                else stringResource(Res.string.error_username),
-                //TODO: Server response for username exists
+                errorMessage = when (uiState.hasUsername) {
+                    true -> stringResource(Res.string.error_username_already_exists)
+                    false -> null
+                    else -> {
+                        if (uiState.username.isBlank() || Username.isValidUsername(uiState.username)) null
+                        else stringResource(Res.string.error_username)
+                    }
+                },
+                trailingIcon = {
+                    AnimatedVisibility(
+                        uiState.loadingUsername,
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(AppDimensions.ExtraLarge.component),
+                            trackColor = Orange80,
+                            color = Orange20
+                        )
+                    }
+                },
                 colors = InputTextColors.outlinedInputTextColors()
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
@@ -145,7 +171,10 @@ fun SignUpScreen(
                     onEvent(SignEvent.SetPassword(it))
                 },
                 keyboardType = KeyboardType.Password,
-                errorMessage = if (uiState.password.isBlank() || Password.isValidPassword(uiState.password)) null
+                errorMessage = if (uiState.password.isBlank() || Password.isValidPassword(
+                        uiState.password
+                    )
+                ) null
                 else stringResource(Res.string.error_password),
                 colors = InputTextColors.outlinedInputTextColors()
             )
@@ -165,11 +194,13 @@ fun SignUpScreen(
                         defaultKeyboardAction(ImeAction.Done)
                     }
                 ),
-                errorMessage = if (passwordConfirm.isBlank() || uiState.password == passwordConfirm) null
-                else stringResource(Res.string.error_password_confirm),
+                errorMessage =
+                    if (passwordConfirm.isBlank() || uiState.password == passwordConfirm) null
+                    else stringResource(Res.string.error_password_confirm),
                 colors = InputTextColors.outlinedInputTextColors()
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
+
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -204,7 +235,8 @@ fun SignUpScreen(
                             Username.isValidUsername(uiState.username) &&
                             Password.isValidPassword(uiState.password) &&
                             passwordConfirm == uiState.password &&
-                            uiState.name.isNotBlank(),
+                            uiState.name.isNotBlank() &&
+                            uiState.hasUsername == false,
                     onClick = {
                         onSignUp()
                     }

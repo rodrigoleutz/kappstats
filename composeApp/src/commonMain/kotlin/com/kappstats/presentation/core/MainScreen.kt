@@ -1,5 +1,8 @@
 package com.kappstats.presentation.core
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -18,13 +21,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.navigation3.runtime.NavKey
 import com.kappstats.components.navigation.ComposeRoute
-import com.kappstats.components.part.component.container.ScrollableContainerComponent
 import com.kappstats.components.part.widget.drawer_menu.DrawerMenuWidget
 import com.kappstats.components.part.widget.drawer_menu.DrawerMenuWidgetColors
+import com.kappstats.components.part.widget.loading.LoadingScreenWidget
+import com.kappstats.components.part.widget.snackbar.AppSnackbarWidget
 import com.kappstats.components.part.widget.top_bar.TopBarWidget
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Blue20
-import com.kappstats.components.theme.Blue80
 import com.kappstats.components.theme.Gray60
 import com.kappstats.components.theme.Orange40
 import com.kappstats.components.theme.Orange60
@@ -34,6 +37,8 @@ import com.kappstats.presentation.core.state.MainUiState
 import com.kappstats.resources.Res
 import com.kappstats.resources.app_name
 import com.kappstats.resources.back
+import com.kappstats.resources.close
+import com.kappstats.resources.loading
 import com.kappstats.resources.logo
 import com.kappstats.resources.menu
 import compose.icons.EvaIcons
@@ -140,12 +145,20 @@ fun MainScreen(
                     }
                 }
             },
+            snackbarHost = {
+                AppSnackbarWidget(uiState.snackbarHostState, stringResource(Res.string.close))
+            },
             containerColor = Gray60
         ) { innerPadding ->
             LaunchedEffect(innerPadding) {
                 onEvent(MainEvent.SetPaddingValues(innerPadding))
             }
             content()
+            AnimatedVisibility(uiState.isLoading, enter = fadeIn(), exit = fadeOut()) {
+                LoadingScreenWidget(
+                    loadingText = stringResource(Res.string.loading)
+                )
+            }
         }
     }
 }

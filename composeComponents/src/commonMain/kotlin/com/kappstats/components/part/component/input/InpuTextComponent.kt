@@ -55,6 +55,7 @@ fun InputTextComponent(
     imeAction: ImeAction = ImeAction.Next,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    trailingIcon: (@Composable () -> Unit)? = null,
     onChange: (String) -> Unit
 ) {
     var displayError by remember {
@@ -90,21 +91,25 @@ fun InputTextComponent(
             visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisibility) PasswordVisualTransformation()
             else VisualTransformation.None,
             trailingIcon = {
-                when (keyboardType) {
-                    KeyboardType.Password -> {
-                        IconButton(
-                            onClick = {
-                                passwordVisibility = !passwordVisibility
+                if(trailingIcon != null) {
+                    trailingIcon()
+                } else {
+                    when (keyboardType) {
+                        KeyboardType.Password -> {
+                            IconButton(
+                                onClick = {
+                                    passwordVisibility = !passwordVisibility
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = if (passwordVisibility) TablerIcons.EyeOff else TablerIcons.Eye,
+                                    contentDescription = "Password visibility"
+                                )
                             }
-                        ) {
-                            Icon(
-                                imageVector = if (passwordVisibility) TablerIcons.EyeOff else TablerIcons.Eye,
-                                contentDescription = "Password visibility"
-                            )
                         }
-                    }
 
-                    else -> {}
+                        else -> {}
+                    }
                 }
             },
             supportingText = {

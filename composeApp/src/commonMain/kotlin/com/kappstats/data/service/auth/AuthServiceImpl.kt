@@ -1,5 +1,7 @@
 package com.kappstats.data.service.auth
 
+import com.kappstats.constants.USERNAME
+import com.kappstats.custom_object.username.Username
 import com.kappstats.data.remote.data_source.RemoteDataSource
 import com.kappstats.dto.request.user.SignInRequest
 import com.kappstats.dto.request.user.SignUpRequest
@@ -8,6 +10,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -20,6 +23,14 @@ class AuthServiceImpl(
     override suspend fun authenticate(token: String): Boolean {
         val response = remoteDataSource.client.get(AppEndpoints.Api.User.Authenticate.route) {
             createRequest(token)
+        }
+        return response.status == HttpStatusCode.OK
+    }
+
+    override suspend fun hasUsername(username: Username): Boolean {
+        val response = remoteDataSource.client.get(AppEndpoints.Api.User.HasUsername.route) {
+            createRequest()
+            parameter(USERNAME, username.asString)
         }
         return response.status == HttpStatusCode.OK
     }

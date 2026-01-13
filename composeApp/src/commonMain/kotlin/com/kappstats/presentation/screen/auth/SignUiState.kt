@@ -2,6 +2,8 @@ package com.kappstats.presentation.screen.auth
 
 data class SignUiState(
     val email: String = "",
+    val hasUsername: Boolean? = null,
+    val loadingUsername: Boolean = false,
     val name: String = "",
     val password: String = "",
     val username: String = ""

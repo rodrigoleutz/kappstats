@@ -110,6 +110,8 @@ git checkout dev
 #### Create a test class by extending BaseIntegrationTest. Use the baseTestApplication helper to perform requests:
 ```kotlin
 class TestClass : BaseIntegrationTest() {
+    
+    @Test
     fun `Should return OK when posting valid info`() = baseTestApplication { client ->
         val bodyInfo = "{ \"key\": \"value\" }"
 
@@ -122,6 +124,7 @@ class TestClass : BaseIntegrationTest() {
 
         assertEquals(HttpStatusCode.OK, response.status)
     }
+    
 }
 ```
 ---

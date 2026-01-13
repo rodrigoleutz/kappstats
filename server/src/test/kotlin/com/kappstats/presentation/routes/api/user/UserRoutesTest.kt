@@ -125,9 +125,7 @@ class UserRoutesTest : BaseIntegrationTest() {
         }
         client.get(AppEndpoints.Api.User.HasUsername.fullPath) {
             contentType(ContentType.Application.Json)
-            parameters {
-                append(USERNAME, "anonnnnn")
-            }
+            parameter(USERNAME, "anonnnnn")
         }.apply {
             assertEquals(HttpStatusCode.BadRequest, status)
         }

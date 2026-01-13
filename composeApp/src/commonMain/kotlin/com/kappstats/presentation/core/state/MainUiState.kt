@@ -1,6 +1,7 @@
 package com.kappstats.presentation.core.state
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.SnackbarHostState
 import androidx.navigation3.runtime.NavKey
 
 data class MainUiState(
@@ -9,6 +10,7 @@ data class MainUiState(
     val isLoading: Boolean = false,
     val isLogged: Boolean = false,
     val paddingValues: PaddingValues = PaddingValues(),
+    val snackbarHostState: SnackbarHostState = SnackbarHostState(),
     val title: String = ""
 )
 
