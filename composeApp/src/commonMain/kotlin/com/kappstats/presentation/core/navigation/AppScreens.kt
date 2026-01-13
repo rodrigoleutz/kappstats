@@ -7,19 +7,26 @@ import com.kappstats.components.navigation.ComposeRoute
 import com.kappstats.resources.Res
 import com.kappstats.resources.auth
 import com.kappstats.resources.home
+import com.kappstats.resources.privacy_policy
+import com.kappstats.resources.privacy_policy_and_terms
 import com.kappstats.resources.sign_in
 import com.kappstats.resources.sign_up
 import com.kappstats.resources.splash
+import com.kappstats.resources.terms_and_conditions
 import compose.icons.EvaIcons
 import compose.icons.FeatherIcons
 import compose.icons.Octicons
 import compose.icons.TablerIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.LogIn
+import compose.icons.evaicons.fill.PersonAdd
 import compose.icons.feathericons.Home
 import compose.icons.octicons.SignIn24
 import compose.icons.tablericons.Loader
 import compose.icons.tablericons.Registered
+import compose.icons.tablericons.Shield
+import compose.icons.tablericons.ShieldCheck
+import compose.icons.tablericons.ShieldLock
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -30,8 +37,10 @@ sealed interface AppScreens : ComposeRoute, NavKey {
 
     companion object {
         val all: List<AppScreens> = listOf(Home, Splash, Auth.SignIn, Auth.SignUp)
-        val unlogged: List<AppScreens> = listOf(Auth.SignIn, Auth.SignUp)
-        val logged: List<AppScreens> = listOf(AppScreens.Home)
+        val unlogged: List<AppScreens> = listOf(Auth.SignIn, Auth.SignUp, PrivacyAndTerms.TermsAndConditions, PrivacyAndTerms.PrivacyPolicy)
+        val unloggedDrawerDivider: List<AppScreens> = listOf(PrivacyAndTerms.TermsAndConditions)
+        val logged: List<AppScreens> = listOf(AppScreens.Home, PrivacyAndTerms.TermsAndConditions, PrivacyAndTerms.PrivacyPolicy)
+        val loggedDrawerDivider: List<AppScreens> = listOf(PrivacyAndTerms.TermsAndConditions)
 
         val configuration = SavedStateConfiguration {
             serializersModule = SerializersModule {
@@ -63,7 +72,7 @@ sealed interface AppScreens : ComposeRoute, NavKey {
         @Serializable
         data object SignUp : AppScreens {
             override val title: StringResource = Res.string.sign_up
-            override val icon: ImageVector = Octicons.SignIn24
+            override val icon: ImageVector = EvaIcons.Fill.PersonAdd
             override val route: @Serializable SignUp = this
         }
     }
@@ -74,6 +83,26 @@ sealed interface AppScreens : ComposeRoute, NavKey {
         override val title: StringResource = Res.string.home
         override val icon: ImageVector = FeatherIcons.Home
         override val route: @Serializable Home = this
+    }
+
+    @Serializable
+    data object PrivacyAndTerms: AppScreens {
+        override val title: StringResource = Res.string.privacy_policy_and_terms
+        override val icon: ImageVector = TablerIcons.Shield
+        override val route: @Serializable PrivacyAndTerms = this
+        override val subRoutes: Set<ComposeRoute> = setOf(PrivacyPolicy, TermsAndConditions)
+
+        data object PrivacyPolicy: AppScreens {
+            override val title: StringResource = Res.string.privacy_policy
+            override val icon: ImageVector = TablerIcons.ShieldLock
+            override val route: @Serializable PrivacyPolicy = this
+        }
+
+        data object TermsAndConditions: AppScreens {
+            override val title: StringResource = Res.string.terms_and_conditions
+            override val icon: ImageVector = TablerIcons.ShieldCheck
+            override val route: @Serializable TermsAndConditions = this
+        }
     }
 
     @Serializable

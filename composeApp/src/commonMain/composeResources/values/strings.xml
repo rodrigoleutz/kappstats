@@ -1,4 +1,5 @@
 <resources>
+    <string name="accept_terms">I accept the Terms and Conditions and Privacy Policy.</string>
     <string name="app_name">KAppStats</string>
     <string name="auth">Auth</string>
     <string name="back">Back</string>
@@ -7,11 +8,17 @@
     <string name="email">Email</string>
     <string name="error_email">Please enter a valid email (e.g., name@example.com).</string>
     <string name="error_password">Password must be at least 8 characters, with one uppercase letter, one number, and one special character.</string>
+    <string name="error_password_confirm">Passwords do not match</string>
     <string name="home">Home</string>
     <string name="login">Login</string>
     <string name="menu">Menu</string>
+    <string name="name">Name</string>
     <string name="password">Password</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_and_terms">Privacy Policy and Terms</string>
+    <string name="register">Register</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="splash">Splash</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
 </resources>

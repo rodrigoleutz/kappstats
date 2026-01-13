@@ -13,17 +13,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.kappstats.components.navigation.ComposeRoute
 import com.kappstats.components.theme.AppDimensions
+import com.kappstats.components.theme.Blue20
+import com.kappstats.components.theme.Blue40
 
 @Composable
 fun DrawerMenuWidget(
     itemList: List<ComposeRoute>,
     selected: ComposeRoute,
+    dividerBefore: List<ComposeRoute> = emptyList(),
     drawerCard: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier,
     colors: DrawerMenuWidgetColors = DrawerMenuWidgetColors(),
@@ -51,6 +55,11 @@ fun DrawerMenuWidget(
             }
             Spacer(modifier = Modifier)
             itemList.forEach { item ->
+                if(item in dividerBefore)
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Blue40
+                    )
                 DrawerMenuItemWidget(
                     item = item,
                     selected = item == selected,

@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.navigation3.runtime.NavKey
 import com.kappstats.components.navigation.ComposeRoute
+import com.kappstats.components.part.component.container.ScrollableContainerComponent
 import com.kappstats.components.part.widget.drawer_menu.DrawerMenuWidget
 import com.kappstats.components.part.widget.drawer_menu.DrawerMenuWidgetColors
 import com.kappstats.components.part.widget.top_bar.TopBarWidget
@@ -58,6 +59,8 @@ fun MainScreen(
             DrawerMenuWidget(
                 itemList = if (uiState.isLogged) AppScreens.logged else AppScreens.unlogged,
                 selected = selectedRoute,
+                dividerBefore = if (uiState.isLogged) AppScreens.loggedDrawerDivider
+                else AppScreens.unloggedDrawerDivider,
                 colors = DrawerMenuWidgetColors(
                     containerColor = Brush.verticalGradient(
                         listOf(
@@ -117,7 +120,7 @@ fun MainScreen(
                                 }
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = Blue20,
+                                containerColor = Blue20.copy(0.9f),
                                 titleContentColor = Color.White,
                                 navigationIconContentColor = Orange40
                             )
@@ -125,7 +128,14 @@ fun MainScreen(
                         Column(
                             modifier = Modifier.fillMaxWidth()
                                 .height(AppDimensions.Medium.component)
-                                .background(Brush.verticalGradient(listOf(Blue20, Gray60)))
+                                .background(
+                                    Brush.verticalGradient(
+                                        listOf(
+                                            Blue20.copy(0.9f),
+                                            Color.Transparent
+                                        )
+                                    )
+                                )
                         ) { }
                     }
                 }

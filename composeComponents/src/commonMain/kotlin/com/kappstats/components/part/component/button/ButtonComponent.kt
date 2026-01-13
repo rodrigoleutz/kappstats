@@ -25,7 +25,7 @@ fun ButtonComponent(
     colors: ButtonColors = ButtonDefaults.buttonColors(),
     enabled: Boolean = true,
     elevation: Dp = AppDimensions.Medium.component,
-    pointerHover: PointerIcon = PointerIcon.Hand,
+    pointerHover: PointerIcon = if(enabled) PointerIcon.Hand else PointerIcon.Default,
     onClick: () -> Unit
 ) {
     Button(

@@ -17,20 +17,41 @@ fun EntryProviderScope<NavKey>.authNavigation(
     stateHolder: MainStateHolder
 ) {
     entry<AppScreens.Auth.SignIn> {
+        val mainUiState by stateHolder.uiState.collectAsState()
         val viewModel: SignViewModel = koinViewModel()
         val uiState by viewModel.uiState.collectAsState()
         SignInScreen(
+            paddingValues = mainUiState.paddingValues,
             uiState = uiState,
             onMainEvent = stateHolder::onMainEvent,
             onEvent = viewModel::onEvent,
             onSignIn = {
                 viewModel.signIn { result ->
-                    if (result) navBackStack.add(AppScreens.Home)
+                    if (result) {
+                        navBackStack.clear()
+                        navBackStack.add(AppScreens.Home)
+                    }
                 }
             }
         )
     }
     entry<AppScreens.Auth.SignUp> {
-        SignUpScreen()
+        val mainUiState by stateHolder.uiState.collectAsState()
+        val viewModel: SignViewModel = koinViewModel()
+        val uiState by viewModel.uiState.collectAsState()
+        SignUpScreen(
+            paddingValues = mainUiState.paddingValues,
+            uiState = uiState,
+            onEvent = viewModel::onEvent,
+            onMainEvent = stateHolder::onMainEvent,
+            onSignUp = {
+                viewModel.signUp { result ->
+                    if(result) {
+                        navBackStack.clear()
+                        navBackStack.add(AppScreens.Home)
+                    }
+                }
+            }
+        )
     }
 }

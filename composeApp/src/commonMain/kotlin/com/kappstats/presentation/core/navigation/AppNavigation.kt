@@ -20,6 +20,8 @@ import com.kappstats.presentation.core.state.MainStateHolder
 import com.kappstats.presentation.screen.auth.navigation.authNavigation
 import com.kappstats.presentation.screen.home.HomeScreen
 import com.kappstats.presentation.screen.home.HomeViewModel
+import com.kappstats.presentation.screen.privacy_and_terms.PrivacyAndTermsScreen
+import com.kappstats.presentation.screen.privacy_and_terms.navigation.privacyAndTermsNavigation
 import com.kappstats.presentation.screen.splash.SplashScreen
 import com.kappstats.presentation.screen.splash.SplashViewModel
 import org.jetbrains.compose.resources.getString
@@ -67,11 +69,15 @@ fun AppNavigation() {
                 },
                 entryProvider = entryProvider {
                     authNavigation(navBackStack, stateHolder)
+                    privacyAndTermsNavigation(navBackStack, stateHolder)
                     entry<AppScreens.Home> {
                         val viewModel: HomeViewModel = koinViewModel()
                         HomeScreen(
                             onMainEvent = stateHolder::onMainEvent
                         )
+                    }
+                    entry<AppScreens.PrivacyAndTerms> {
+                        PrivacyAndTermsScreen(paddingValues = uiState.paddingValues)
                     }
                     entry<AppScreens.Splash> {
                         val viewModel: SplashViewModel = koinViewModel()
