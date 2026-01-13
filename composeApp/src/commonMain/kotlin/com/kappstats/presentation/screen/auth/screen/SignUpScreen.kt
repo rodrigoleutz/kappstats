@@ -39,6 +39,7 @@ import com.kappstats.components.theme.Red20
 import com.kappstats.components.theme.component_color.InputTextColors
 import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
+import com.kappstats.custom_object.username.Username
 import com.kappstats.presentation.core.state.MainEvent
 import com.kappstats.presentation.screen.auth.SignEvent
 import com.kappstats.presentation.screen.auth.SignUiState
@@ -49,11 +50,13 @@ import com.kappstats.resources.email
 import com.kappstats.resources.error_email
 import com.kappstats.resources.error_password
 import com.kappstats.resources.error_password_confirm
+import com.kappstats.resources.error_username
 import com.kappstats.resources.login
 import com.kappstats.resources.logo
 import com.kappstats.resources.name
 import com.kappstats.resources.password
 import com.kappstats.resources.register
+import com.kappstats.resources.username
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.Close
@@ -122,6 +125,20 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
                 modifier = Modifier.fillMaxWidth(),
+                label = stringResource(Res.string.username),
+                value = uiState.username,
+                onChange = {
+                    onEvent(SignEvent.SetUsername(it))
+                },
+                keyboardType = KeyboardType.Text,
+                errorMessage = if (uiState.username.isBlank() || Username.isValidUsername(uiState.username)) null
+                else stringResource(Res.string.error_username),
+                //TODO: Server response for username exists
+                colors = InputTextColors.outlinedInputTextColors()
+            )
+            Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
+            InputTextComponent(
+                modifier = Modifier.fillMaxWidth(),
                 label = stringResource(Res.string.password),
                 value = uiState.password,
                 onChange = {
@@ -184,8 +201,10 @@ fun SignUpScreen(
                         contentColor = Color.White
                     ),
                     enabled = Email.isValidEmail(uiState.email) &&
+                            Username.isValidUsername(uiState.username) &&
                             Password.isValidPassword(uiState.password) &&
-                            passwordConfirm == uiState.password,
+                            passwordConfirm == uiState.password &&
+                            uiState.name.isNotBlank(),
                     onClick = {
                         onSignUp()
                     }

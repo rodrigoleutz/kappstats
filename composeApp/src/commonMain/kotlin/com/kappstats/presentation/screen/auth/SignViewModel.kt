@@ -3,6 +3,7 @@ package com.kappstats.presentation.screen.auth
 import androidx.lifecycle.viewModelScope
 import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
+import com.kappstats.custom_object.username.Username
 import com.kappstats.domain.use_case.auth.AuthUseCases
 import com.kappstats.presentation.core.navigation.AppScreens
 import com.kappstats.presentation.core.state.MainEvent
@@ -24,6 +25,7 @@ class SignViewModel(
             is SignEvent.SetEmail -> _uiState.update { it.copy(email = event.email) }
             is SignEvent.SetName -> _uiState.update { it.copy(name = event.name) }
             is SignEvent.SetPassword -> _uiState.update { it.copy(password = event.password) }
+            is SignEvent.SetUsername -> _uiState.update { it.copy(username = event.username) }
         }
     }
 
@@ -56,6 +58,12 @@ class SignViewModel(
             } catch (e: Exception) {
                 return@launch
             }
+            val username = try {
+                Username(uiState.value.username)
+            } catch (e: Exception) {
+                return@launch
+            }
+
         }
     }
 

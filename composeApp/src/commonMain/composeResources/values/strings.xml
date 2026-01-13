@@ -9,6 +9,7 @@
     <string name="error_email">Please enter a valid email (e.g., name@example.com).</string>
     <string name="error_password">Password must be at least 8 characters, with one uppercase letter, one number, and one special character.</string>
     <string name="error_password_confirm">Passwords do not match</string>
+    <string name="error_username">Username must be at least 4 characters, with one number.</string>
     <string name="home">Home</string>
     <string name="login">Login</string>
     <string name="menu">Menu</string>
@@ -21,4 +22,5 @@
     <string name="sign_up">Sign Up</string>
     <string name="splash">Splash</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="username">Username</string>
 </resources>
