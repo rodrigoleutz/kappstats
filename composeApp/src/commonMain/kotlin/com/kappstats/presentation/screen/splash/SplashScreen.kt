@@ -15,12 +15,17 @@ import com.kappstats.presentation.core.navigation.AppScreens
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    authenticate: () -> Unit
+) {
+    LaunchedEffect(Unit) {
+        authenticate()
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("splash")
+
     }
 }

@@ -11,9 +11,11 @@ class SplashViewModel(
 ): StateViewModel() {
 
     fun authenticate(result: (Boolean) -> Unit) {
+        stateHolder.onMainEvent(MainEvent.SetIsLoading(true))
         viewModelScope.launch {
             val resource = authUseCases.authenticate.invoke()
             stateHolder.onMainEvent(MainEvent.SetIsLogged(resource.isSuccess))
+            stateHolder.onMainEvent(MainEvent.SetIsLoading(false))
             result(resource.isSuccess)
         }
     }

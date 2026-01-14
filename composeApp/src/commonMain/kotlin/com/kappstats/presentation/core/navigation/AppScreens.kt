@@ -7,6 +7,7 @@ import com.kappstats.components.navigation.ComposeRoute
 import com.kappstats.resources.Res
 import com.kappstats.resources.auth
 import com.kappstats.resources.home
+import com.kappstats.resources.logout
 import com.kappstats.resources.privacy_policy
 import com.kappstats.resources.privacy_policy_and_terms
 import com.kappstats.resources.sign_in
@@ -19,6 +20,7 @@ import compose.icons.Octicons
 import compose.icons.TablerIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.LogIn
+import compose.icons.evaicons.fill.LogOut
 import compose.icons.evaicons.fill.PersonAdd
 import compose.icons.feathericons.Home
 import compose.icons.octicons.SignIn24
@@ -36,19 +38,43 @@ import org.jetbrains.compose.resources.StringResource
 sealed interface AppScreens : ComposeRoute, NavKey {
 
     companion object {
-        val all: List<AppScreens> = listOf(Home, Splash, Auth.SignIn, Auth.SignUp)
-        val unlogged: List<AppScreens> = listOf(Auth.SignIn, Auth.SignUp, PrivacyAndTerms.TermsAndConditions, PrivacyAndTerms.PrivacyPolicy)
+        val all: List<AppScreens> = listOf(
+            Home, Splash, Auth.LogOut, Auth.SignIn, Auth.SignUp,
+            PrivacyAndTerms, PrivacyAndTerms.PrivacyPolicy, PrivacyAndTerms.TermsAndConditions
+        )
+        val unlogged: List<AppScreens> = listOf(
+            Auth.SignIn,
+            Auth.SignUp,
+            PrivacyAndTerms.TermsAndConditions,
+            PrivacyAndTerms.PrivacyPolicy
+        )
         val unloggedDrawerDivider: List<AppScreens> = listOf(PrivacyAndTerms.TermsAndConditions)
-        val logged: List<AppScreens> = listOf(AppScreens.Home, PrivacyAndTerms.TermsAndConditions, PrivacyAndTerms.PrivacyPolicy)
-        val loggedDrawerDivider: List<AppScreens> = listOf(PrivacyAndTerms.TermsAndConditions)
+        val logged: List<AppScreens> = listOf(
+            AppScreens.Home,
+            PrivacyAndTerms.TermsAndConditions,
+            PrivacyAndTerms.PrivacyPolicy,
+            Auth.LogOut
+        )
+        val loggedDrawerDivider: List<AppScreens> =
+            listOf(Auth.LogOut, PrivacyAndTerms.TermsAndConditions)
 
         val configuration = SavedStateConfiguration {
             serializersModule = SerializersModule {
                 polymorphic(NavKey::class) {
                     subclass(Auth::class, Auth.serializer())
+                    subclass(Auth.LogOut::class, Auth.LogOut.serializer())
                     subclass(Auth.SignIn::class, Auth.SignIn.serializer())
                     subclass(Auth.SignUp::class, Auth.SignUp.serializer())
                     subclass(AppScreens.Home::class, AppScreens.Home.serializer())
+                    subclass(PrivacyAndTerms::class, PrivacyAndTerms.serializer())
+                    subclass(
+                        PrivacyAndTerms.PrivacyPolicy::class,
+                        PrivacyAndTerms.PrivacyPolicy.serializer()
+                    )
+                    subclass(
+                        PrivacyAndTerms.TermsAndConditions::class,
+                        PrivacyAndTerms.TermsAndConditions.serializer()
+                    )
                     subclass(Splash::class, Splash.serializer())
                 }
             }
@@ -61,6 +87,13 @@ sealed interface AppScreens : ComposeRoute, NavKey {
         override val icon: ImageVector = TablerIcons.Registered
         override val route: @Serializable Auth = this
         override val subRoutes: Set<ComposeRoute> = setOf(SignIn, SignUp)
+
+        @Serializable
+        data object LogOut : AppScreens {
+            override val title: StringResource = Res.string.logout
+            override val icon: ImageVector = EvaIcons.Fill.LogOut
+            override val route: @Serializable LogOut = this
+        }
 
         @Serializable
         data object SignIn : AppScreens {
@@ -86,19 +119,21 @@ sealed interface AppScreens : ComposeRoute, NavKey {
     }
 
     @Serializable
-    data object PrivacyAndTerms: AppScreens {
+    data object PrivacyAndTerms : AppScreens {
         override val title: StringResource = Res.string.privacy_policy_and_terms
         override val icon: ImageVector = TablerIcons.Shield
         override val route: @Serializable PrivacyAndTerms = this
         override val subRoutes: Set<ComposeRoute> = setOf(PrivacyPolicy, TermsAndConditions)
 
-        data object PrivacyPolicy: AppScreens {
+        @Serializable
+        data object PrivacyPolicy : AppScreens {
             override val title: StringResource = Res.string.privacy_policy
             override val icon: ImageVector = TablerIcons.ShieldLock
             override val route: @Serializable PrivacyPolicy = this
         }
 
-        data object TermsAndConditions: AppScreens {
+        @Serializable
+        data object TermsAndConditions : AppScreens {
             override val title: StringResource = Res.string.terms_and_conditions
             override val icon: ImageVector = TablerIcons.ShieldCheck
             override val route: @Serializable TermsAndConditions = this

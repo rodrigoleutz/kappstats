@@ -10,6 +10,8 @@ class AuthTokenRepositoryImpl(
 
     private val store = getKStore<AuthTokenEntity>().store
 
+    override suspend fun deleteToken() = store.delete()
+
     override suspend fun getToken(): String? {
         val tokenEncrypted = store.get()?.token ?: return null
         val token = cryptManager.decrypt(tokenEncrypted)

@@ -8,6 +8,7 @@ import androidx.navigation3.runtime.NavKey
 import com.kappstats.presentation.core.navigation.AppScreens
 import com.kappstats.presentation.core.state.MainStateHolder
 import com.kappstats.presentation.screen.auth.SignViewModel
+import com.kappstats.presentation.screen.auth.screen.LogOutScreen
 import com.kappstats.presentation.screen.auth.screen.SignInScreen
 import com.kappstats.presentation.screen.auth.screen.SignUpScreen
 import org.koin.compose.viewmodel.koinViewModel
@@ -16,6 +17,22 @@ fun EntryProviderScope<NavKey>.authNavigation(
     navBackStack: NavBackStack<NavKey>,
     stateHolder: MainStateHolder
 ) {
+    entry<AppScreens.Auth.LogOut> {
+        val viewModel: SignViewModel = koinViewModel()
+        LogOutScreen(
+            cancel = {
+                navBackStack.removeLastOrNull()
+            },
+            logOut = {
+                viewModel.logOut { result ->
+                    if(result) {
+                        navBackStack.clear()
+                        navBackStack.add(AppScreens.Auth.SignIn)
+                    }
+                }
+            }
+        )
+    }
     entry<AppScreens.Auth.SignIn> {
         val mainUiState by stateHolder.uiState.collectAsState()
         val viewModel: SignViewModel = koinViewModel()

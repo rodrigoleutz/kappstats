@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/license-GPL%202.0-blue.svg?style=flat-square)](LICENSE)
+
 <img src="docs/img/logo.webp" alt="KAppStats" width="300">
 
 # KAppStats

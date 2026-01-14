@@ -81,14 +81,17 @@ fun AppNavigation() {
                     }
                     entry<AppScreens.Splash> {
                         val viewModel: SplashViewModel = koinViewModel()
-                        viewModel.authenticate { result ->
-                            val lastIndex = navBackStack.lastIndex
-                            if (lastIndex >= 0) {
-                                navBackStack[lastIndex] =
-                                    if (result) AppScreens.Home else AppScreens.Auth.SignIn
+                        SplashScreen(
+                            authenticate = {
+                                viewModel.authenticate { result ->
+                                    val lastIndex = navBackStack.lastIndex
+                                    if (lastIndex >= 0) {
+                                        navBackStack[lastIndex] =
+                                            if (result) AppScreens.Home else AppScreens.Auth.SignIn
+                                    }
+                                }
                             }
-                        }
-                        SplashScreen()
+                        )
                     }
                 }
             )

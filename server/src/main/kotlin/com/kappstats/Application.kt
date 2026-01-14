@@ -2,6 +2,7 @@ package com.kappstats
 
 import com.kappstats.constants.SERVER_PORT
 import com.kappstats.constants.config.ProjectConfig
+import com.kappstats.plugin.configureCors
 import com.kappstats.plugin.configureKoin
 import com.kappstats.plugin.configureLogger
 import com.kappstats.plugin.configureRoutes
@@ -23,6 +24,7 @@ fun Application.module() {
     configureSerialization()
     configureKoin()
     configureSecurity()
+    configureCors()
     configureWebSocket()
     configureRoutes()
 }
