@@ -36,12 +36,34 @@ kotlin {
 
     js {
         browser()
+        /* Main Release
+        browser {
+            commonWebpackConfig {
+                sourceMaps = false
+                cssSupport {
+                    enabled.set(true)
+                }
+            }
+            binaries.executable()
+        }
+         */
         binaries.executable()
     }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
+        /* Main Release
+        browser {
+            commonWebpackConfig {
+                sourceMaps = false
+                cssSupport {
+                    enabled.set(true)
+                }
+            }
+            binaries.executable()
+        }
+         */
         binaries.executable()
     }
 
