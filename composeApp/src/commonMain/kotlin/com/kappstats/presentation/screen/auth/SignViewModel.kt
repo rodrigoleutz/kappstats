@@ -75,50 +75,64 @@ class SignViewModel(
 
     fun signIn(result: (Boolean) -> Unit) {
         viewModelScope.launch {
-            val email = try {
-                Email(uiState.value.email)
+            stateHolder.onMainEvent(MainEvent.SetIsLoading(true))
+            try {
+                val email = try {
+                    Email(uiState.value.email)
+                } catch (e: Exception) {
+                    return@launch
+                }
+                val password = try {
+                    Password(uiState.value.password)
+                } catch (e: Exception) {
+                    return@launch
+                }
+                val resource = authUseCases.signIn.invoke(email, password)
+                if (resource.isSuccess) {
+                    stateHolder.onMainEvent(MainEvent.SetIsLogged(resource.isSuccess))
+                }
+                result(resource.isSuccess)
             } catch (e: Exception) {
-                return@launch
+                e.printStackTrace()
+            } finally {
+                stateHolder.onMainEvent(MainEvent.SetIsLoading(false))
             }
-            val password = try {
-                Password(uiState.value.password)
-            } catch (e: Exception) {
-                return@launch
-            }
-            val resource = authUseCases.signIn.invoke(email, password)
-            if (resource.isSuccess) {
-                stateHolder.onMainEvent(MainEvent.SetIsLogged(resource.isSuccess))
-            }
-            result(resource.isSuccess)
         }
     }
 
     fun signUp(result: (Boolean) -> Unit) {
         viewModelScope.launch {
-            val email = try {
-                Email(uiState.value.email)
+            stateHolder.onMainEvent(MainEvent.SetIsLoading(true))
+            try {
+                val email = try {
+                    Email(uiState.value.email)
+                } catch (e: Exception) {
+                    return@launch
+                }
+                val password = try {
+                    Password(uiState.value.password)
+                } catch (e: Exception) {
+                    return@launch
+                }
+                val username = try {
+                    Username(uiState.value.username)
+                } catch (e: Exception) {
+                    return@launch
+                }
+                val signUpRequest = SignUpRequest(
+                    email = email,
+                    username = username,
+                    password = password,
+                    name = uiState.value.name
+                )
+                val resource = authUseCases.signUp.invoke(signUpRequest)
+                if (resource.isSuccess)
+                    result(resource.isSuccess)
             } catch (e: Exception) {
-                return@launch
+                e.printStackTrace()
+            } finally {
+                stateHolder.onMainEvent(MainEvent.SetIsLoading(false))
             }
-            val password = try {
-                Password(uiState.value.password)
-            } catch (e: Exception) {
-                return@launch
-            }
-            val username = try {
-                Username(uiState.value.username)
-            } catch (e: Exception) {
-                return@launch
-            }
-            val signUpRequest = SignUpRequest(
-                email = email,
-                username = username,
-                password = password,
-                name = uiState.value.name
-            )
-            val resource = authUseCases.signUp.invoke(signUpRequest)
-            if (resource.isSuccess)
-                result(resource.isSuccess)
         }
     }
 

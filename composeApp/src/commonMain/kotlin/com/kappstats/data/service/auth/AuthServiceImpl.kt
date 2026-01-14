@@ -38,8 +38,9 @@ class AuthServiceImpl(
     override suspend fun signIn(signInRequest: SignInRequest): String? {
         val response = remoteDataSource.client.post(AppEndpoints.Api.User.SignIn.route) {
             createRequest()
+            setBody(signInRequest)
         }
-        return response.body()
+        return if(response.status == HttpStatusCode.OK) response.body() else null
     }
 
     override suspend fun signUp(signUpRequest: SignUpRequest): Boolean {
