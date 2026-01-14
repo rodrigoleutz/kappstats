@@ -3,6 +3,7 @@ package com.kappstats.data.service.auth
 import com.kappstats.constants.USERNAME
 import com.kappstats.custom_object.username.Username
 import com.kappstats.data.remote.data_source.RemoteDataSource
+import com.kappstats.data.repository.auth_token.AuthTokenRepository
 import com.kappstats.dto.request.user.SignInRequest
 import com.kappstats.dto.request.user.SignUpRequest
 import com.kappstats.endpoint.AppEndpoints

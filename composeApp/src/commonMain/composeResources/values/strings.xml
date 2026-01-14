@@ -10,6 +10,8 @@
     <string name="error_email">Please enter a valid email (e.g., name@example.com).</string>
     <string name="error_password">Password must be at least 8 characters, with one uppercase letter, one number, and one special character.</string>
     <string name="error_password_confirm">Passwords do not match</string>
+    <string name="error_sign_in">Invalid email or password.</string>
+    <string name="error_sign_up">Sign Up error.</string>
     <string name="error_username">Username must be at least 4 characters, with one number.</string>
     <string name="error_username_already_exists">Username already exists.</string>
     <string name="home">Home</string>

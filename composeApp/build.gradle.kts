@@ -21,7 +21,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -31,24 +31,27 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm()
-    
+
     js {
         browser()
         binaries.executable()
     }
-    
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
         binaries.executable()
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            // KStore
+            implementation(libs.kstore.file)
         }
         commonMain.dependencies {
             implementation(projects.composeComponents)
@@ -59,6 +62,9 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.viewmodel.navigation)
+
+            // KStore
+            implementation(libs.kstore)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -67,6 +73,22 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            // AppDirs
+            implementation(libs.appdirs)
+            // KStore
+            implementation(libs.kstore.file)
+        }
+        iosMain.dependencies {
+            // KStore
+            implementation(libs.kstore.file)
+        }
+        jsMain.dependencies {
+            // KStore
+            implementation(libs.kstore.storage)
+        }
+        wasmJsMain.dependencies {
+            // KStore
+            implementation(libs.kstore.storage)
         }
     }
 }

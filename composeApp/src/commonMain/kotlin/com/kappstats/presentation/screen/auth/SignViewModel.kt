@@ -2,6 +2,8 @@ package com.kappstats.presentation.screen.auth
 
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.kappstats.components.part.widget.snackbar.AppSnackbarVisuals
+import com.kappstats.components.part.widget.snackbar.show
 import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
 import com.kappstats.custom_object.username.Username
@@ -11,6 +13,9 @@ import com.kappstats.dto.request.user.SignUpRequest
 import com.kappstats.presentation.core.navigation.AppScreens
 import com.kappstats.presentation.core.state.MainEvent
 import com.kappstats.presentation.core.view_model.StateViewModel
+import com.kappstats.resources.Res
+import com.kappstats.resources.error_sign_in
+import com.kappstats.resources.error_sign_up
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,6 +28,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 
 @OptIn(FlowPreview::class)
 class SignViewModel(
@@ -38,7 +44,7 @@ class SignViewModel(
                 .map { it.username }
                 .distinctUntilChanged()
                 .onEach {
-                    if(Username.isValidUsername(it)) setLoadingUsername(true)
+                    if (Username.isValidUsername(it)) setLoadingUsername(true)
                     setHasUsername(null)
                 }
                 .debounce(2_000)
@@ -88,8 +94,12 @@ class SignViewModel(
                     return@launch
                 }
                 val resource = authUseCases.signIn.invoke(email, password)
-                if (resource.isSuccess) {
-                    stateHolder.onMainEvent(MainEvent.SetIsLogged(resource.isSuccess))
+                stateHolder.onMainEvent(MainEvent.SetIsLogged(resource.isSuccess))
+                if (!resource.isSuccess) {
+                    stateHolder.uiState.value.snackbarHostState.show(
+                        getString(Res.string.error_sign_in),
+                        type = AppSnackbarVisuals.Type.Error
+                    )
                 }
                 result(resource.isSuccess)
             } catch (e: Exception) {
@@ -126,8 +136,11 @@ class SignViewModel(
                     name = uiState.value.name
                 )
                 val resource = authUseCases.signUp.invoke(signUpRequest)
-                if (resource.isSuccess)
-                    result(resource.isSuccess)
+                if(!resource.isSuccess) stateHolder.uiState.value.snackbarHostState.show(
+                    getString(Res.string.error_sign_up),
+                    type = AppSnackbarVisuals.Type.Error
+                )
+                result(resource.isSuccess)
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
