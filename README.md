@@ -1,6 +1,8 @@
-[![License](https://img.shields.io/badge/license-GPL%202.0-blue.svg?style=flat-square)](LICENSE)
-
 <img src="docs/img/logo.webp" alt="KAppStats" width="300">
+
+[![Version](https://img.shields.io/badge/version-development-brightgreen?style=flat-square)](VERSION)
+![GitLab Release](https://img.shields.io/gitlab/v/release/:project)
+[![License](https://img.shields.io/badge/license-GPL%202.0-blue.svg?style=flat-square)](LICENSE)
 
 # KAppStats
 
@@ -50,6 +52,12 @@ KAppStats provides lightweight, reusable components to collect, aggregate, and e
 [/composeApp](/kappstats/kmp/-/tree/main/composeApp/src) is for code that will be shared across your Compose Multiplatform applications. 
 
 [/iosApp](/kappstats/kmp/-/tree/main/iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+
+[/server](./server/src/main/kotlin) is for the Ktor server application.
+
+[/shared](./shared/src) is for the code that will be shared between all targets in the project.
+  The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
+  can add code to the platform-specific folders here too.
 
 ---
 # Installation
