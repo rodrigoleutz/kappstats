@@ -8,46 +8,29 @@
 
 KAppStats is an open-source project that makes it easy to collect metrics and statistics from websites, apps, and systems.
 
-## Our Mission
+## 🎯 Our Mission
 Make a KMP (Kotlin Multiplatform) app — cross-platform and efficient — viable for data collection and statistics, contributing to an open and transparent ecosystem.
 
 ---
 
-## Summary
+## 📝 Summary
 
 - About
-- Key features
-- Architecture
 - Structure
-- Installation
-- Basic usage
-- Examples
-- Contribution
+- Clone project
+- Getting Started
+- Contributing
+- Pro-Tip: Development Workflow
 - License
 - Contact
 ---
 
-# About
+## 🔍 About
 
 KAppStats provides lightweight, reusable components to collect, aggregate, and export performance metrics, events, and usage statistics. The project focuses on being cross-platform using Kotlin Multiplatform (KMP), enabling integration on Android, iOS, JVM, Linux, macOS, and other targets supported by Kotlin.
 
 ---
-
-# Key Features
-
-#### TODO : ADD SESSION
-
----
-
-# Architecture
-
-- Core : 
-- Current platforms: Kotlin JVM/Android, Kotlin/Native, Kotlin/JS, Kotlin/iOS.
-
----
-# Structure
-
-#### TODO: UPDATE THAT SESSION
+## 🧩 Structure
 
 [/composeApp](/kappstats/kmp/-/tree/main/composeApp/src) is for code that will be shared across your Compose Multiplatform applications. 
 
@@ -59,32 +42,73 @@ KAppStats provides lightweight, reusable components to collect, aggregate, and e
   The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
   can add code to the platform-specific folders here too.
 
----
-# Installation
-
-#### TODO: ADD SESSION
-
+## 📂 Clone project
 ---
 
-# Basic Usage
-
-#### TODO: ADD SESSION
-
----
-
-## Usage examples
-
-#### TODO: ADD SUB SESSION
-
----
-
-## Best Practices
-
-#### TODO ADD SUB SESSION
+### SSH Clone project
+```bash
+git clone git@gitlab.com:kappstats/kmp.git
+```
+### HTTP Clone project 
+```bash
+git clone https://gitlab.com/kappstats/kmp.git
+```
 
 ---
+## 🚀 Getting Started
 
-# Contribution
+### Prerequisites
+* **JDK 17** or higher.
+* **Android Studio** or **IntelliJ IDEA**.
+* **Docker** and **docker compose plugin** for database.
+
+### Running the Project
+
+1.  **Initialize Environment Files**
+ 
+    Copy the templates to active environment files. It is highly recommended to open and read these files to understand the system's ports, credentials, and behavioral flags:
+    ```bash
+    # Server configuration (DB, Ports, JWT)
+    cp server/.env-sample server/.env
+    # Shared configurations used across modules
+    cp shared/.env-sample shared/.env
+    # Development & Docker orchestration settings
+    cp docs/dev/.env-sample docs/dev/.env
+    ```
+2.  **Launch the Development Stack**
+       
+    Once you have reviewed the .env files and ensured the settings match your local environment, run the orchestration script:
+    ```bash
+    ./docs/dev/runDev.sh
+    ```
+
+3.  **Start the Server:**
+    ```bash
+    ./gradlew :server:run
+    ```
+    The server starts by default on port `8080`.
+
+4.  **Run the Desktop App:**
+    ```bash
+    ./gradlew :composeApp:run
+    ```
+
+5.  **Run the Android App:**
+    ```bash
+    ./gradlew :composeApp:installDebug
+    ```
+
+6.  **Run the Web App:**
+    ```bash
+    ./gradlew :composeApp:jsBrowserDevelopmentRun
+    ```
+    or
+    ```bash
+    ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
+    ```
+---
+
+## 🤝 Contributing
 
 All contributions are welcome and encouraged. Feel free to:
 
@@ -95,29 +119,19 @@ All contributions are welcome and encouraged. Feel free to:
 
 Issues, suggestions, and bug reports are encouraged.
 
-
-## Clone project
-
 ---
 
-### Clone project via SSH
-<pre>
-git clone git@gitlab.com:kappstats/kmp.git
-</pre>
-### or
-### Clone project via HTTP
-<pre>
-git clone https://gitlab.com/kappstats/kmp.git
-</pre>
 
-## Checkout to dev branch (current dev branch)
-<pre>
+## 💡 Pro-Tip: Development Workflow
+
+---
+### Checkout to dev branch (current dev branch)
+```bash
 git checkout dev
-</pre>
-
-## How-to develop
+```
+---
 ### Server
-#### Create a test class by extending BaseIntegrationTest. Use the baseTestApplication helper to perform requests:
+Create a test class by extending BaseIntegrationTest. Use the baseTestApplication helper to perform requests:
 ```kotlin
 class TestClass : BaseIntegrationTest() {
     
@@ -138,13 +152,12 @@ class TestClass : BaseIntegrationTest() {
 }
 ```
 ---
-
-# License
-
-#### GNU GENERAL PUBLIC LICENSE 2.0
+## License
+GNU GENERAL PUBLIC LICENSE 2.0
 
 ---
 
-# Contact
-
+## Contact
 Open issues on the GitLab repository or submit PRs.
+
+
