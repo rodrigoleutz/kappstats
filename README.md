@@ -1,8 +1,8 @@
 <img src="docs/img/logo.webp" alt="KAppStats" width="300">
 
 [![Version](https://img.shields.io/badge/version-development-blue?style=flat-square)](VERSION)
-![GitLab Release](https://img.shields.io/gitlab/v/release/kappstats%2Fkmp)
 [![License](https://img.shields.io/badge/license-GPL%202.0-brightgreen.svg?style=flat-square)](LICENSE)
+![GitLab Release](https://img.shields.io/gitlab/v/release/kappstats%2Fkmp)
 
 # 📈 KAppStats
 
@@ -15,14 +15,14 @@ Make a KMP (Kotlin Multiplatform) app — cross-platform and efficient — viabl
 
 ## 📝 Summary
 
-- About
-- Structure
-- Contributing
-- Clone project
-- Getting Started
-- Pro-Tip: Development Workflow
-- License
-- Contact
+* [About](#-about)
+* [Structure](#-structure)
+* [Contributing](#-contributing)
+* [Clone project](#-clone-project)
+* [Getting Started](#-getting-started)
+* [Pro-Tip: Development Workflow](#-pro-tip-development-workflow)
+* [License](#-license)
+* [Contact](#-contact)
 ---
 
 ## 🔍 About
