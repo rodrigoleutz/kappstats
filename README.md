@@ -1,8 +1,8 @@
 <img src="docs/img/logo.webp" alt="KAppStats" width="300">
 
-[![Version](https://img.shields.io/badge/version-development-brightgreen?style=flat-square)](VERSION)
-![GitLab Release](https://img.shields.io/gitlab/v/release/:project)
-[![License](https://img.shields.io/badge/license-GPL%202.0-blue.svg?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/version-development-blue?style=flat-square)](VERSION)
+![GitLab Release](https://img.shields.io/gitlab/v/release/kappstats%2Fkmp)
+[![License](https://img.shields.io/badge/license-GPL%202.0-brightgreen.svg?style=flat-square)](LICENSE)
 
 # KAppStats
 

@@ -1,5 +1,6 @@
 package com.kappstats.data.local.security
 
+import com.kappstats.util.getLocalAppPath
 import java.io.File
 import java.security.KeyStore
 import java.util.Base64
@@ -93,13 +94,8 @@ private fun getHardwareId(): CharArray {
 }
 
 actual fun getCryptManager(): CryptManager {
-    val os = System.getProperty("os.name").lowercase()
-    val baseDir = if (os.contains("win")) {
-        System.getenv("APPDATA") ?: System.getProperty("user.home")
-    } else {
-        System.getProperty("user.home")
-    }
-    val keyStoreFile = File(baseDir, ".kappstats/keystore.p12")
+    val filesDir = getLocalAppPath()
+    val keyStoreFile = File(filesDir, ".crypt/keystore.p12")
     if (keyStoreFile.parentFile?.exists() == false) {
         keyStoreFile.parentFile?.mkdirs()
     }
