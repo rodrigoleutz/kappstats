@@ -1,8 +1,12 @@
 <img src="docs/img/logo.webp" alt="KAppStats" width="300">
 
+---
+
 [![Version](https://img.shields.io/badge/version-development-blue?style=flat-square)](VERSION)
 [![License](https://img.shields.io/badge/license-GPL%202.0-brightgreen.svg?style=flat-square)](LICENSE)
 ![GitLab Release](https://img.shields.io/gitlab/v/release/kappstats%2Fkmp)
+
+---
 
 # 📈 KAppStats
 

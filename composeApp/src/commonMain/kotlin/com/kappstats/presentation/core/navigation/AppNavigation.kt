@@ -72,7 +72,9 @@ fun AppNavigation() {
                     privacyAndTermsNavigation(navBackStack, stateHolder)
                     entry<AppScreens.Home> {
                         val viewModel: HomeViewModel = koinViewModel()
+                        val userState by viewModel.stateHolder.user.collectAsState()
                         HomeScreen(
+                            userState = userState,
                             onMainEvent = stateHolder::onMainEvent
                         )
                     }

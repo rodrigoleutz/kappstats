@@ -76,18 +76,22 @@ kotlin {
             // KStore
             implementation(libs.kstore.file)
         }
-        commonMain.dependencies {
-            implementation(projects.composeComponents)
+        commonMain {
+            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
 
-            // Koin
-            implementation(project.dependencies.platform(libs.koin.bom))
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-            implementation(libs.koin.compose.viewmodel.navigation)
+            dependencies {
+                implementation(projects.composeComponents)
 
-            // KStore
-            implementation(libs.kstore)
+                // Koin
+                implementation(project.dependencies.platform(libs.koin.bom))
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.koin.compose.viewmodel.navigation)
+
+                // KStore
+                implementation(libs.kstore)
+            }
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

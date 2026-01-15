@@ -1,12 +1,14 @@
 package com.kappstats.presentation.core.state
 
 import androidx.navigation3.runtime.NavKey
+import com.kappstats.domain.data_state.DataState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class MainStateHolder {
+class MainStateHolder(val dataState: DataState) {
 
+    val user = dataState.user
     private val _uiState = MutableStateFlow(MainUiState())
     val uiState = _uiState.asStateFlow()
 

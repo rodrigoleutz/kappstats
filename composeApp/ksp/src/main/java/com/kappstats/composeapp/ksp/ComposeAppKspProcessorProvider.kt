@@ -7,6 +7,6 @@ import com.google.devtools.ksp.processing.SymbolProcessorProvider
 class ComposeAppKspProcessorProvider: SymbolProcessorProvider {
 
     override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
-        return ComposeAppKspProcessor()
+        return ComposeAppKspProcessor(environment)
     }
 }

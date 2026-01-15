@@ -12,6 +12,8 @@ import com.kappstats.data.repository.auth_token.AuthTokenRepository
 import com.kappstats.data.repository.auth_token.AuthTokenRepositoryImpl
 import com.kappstats.data.service.auth.AuthService
 import com.kappstats.data.service.auth.AuthServiceImpl
+import com.kappstats.data.service.web_socket.WebSocketService
+import com.kappstats.data.service.web_socket.WebSocketServiceImpl
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -26,4 +28,6 @@ val dataModule = module {
     singleOf(::AuthTokenRepositoryImpl) bind AuthTokenRepository::class
 
     factoryOf(::AuthServiceImpl) bind AuthService::class
+
+    singleOf(::WebSocketServiceImpl) bind WebSocketService::class
 }

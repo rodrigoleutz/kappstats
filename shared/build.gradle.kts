@@ -33,21 +33,20 @@ kotlin {
     }
 
     sourceSets {
-        commonMain.dependencies {
-            // put your Multiplatform dependencies here
-            api(libs.kotlinx.serialization.json)
-            api(libs.bignum)
-            api(libs.kotlinx.datetime)
+        commonMain {
+            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+            dependencies {
+                // put your Multiplatform dependencies here
+                api(libs.kotlinx.serialization.json)
+                api(libs.bignum)
+                api(libs.kotlinx.datetime)
+            }
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
     }
-    sourceSets {
-        val commonMain by getting {
-            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-        }
-    }
+
 }
 
 android {
