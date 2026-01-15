@@ -11,17 +11,26 @@ import com.kappstats.plugin.configureSerialization
 import com.kappstats.plugin.configureWebSocket
 import com.kappstats.test_util.container.MongoTestContainer
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.websocket.WebSockets
+import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
+import kotlinx.coroutines.cancel
+import org.junit.jupiter.api.AfterEach
+import org.koin.core.context.stopKoin
 import org.koin.ktor.plugin.Koin
 
 abstract class BaseIntegrationTest {
 
+    @AfterEach
+    fun tearDown() {
+        stopKoin()
+    }
 
     /**
      * Server Integration Tests Configs
@@ -85,7 +94,12 @@ abstract class BaseIntegrationTest {
             modules()
         }
         val testClient = configuredClient()
-        block(testClient)
+        try {
+            block(testClient)
+        } finally {
+            testClient.close()
+        }
+        this.application.parentCoroutineContext.cancel()
     }
 
     /**
@@ -98,5 +112,8 @@ abstract class BaseIntegrationTest {
             json()
         }
         this@createClient.install(WebSockets)
+        this@createClient.install(DefaultRequest) {
+            header("X-Forwarded-For", "123.123.123.123")
+        }
     }
 }

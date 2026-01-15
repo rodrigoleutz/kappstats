@@ -2,6 +2,7 @@ package com.kappstats.custom_object.app_date_time
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -109,11 +110,11 @@ value class AppDateTime(val value: String) : Comparable<AppDateTime> {
         return tokenRegex.replace(pattern) { match ->
             when (val token = match.value) {
                 "yyyy" -> year.toString().padStart(4, '0')
-                "MMMM" -> monthsFull[monthNumber - 1]
-                "MMM" -> monthsAbbrev[monthNumber - 1]
-                "MM" -> monthNumber.toString().padStart(2, '0')
-                "dd" -> dayOfMonth.toString().padStart(2, '0')
-                "d" -> dayOfMonth.toString()
+                "MMMM" -> monthsFull[month.number - 1]
+                "MMM" -> monthsAbbrev[month.number - 1]
+                "MM" -> month.number.toString().padStart(2, '0')
+                "dd" -> day.toString().padStart(2, '0')
+                "d" -> day.toString()
                 "HH" -> hour.toString().padStart(2, '0')
                 "hh" -> hour.toString().padStart(2, '0')
                 "h" -> {

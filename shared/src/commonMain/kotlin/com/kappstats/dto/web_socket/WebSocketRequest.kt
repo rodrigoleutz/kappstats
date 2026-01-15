@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 data class WebSocketRequest(
     val id: String = IdGenerator.createUuid,
     val action: String,
-    val data: String
+    val data: String? = null
 )

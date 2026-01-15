@@ -1,5 +1,6 @@
 package com.kappstats.presentation.routes.web_socket
 
+import com.kappstats.domain.model.connection.ConnectionInfo
 import com.kappstats.domain.web_socket.action.WebSocketActions
 import com.kappstats.domain.web_socket.data.WebSocketData
 import com.kappstats.dto.web_socket.WebSocketRequest
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object WebSocketEventBus: KoinComponent {
+object WebSocketEventBus : KoinComponent {
 
     private val wsData by inject<WebSocketData>()
     private val wsActions by inject<WebSocketActions>()
@@ -29,8 +30,17 @@ object WebSocketEventBus: KoinComponent {
     )
     val authMessages = _authMessages.asSharedFlow()
 
-    suspend fun sendMessage(webSocketRequest: WebSocketRequest) {
-        wsActions.process(webSocketRequest)?.let {
+    suspend fun sendAuthMessage(
+        connectionInfo: ConnectionInfo,
+        webSocketRequest: WebSocketRequest
+    ) {
+        wsActions.process(connectionInfo, webSocketRequest)?.let {
+            _authMessages.emit(it)
+        }
+    }
+
+    suspend fun sendMessage(connectionInfo: ConnectionInfo, webSocketRequest: WebSocketRequest) {
+        wsActions.process(connectionInfo, webSocketRequest)?.let {
             _messages.emit(it)
         }
     }

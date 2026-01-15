@@ -5,6 +5,8 @@ import com.kappstats.domain.web_socket.model.WebSocketConnection
 import com.kappstats.dto.web_socket.WebSocketRequest
 import com.kappstats.endpoint.AppEndpoints
 import com.kappstats.presentation.constants.PresentationConstants
+import com.kappstats.presentation.util.getAuthConnectionInfo
+import com.kappstats.presentation.util.getDefaultConnectionInfo
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.Route
 import io.ktor.server.websocket.webSocket
@@ -13,6 +15,7 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -23,11 +26,58 @@ fun Route.webSocketRoutes() {
     val webSocketData by inject<WebSocketData>()
     authenticate(PresentationConstants.Auth.JWT) {
         webSocket(AppEndpoints.WebSocket.Auth.fullPath) {
+            val connectionInfo = call.getAuthConnectionInfo() ?: run {
+                close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Add connection info fail."))
+                return@webSocket
+            }
+            if (!webSocketData.addConnection(WebSocketConnection.create(connectionInfo, this))) {
+                close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Add connection fail."))
+                return@webSocket
+            }
+            val job = launch {
+                WebSocketEventBus.authMessages.distinctUntilChanged().collect { message ->
+                    val json = Json.encodeToString(message)
+                    send(json)
+                }
+            }
+            runCatching {
+                incoming.consumeEach { frame ->
+                    when (frame) {
+                        is Frame.Text -> {
+                            try {
+                                val json = frame.readText()
+                                val jsonDecoded = Json.decodeFromString<WebSocketRequest>(json)
+                                WebSocketEventBus.sendAuthMessage(connectionInfo, jsonDecoded)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                close(
+                                    CloseReason(
+                                        CloseReason.Codes.NOT_CONSISTENT,
+                                        "Disconnect by server."
+                                    )
+                                )
+                            }
+                        }
 
+                        else -> {
+                            println("Unsupported frame: $frame")
+                        }
+                    }
+                }
+            }.onFailure { e ->
+                e.printStackTrace()
+            }.also {
+                webSocketData.removeConnectionBySession(this)
+                job.cancel()
+            }
         }
     }
     webSocket(AppEndpoints.WebSocket.path) {
-        if(!webSocketData.addConnection(WebSocketConnection.create(this))) {
+        val connectionInfo = call.getDefaultConnectionInfo() ?: run {
+            close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Add connection info fail."))
+            return@webSocket
+        }
+        if (!webSocketData.addConnection(WebSocketConnection.create(connectionInfo, this))) {
             close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Add connection fail."))
             return@webSocket
         }
@@ -44,7 +94,7 @@ fun Route.webSocketRoutes() {
                         try {
                             val json = frame.readText()
                             val jsonDecoded = Json.decodeFromString<WebSocketRequest>(json)
-                            WebSocketEventBus.sendMessage(jsonDecoded)
+                            WebSocketEventBus.sendMessage(connectionInfo, jsonDecoded)
                         } catch (e: Exception) {
                             e.printStackTrace()
                             close(

@@ -4,7 +4,7 @@
 ![GitLab Release](https://img.shields.io/gitlab/v/release/kappstats%2Fkmp)
 [![License](https://img.shields.io/badge/license-GPL%202.0-brightgreen.svg?style=flat-square)](LICENSE)
 
-# KAppStats
+# 📈 KAppStats
 
 KAppStats is an open-source project that makes it easy to collect metrics and statistics from websites, apps, and systems.
 
@@ -17,9 +17,9 @@ Make a KMP (Kotlin Multiplatform) app — cross-platform and efficient — viabl
 
 - About
 - Structure
+- Contributing
 - Clone project
 - Getting Started
-- Contributing
 - Pro-Tip: Development Workflow
 - License
 - Contact
@@ -41,6 +41,21 @@ KAppStats provides lightweight, reusable components to collect, aggregate, and e
 [/shared](./shared/src) is for the code that will be shared between all targets in the project.
   The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
   can add code to the platform-specific folders here too.
+
+---
+
+## 🤝 Contributing
+
+All contributions are welcome and encouraged. Feel free to:
+
+1. Fork the repository
+2. Create a branch for your feature/fix
+3. Open a Pull Request with a clear description
+4. Follow code and test standards (see CONTRIBUTING.md)
+
+Issues, suggestions, and bug reports are encouraged.
+
+---
 
 ## 📂 Clone project
 ---
@@ -108,20 +123,6 @@ git clone https://gitlab.com/kappstats/kmp.git
     ```
 ---
 
-## 🤝 Contributing
-
-All contributions are welcome and encouraged. Feel free to:
-
-1. Fork the repository
-2. Create a branch for your feature/fix
-3. Open a Pull Request with a clear description
-4. Follow code and test standards (see CONTRIBUTING.md)
-
-Issues, suggestions, and bug reports are encouraged.
-
----
-
-
 ## 💡 Pro-Tip: Development Workflow
 
 ---
@@ -152,12 +153,12 @@ class TestClass : BaseIntegrationTest() {
 }
 ```
 ---
-## License
+## 📜 License
 GNU GENERAL PUBLIC LICENSE 2.0
 
 ---
 
-## Contact
+## 📬 Contact
 Open issues on the GitLab repository or submit PRs.
 
 

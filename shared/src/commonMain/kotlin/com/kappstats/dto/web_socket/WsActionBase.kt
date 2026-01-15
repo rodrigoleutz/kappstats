@@ -8,9 +8,13 @@ open class WsActionBase<T, R>(
     val command: String,
     val inputSerializer: KSerializer<@Serializable T>? = null,
     val outputSerializer: KSerializer<@Serializable R>? = null,
-    override val isAuth: Boolean = false
+    override val isAuth: Boolean = true
 ): WsActionType {
     override val action: String by lazy {
         (parent?.action ?: "") + command
     }
+    val isAuthAction: Boolean by lazy {
+        isAuth || (parent as? WsActionBase<*, *>)?.isAuthAction == true
+    }
+
 }

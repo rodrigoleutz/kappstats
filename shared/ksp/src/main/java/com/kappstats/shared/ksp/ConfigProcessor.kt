@@ -86,7 +86,7 @@ class ConfigProcessor(
             println("${value.key} = ${value.value}")
             configClass.addProperty(
                 PropertySpec.builder(value.key, String::class)
-                    .addModifiers(KModifier.CONST)
+//                    .addModifiers(KModifier.CONST)
                     .initializer("%S", value.value)
                     .build()
             )

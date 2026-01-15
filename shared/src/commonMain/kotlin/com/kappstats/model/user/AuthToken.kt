@@ -2,7 +2,9 @@ package com.kappstats.model.user
 
 import com.kappstats.contracts.Model
 import com.kappstats.custom_object.app_date_time.AppDateTime
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AuthToken(
     override val id: String,
     val authId: String,
