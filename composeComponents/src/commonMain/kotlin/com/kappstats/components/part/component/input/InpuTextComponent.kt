@@ -44,6 +44,7 @@ import compose.icons.tablericons.Eye
 import compose.icons.tablericons.EyeOff
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.math.min
 
 @Composable
 fun InputTextComponent(
@@ -56,6 +57,8 @@ fun InputTextComponent(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
     trailingIcon: (@Composable () -> Unit)? = null,
+    minLines: Int = 1,
+    maxLines: Int = 1,
     onChange: (String) -> Unit
 ) {
     var displayError by remember {
@@ -82,6 +85,8 @@ fun InputTextComponent(
             onValueChange = {
                 onChange(it)
             },
+            minLines = minLines,
+            maxLines = if(maxLines < minLines) minLines else maxLines,
             isError = errorMessage != null,
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,

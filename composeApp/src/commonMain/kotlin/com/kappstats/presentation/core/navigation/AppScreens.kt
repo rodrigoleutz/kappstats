@@ -1,5 +1,6 @@
 package com.kappstats.presentation.core.navigation
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavKey
 import androidx.savedstate.serialization.SavedStateConfiguration
@@ -10,6 +11,7 @@ import com.kappstats.resources.home
 import com.kappstats.resources.logout
 import com.kappstats.resources.privacy_policy
 import com.kappstats.resources.privacy_policy_and_terms
+import com.kappstats.resources.profile
 import com.kappstats.resources.sign_in
 import com.kappstats.resources.sign_up
 import com.kappstats.resources.splash
@@ -21,6 +23,7 @@ import compose.icons.TablerIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.LogIn
 import compose.icons.evaicons.fill.LogOut
+import compose.icons.evaicons.fill.Person
 import compose.icons.evaicons.fill.PersonAdd
 import compose.icons.feathericons.Home
 import compose.icons.octicons.SignIn24
@@ -51,6 +54,7 @@ sealed interface AppScreens : ComposeRoute, NavKey {
         val unloggedDrawerDivider: List<AppScreens> = listOf(PrivacyAndTerms.TermsAndConditions)
         val logged: List<AppScreens> = listOf(
             AppScreens.Home,
+            Profile,
             PrivacyAndTerms.TermsAndConditions,
             PrivacyAndTerms.PrivacyPolicy,
             Auth.LogOut
@@ -75,6 +79,7 @@ sealed interface AppScreens : ComposeRoute, NavKey {
                         PrivacyAndTerms.TermsAndConditions::class,
                         PrivacyAndTerms.TermsAndConditions.serializer()
                     )
+                    subclass(Profile::class, Profile.serializer())
                     subclass(Splash::class, Splash.serializer())
                 }
             }
@@ -138,6 +143,13 @@ sealed interface AppScreens : ComposeRoute, NavKey {
             override val icon: ImageVector = TablerIcons.ShieldCheck
             override val route: @Serializable TermsAndConditions = this
         }
+    }
+
+    @Serializable
+    data object Profile: AppScreens {
+        override val title: StringResource = Res.string.profile
+        override val icon: ImageVector = EvaIcons.Fill.Person
+        override val route: @Serializable Profile = this
     }
 
     @Serializable

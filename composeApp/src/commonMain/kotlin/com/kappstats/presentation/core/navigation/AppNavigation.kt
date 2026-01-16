@@ -22,6 +22,8 @@ import com.kappstats.presentation.screen.home.HomeScreen
 import com.kappstats.presentation.screen.home.HomeViewModel
 import com.kappstats.presentation.screen.privacy_and_terms.PrivacyAndTermsScreen
 import com.kappstats.presentation.screen.privacy_and_terms.navigation.privacyAndTermsNavigation
+import com.kappstats.presentation.screen.profile.ProfileScreen
+import com.kappstats.presentation.screen.profile.ProfileViewModel
 import com.kappstats.presentation.screen.splash.SplashScreen
 import com.kappstats.presentation.screen.splash.SplashViewModel
 import org.jetbrains.compose.resources.getString
@@ -80,6 +82,25 @@ fun AppNavigation() {
                     }
                     entry<AppScreens.PrivacyAndTerms> {
                         PrivacyAndTermsScreen(paddingValues = uiState.paddingValues)
+                    }
+                    entry<AppScreens.Profile> {
+                        val viewModel: ProfileViewModel = koinViewModel()
+                        val mainUiState by viewModel.stateHolder.uiState.collectAsState()
+                        val uiState by viewModel.uiState.collectAsState()
+                        ProfileScreen(
+                            mainUiState = mainUiState,
+                            uiState = uiState,
+                            onEvent = viewModel::onEvent,
+                            enableUpdate = viewModel.enabledUpdate,
+                            onUpdate = {
+                                viewModel.updateProfile { result ->
+                                    if(result) navBackStack.removeLastOrNull()
+                                }
+                            },
+                            onCancel = {
+                                navBackStack.removeLastOrNull()
+                            }
+                        )
                     }
                     entry<AppScreens.Splash> {
                         val viewModel: SplashViewModel = koinViewModel()

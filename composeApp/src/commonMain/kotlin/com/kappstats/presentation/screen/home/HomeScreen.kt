@@ -34,15 +34,20 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        userState.myProfile?.name?.let { name ->
+        userState.myProfile?.let { profile ->
             Text(
                 text = stringResource(Res.string.welcome),
                 style = MaterialTheme.typography.titleSmall
             )
             Text(
-                text = name,
+                text = profile.name,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = profile.username.asString,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Thin
             )
         }
     }

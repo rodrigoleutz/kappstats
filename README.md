@@ -6,20 +6,16 @@
 [![License](https://img.shields.io/badge/license-GPL%202.0-brightgreen.svg?style=flat-square)](LICENSE)
 ![GitLab Release](https://img.shields.io/gitlab/v/release/kappstats%2Fkmp)
 
----
-
 # 📈 KAppStats
 
 KAppStats is an open-source project that makes it easy to collect metrics and statistics from websites, apps, and systems.
-
-## 🎯 Our Mission
-Make a KMP (Kotlin Multiplatform) app — cross-platform and efficient — viable for data collection and statistics, contributing to an open and transparent ecosystem.
 
 ---
 
 ## 📝 Summary
 
 * [About](#-about)
+* [Our Mission](#-our-mission)
 * [Structure](#-structure)
 * [Contributing](#-contributing)
 * [Clone project](#-clone-project)
@@ -32,6 +28,11 @@ Make a KMP (Kotlin Multiplatform) app — cross-platform and efficient — viabl
 ## 🔍 About
 
 KAppStats provides lightweight, reusable components to collect, aggregate, and export performance metrics, events, and usage statistics. The project focuses on being cross-platform using Kotlin Multiplatform (KMP), enabling integration on Android, iOS, JVM, Linux, macOS, and other targets supported by Kotlin.
+
+---
+
+## 🎯 Our Mission
+Make a KMP (Kotlin Multiplatform) app — cross-platform and efficient — viable for data collection and statistics, contributing to an open and transparent ecosystem.
 
 ---
 ## 🧩 Structure
