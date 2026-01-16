@@ -5,6 +5,7 @@ import com.kappstats.model.user.Auth
 import com.kappstats.model.user.AuthToken
 import com.kappstats.model.user.Profile
 import kotlinx.serialization.builtins.TripleSerializer
+import kotlinx.serialization.builtins.nullable
 
 object WebSocketEvents : WsActionBase<Any?, Any?>(null, "/web_socket", isAuth = false) {
 
@@ -28,6 +29,14 @@ object WebSocketEvents : WsActionBase<Any?, Any?>(null, "/web_socket", isAuth = 
                     ),
                     isAuth = true
                 )
+
+            object ProfileUpdate: WsActionBase<Profile, Profile?>(
+                parent = User,
+                command = "/profile_update",
+                inputSerializer = Profile.serializer(),
+                outputSerializer = Profile.serializer().nullable,
+                isAuth = true
+            )
         }
     }
 

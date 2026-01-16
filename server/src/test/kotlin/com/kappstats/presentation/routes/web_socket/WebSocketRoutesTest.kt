@@ -36,6 +36,7 @@ import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
+import kotlin.test.assertNotEquals
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class WebSocketRoutesTest : BaseIntegrationTest() {
@@ -138,6 +139,49 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
             assertEquals(signUp.email, tripleUserInfo.first.email)
             assertEquals(signUp.name, tripleUserInfo.third.name)
             assertEquals(signUp.username, tripleUserInfo.third.username)
+        }
+    }
+
+    @Test
+    @Order(4)
+    fun `Test webSocket update profile`() = baseTestApplication { client ->
+        client.webSocket(
+            AppEndpoints.WebSocket.Auth.fullPath,
+            request = {
+                bearerAuth(token)
+            }
+        ) {
+            send(jsonUserInfo)
+            val frame = incoming.receive() as Frame.Text
+            val jsonDecoded =
+                Json.decodeFromString<WebSocketResponse>(frame.readText())
+            assert(jsonDecoded.isSuccess)
+            assertInstanceOf(WebSocketResponse::class.java, jsonDecoded)
+            val tripleUserInfo =
+                Json.decodeFromString<Triple<Auth, AuthToken, Profile>>(
+                    (jsonDecoded as WebSocketResponse.Success).data
+                )
+            assertEquals(signUp.email, tripleUserInfo.first.email)
+            assertEquals(signUp.name, tripleUserInfo.third.name)
+            assertEquals(signUp.username, tripleUserInfo.third.username)
+            val profile = tripleUserInfo.third.copy(
+                name = "Test name info",
+                username = Username("testName2")
+            )
+            val webSocketRequest = WebSocketRequest(
+                data = Json.encodeToString(profile),
+                action = WebSocketEvents.Authenticate.User.ProfileUpdate.action
+            )
+            send(Json.encodeToString(webSocketRequest))
+            val frame1 = incoming.receive() as Frame.Text
+            val jsonDecoded1 =
+                Json.decodeFromString<WebSocketResponse>(frame1.readText())
+            assert(jsonDecoded1.isSuccess)
+            val profileDecoded = Json.decodeFromString<Profile>((jsonDecoded1 as WebSocketResponse.Success).data)
+            assertEquals(profile.name, profileDecoded.name)
+            assertEquals(profile.username, profileDecoded.username)
+            assertNotEquals(profile.updatedAt, profileDecoded.updatedAt)
+            assertEquals(profile.updatedAt.size+1, profileDecoded.updatedAt.size)
         }
     }
 }

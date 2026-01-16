@@ -4,6 +4,7 @@ import com.kappstats.custom_object.app_date_time.AppDateTime
 import com.kappstats.custom_object.ip_address.IpAddress
 
 data class DefaultConnectionInfo(
+    override val webSocketId: String,
     override val ipAddress: IpAddress,
     override val date: AppDateTime = AppDateTime.now
 ): ConnectionInfo

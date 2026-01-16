@@ -63,6 +63,7 @@ import com.kappstats.resources.login
 import com.kappstats.resources.logo
 import com.kappstats.resources.name
 import com.kappstats.resources.password
+import com.kappstats.resources.password_confirm
 import com.kappstats.resources.register
 import com.kappstats.resources.username
 import compose.icons.EvaIcons
@@ -89,7 +90,7 @@ fun SignUpScreen(
         onMainEvent(MainEvent.SetHasTopBar(true))
     }
     val listState = rememberLazyListState()
-    ScrollableContainerComponent<Any>(
+    ScrollableContainerComponent<Unit>(
         listState = listState,
         modifier = Modifier.verticalScrollbar(listState),
         paddingValues = paddingValues
@@ -181,7 +182,7 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
                 modifier = Modifier.fillMaxWidth(),
-                label = stringResource(Res.string.password),
+                label = stringResource(Res.string.password_confirm),
                 value = passwordConfirm,
                 onChange = {
                     passwordConfirm = it
@@ -200,7 +201,6 @@ fun SignUpScreen(
                 colors = InputTextColors.outlinedInputTextColors()
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
-
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {

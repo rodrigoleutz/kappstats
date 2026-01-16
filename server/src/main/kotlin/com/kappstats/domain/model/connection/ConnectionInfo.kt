@@ -5,6 +5,7 @@ import com.kappstats.custom_object.ip_address.IpAddress
 
 
 interface ConnectionInfo {
+    val webSocketId: String
     val ipAddress: IpAddress
     val date: AppDateTime
 }

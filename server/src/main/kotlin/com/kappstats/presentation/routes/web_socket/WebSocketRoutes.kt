@@ -7,6 +7,7 @@ import com.kappstats.endpoint.AppEndpoints
 import com.kappstats.presentation.constants.PresentationConstants
 import com.kappstats.presentation.util.getAuthConnectionInfo
 import com.kappstats.presentation.util.getDefaultConnectionInfo
+import com.kappstats.util.IdGenerator
 import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.Route
 import io.ktor.server.websocket.webSocket
@@ -21,23 +22,34 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
+import java.util.UUID
 
 fun Route.webSocketRoutes() {
     val webSocketData by inject<WebSocketData>()
     authenticate(PresentationConstants.Auth.JWT) {
         webSocket(AppEndpoints.WebSocket.Auth.fullPath) {
-            val connectionInfo = call.getAuthConnectionInfo() ?: run {
+            val webSocketId = IdGenerator.createUuid
+            val connectionInfo = call.getAuthConnectionInfo(webSocketId) ?: run {
                 close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Add connection info fail."))
                 return@webSocket
             }
-            if (!webSocketData.addConnection(WebSocketConnection.create(connectionInfo, this))) {
+            if (!webSocketData.addConnection(
+                    WebSocketConnection.create(
+                        webSocketId,
+                        connectionInfo,
+                        this
+                    )
+                )
+            ) {
                 close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Add connection fail."))
                 return@webSocket
             }
             val job = launch {
                 WebSocketEventBus.authMessages.distinctUntilChanged().collect { message ->
-                    val json = Json.encodeToString(message)
-                    send(json)
+                    if (connectionInfo.profileId in message.profiles) {
+                        val json = Json.encodeToString(message)
+                        send(json)
+                    }
                 }
             }
             runCatching {
@@ -47,7 +59,12 @@ fun Route.webSocketRoutes() {
                             try {
                                 val json = frame.readText()
                                 val jsonDecoded = Json.decodeFromString<WebSocketRequest>(json)
-                                WebSocketEventBus.sendAuthMessage(connectionInfo, jsonDecoded)
+                                WebSocketEventBus.sendAuthMessage(
+                                    connectionInfo, jsonDecoded.copy(
+                                        webSocketId = webSocketId,
+                                        profileId = connectionInfo.profileId
+                                    )
+                                )
                             } catch (e: Exception) {
                                 e.printStackTrace()
                                 close(
@@ -73,18 +90,28 @@ fun Route.webSocketRoutes() {
         }
     }
     webSocket(AppEndpoints.WebSocket.path) {
-        val connectionInfo = call.getDefaultConnectionInfo() ?: run {
+        val webSocketId = IdGenerator.createUuid
+        val connectionInfo = call.getDefaultConnectionInfo(webSocketId) ?: run {
             close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Add connection info fail."))
             return@webSocket
         }
-        if (!webSocketData.addConnection(WebSocketConnection.create(connectionInfo, this))) {
+        if (!webSocketData.addConnection(
+                WebSocketConnection.create(
+                    webSocketId,
+                    connectionInfo,
+                    this
+                )
+            )
+        ) {
             close(CloseReason(CloseReason.Codes.CANNOT_ACCEPT, "Add connection fail."))
             return@webSocket
         }
         val job = launch {
             WebSocketEventBus.messages.distinctUntilChanged().collect { message ->
-                val json = Json.encodeToString(message)
-                send(json)
+                if (webSocketId == message.requestWebSocketId) {
+                    val json = Json.encodeToString(message)
+                    send(json)
+                }
             }
         }
         runCatching {
@@ -94,7 +121,10 @@ fun Route.webSocketRoutes() {
                         try {
                             val json = frame.readText()
                             val jsonDecoded = Json.decodeFromString<WebSocketRequest>(json)
-                            WebSocketEventBus.sendMessage(connectionInfo, jsonDecoded)
+                            WebSocketEventBus.sendMessage(
+                                connectionInfo,
+                                jsonDecoded.copy(webSocketId = webSocketId)
+                            )
                         } catch (e: Exception) {
                             e.printStackTrace()
                             close(

@@ -34,7 +34,7 @@ fun ApplicationCall.getClientIp(): IpAddress {
     return IpAddress(InetAddress.getByName(this.request.origin.remoteHost).hostAddress)
 }
 
-fun ApplicationCall.getAuthConnectionInfo(): AuthConnectionInfo? {
+fun ApplicationCall.getAuthConnectionInfo(webSocketId: String): AuthConnectionInfo? {
     return try {
         val ipAddress = this.getClientIp()
         val jwt = this.principal<JWTPrincipal>()?.payload ?: return null
@@ -42,6 +42,7 @@ fun ApplicationCall.getAuthConnectionInfo(): AuthConnectionInfo? {
         val profileId = jwt.getClaim(DomainConstants.PROFILE_ID)?.asString() ?: return null
         val tokenId = jwt.getClaim(DomainConstants.TOKEN_ID)?.asString() ?: return null
         AuthConnectionInfo(
+            webSocketId = webSocketId,
             ipAddress = ipAddress,
             authId = authId,
             profileId = profileId,
@@ -53,10 +54,11 @@ fun ApplicationCall.getAuthConnectionInfo(): AuthConnectionInfo? {
     }
 }
 
-fun ApplicationCall.getDefaultConnectionInfo(): DefaultConnectionInfo? {
+fun ApplicationCall.getDefaultConnectionInfo(webSocketId: String): DefaultConnectionInfo? {
     return try {
         val ipAddress = this.getClientIp()
         DefaultConnectionInfo(
+            webSocketId = webSocketId,
             ipAddress = ipAddress,
         )
     } catch (e: Exception) {

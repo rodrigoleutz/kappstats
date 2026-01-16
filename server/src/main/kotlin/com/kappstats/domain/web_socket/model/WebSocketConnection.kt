@@ -14,11 +14,12 @@ data class WebSocketConnection(
 ) {
     companion object {
         fun create(
+            webSocketId: String,
             connectionInfo: ConnectionInfo,
             defaultWebSocketSession: DefaultWebSocketSession
         ): WebSocketConnection {
             return WebSocketConnection(
-                id = IdGenerator.createUuid,
+                id = webSocketId,
                 session = defaultWebSocketSession,
                 connectDate = AppDateTime.now,
                 lastUpdateDate = AppDateTime.now,

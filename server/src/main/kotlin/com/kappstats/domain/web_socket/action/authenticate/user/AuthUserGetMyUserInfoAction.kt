@@ -7,6 +7,8 @@ import com.kappstats.domain.model.connection.AuthConnectionInfo
 import com.kappstats.domain.model.connection.ConnectionInfo
 import com.kappstats.domain.web_socket.contract.WebSocketContract
 import com.kappstats.dto.web_socket.WebSocketEvents
+import com.kappstats.dto.web_socket.WebSocketRequest
+import com.kappstats.dto.web_socket.WebSocketResponse
 import com.kappstats.dto.web_socket.WsAction
 import com.kappstats.dto.web_socket.WsActionBase
 import com.kappstats.model.user.Auth
@@ -24,14 +26,14 @@ object AuthUserGetMyUserInfoAction : WebSocketContract<Any?, Triple<Auth, AuthTo
     override val base: WsActionBase<Any?, Triple<Auth, AuthToken, Profile>> =
         WebSocketEvents.Authenticate.User.GetMyUserInfo
 
-    override suspend fun process(
+    override suspend fun WebSocketRequest.process(
         connectionInfo: ConnectionInfo,
         data: Any?
-    ): Triple<Auth, AuthToken, Profile>? {
+    ): WebSocketResponse? {
         if (connectionInfo !is AuthConnectionInfo) return null
         val auth = authRepository.generic.getById(connectionInfo.authId) ?: return null
         val authToken = authTokenRepository.getByAuthId(connectionInfo.authId) ?: return null
         val profile = profileRepository.generic.getById(connectionInfo.profileId) ?: return null
-        return Triple(auth, authToken, profile)
+        return this.toSuccess(Triple(auth, authToken, profile), profileIdList = listOf(connectionInfo.profileId))
     }
 }
