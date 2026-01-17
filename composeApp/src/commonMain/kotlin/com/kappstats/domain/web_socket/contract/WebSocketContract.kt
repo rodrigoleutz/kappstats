@@ -37,7 +37,8 @@ interface WebSocketContract<T, R> : KoinComponent {
                     deferred?.complete(data)
                 }
             } else {
-                val failure = (webSocketResponse as WebSocketResponse.Failure).failureType
+                val failure =
+                    (webSocketResponse as WebSocketResponse.Failure).failureType
                 deferred?.complete(failure)
             }
         } catch (e: Exception) {
@@ -61,10 +62,13 @@ interface WebSocketContract<T, R> : KoinComponent {
         return try {
             webSocketActions.send(request)
             withTimeoutOrNull(10_000) {
-                deferred.await() as? R
+                val result = deferred.await()
+                if (result is WebSocketResponse.Companion.FailureType) {
+                    dataState.setErrorState(failure = result as WebSocketResponse.Companion.FailureType)
+                    null
+                } else result as? R
             }
         } catch (e: Exception) {
-            //TODO:DataState error UI
             e.printStackTrace()
             null
         } finally {

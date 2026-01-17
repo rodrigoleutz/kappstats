@@ -16,13 +16,11 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import org.koin.ktor.ext.inject
-import java.util.UUID
 
 fun Route.webSocketRoutes() {
     val webSocketData by inject<WebSocketData>()

@@ -21,6 +21,16 @@
     <string name="error_username_invalid">Invalid username.</string>
     <string name="error_username_already_exists">Username already exists.</string>
     <string name="exit">Exit</string>
+    <string name="failure_conflict">Conflict failure.</string>
+    <string name="failure_database">Database failure.</string>
+    <string name="failure_exception">Exception failure.</string>
+    <string name="failure_load_data">Load data failure.</string>
+    <string name="failure_network">Network failure.</string>
+    <string name="failure_no_data">No data failure.</string>
+    <string name="failure_save_data">Save data failure.</string>
+    <string name="failure_serialization">Serialization failure.</string>
+    <string name="failure_unauthorized">Unauthorized failure.</string>
+    <string name="failure_unknown">Unknown failure.</string>
     <string name="home">Home</string>
     <string name="loading">Loading</string>
     <string name="login">Login</string>
