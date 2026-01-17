@@ -42,5 +42,6 @@ interface WebSocketContract<T, R> : KoinComponent {
             data = data
         )
         webSocketActions.send(request)
+        //TODO: Mutex and CompletableDeferred for response
     }
 }

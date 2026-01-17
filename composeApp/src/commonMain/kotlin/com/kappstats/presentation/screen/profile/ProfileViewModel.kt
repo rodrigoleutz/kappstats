@@ -1,10 +1,16 @@
 package com.kappstats.presentation.screen.profile
 
 import androidx.lifecycle.viewModelScope
+import com.kappstats.components.part.widget.snackbar.AppSnackbarVisuals
+import com.kappstats.components.part.widget.snackbar.show
 import com.kappstats.custom_object.username.Username
 import com.kappstats.domain.use_case.auth.AuthUseCases
+import com.kappstats.domain.web_socket.actions.user.AuthUserProfileUpdateAction
 import com.kappstats.model.user.Profile
 import com.kappstats.presentation.core.view_model.StateViewModel
+import com.kappstats.resources.Res
+import com.kappstats.resources.error_username
+import com.kappstats.resources.error_username_invalid
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +22,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+import org.jetbrains.compose.resources.getString
 
 @OptIn(FlowPreview::class)
 class ProfileViewModel(
@@ -98,7 +106,25 @@ class ProfileViewModel(
 
     fun updateProfile(result: (Boolean) -> Unit) {
         viewModelScope.launch {
-
+            val username = try {
+                Username(uiState.value.username)
+            } catch (e: Exception) {
+                stateHolder.uiState.value.snackbarHostState.show(
+                    getString(Res.string.error_username_invalid),
+                    type = AppSnackbarVisuals.Type.Error
+                )
+                result(false)
+                return@launch
+            }
+            stateHolder.user.value.myProfile?.let { old ->
+                val profile = old.copy(
+                    name = uiState.value.name,
+                    username = username,
+                    bio = uiState.value.bio
+                )
+                val result = AuthUserProfileUpdateAction.send(profile)
+                result(true)
+            }
         }
     }
 }

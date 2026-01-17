@@ -46,9 +46,15 @@ fun Route.webSocketRoutes() {
             }
             val job = launch {
                 WebSocketEventBus.authMessages.distinctUntilChanged().collect { message ->
-                    if (connectionInfo.profileId in message.profiles) {
-                        val json = Json.encodeToString(message)
-                        send(json)
+                    when {
+                        connectionInfo.profileId in message.profiles -> {
+                            val json = Json.encodeToString(message)
+                            send(json)
+                        }
+                        message.profiles.isEmpty() && message.requestWebSocketId == connectionInfo.webSocketId -> {
+                            val json = Json.encodeToString(message)
+                            send(json)
+                        }
                     }
                 }
             }

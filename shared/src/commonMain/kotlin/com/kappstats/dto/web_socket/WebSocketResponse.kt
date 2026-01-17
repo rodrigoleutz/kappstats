@@ -17,7 +17,8 @@ sealed class WebSocketResponse {
             NoData,
             SaveData,
             Serialization,
-            Unauthorized;
+            Unauthorized,
+            Unknown;
         }
     }
 

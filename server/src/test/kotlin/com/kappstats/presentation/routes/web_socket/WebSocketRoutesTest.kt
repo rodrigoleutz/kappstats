@@ -36,6 +36,7 @@ import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
+import kotlin.collections.emptyList
 import kotlin.test.assertNotEquals
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
@@ -174,14 +175,18 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
             )
             send(Json.encodeToString(webSocketRequest))
             val frame1 = incoming.receive() as Frame.Text
-            val jsonDecoded1 =
+            val webSocketResponseProfile =
                 Json.decodeFromString<WebSocketResponse>(frame1.readText())
-            assert(jsonDecoded1.isSuccess)
-            val profileDecoded = Json.decodeFromString<Profile>((jsonDecoded1 as WebSocketResponse.Success).data)
+            assert(webSocketResponseProfile.isSuccess)
+            val profileDecoded = Json.decodeFromString<Profile>(
+                (webSocketResponseProfile as WebSocketResponse.Success).data
+            )
             assertEquals(profile.name, profileDecoded.name)
             assertEquals(profile.username, profileDecoded.username)
             assertNotEquals(profile.updatedAt, profileDecoded.updatedAt)
-            assertEquals(profile.updatedAt.size+1, profileDecoded.updatedAt.size)
+            assertEquals(profile.updatedAt.size + 1, profileDecoded.updatedAt.size)
+            assertEquals(emptyList<String>(), webSocketResponseProfile.profiles)
+            assertEquals(null, webSocketResponseProfile.webSocketId)
         }
     }
 }
