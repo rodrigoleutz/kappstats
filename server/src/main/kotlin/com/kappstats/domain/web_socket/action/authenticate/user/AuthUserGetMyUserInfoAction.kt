@@ -14,6 +14,9 @@ import com.kappstats.dto.web_socket.WsActionBase
 import com.kappstats.model.user.Auth
 import com.kappstats.model.user.AuthToken
 import com.kappstats.model.user.Profile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import org.koin.core.component.inject
 
 @WsAction
@@ -23,6 +26,8 @@ object AuthUserGetMyUserInfoAction : WebSocketContract<Any?, Triple<Auth, AuthTo
     private val authTokenRepository by inject<AuthTokenRepository>()
     private val profileRepository by inject<ProfileRepository>()
 
+    val scope = CoroutineScope(Dispatchers.IO)
+
     override val base: WsActionBase<Any?, Triple<Auth, AuthToken, Profile>> =
         WebSocketEvents.Authenticate.User.GetMyUserInfo
 
@@ -31,9 +36,18 @@ object AuthUserGetMyUserInfoAction : WebSocketContract<Any?, Triple<Auth, AuthTo
         data: Any?
     ): WebSocketResponse? {
         if (connectionInfo !is AuthConnectionInfo) return null
-        val auth = authRepository.generic.getById(connectionInfo.authId) ?: return null
-        val authToken = authTokenRepository.getByAuthId(connectionInfo.authId) ?: return null
-        val profile = profileRepository.generic.getById(connectionInfo.profileId) ?: return null
+        val authJob = scope.async {
+            authRepository.generic.getById(connectionInfo.authId)
+        }
+        val authTokenJob = scope.async {
+            authTokenRepository.getByAuthId(connectionInfo.authId)
+        }
+        val profileJob = scope.async {
+            profileRepository.generic.getById(connectionInfo.profileId)
+        }
+        val auth = authJob.await() ?: return null
+        val authToken = authTokenJob.await() ?: return null
+        val profile = profileJob.await() ?: return null
         return this.toSuccess(Triple(auth, authToken, profile), profileIdList = listOf(connectionInfo.profileId))
     }
 }

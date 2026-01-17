@@ -14,12 +14,10 @@ object AuthUserProfileUpdateAction: WebSocketContract<Profile, Profile?> {
 
     override suspend fun process(value: Profile?): Profile? {
         value?.let { profile ->
-            val profileMap = dataState.user.value.profileMap.toMutableMap()
-            profileMap[profile.id] = profile
             dataState.setUserState(
                 dataState.user.value.copy(
                     myProfile = profile,
-                    profileMap = profileMap
+                    profileMap = dataState.user.value.profileMap + (profile.id to profile)
                 )
             )
         }

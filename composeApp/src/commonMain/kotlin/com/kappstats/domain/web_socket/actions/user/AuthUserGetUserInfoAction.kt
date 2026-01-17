@@ -16,11 +16,15 @@ object AuthUserGetUserInfoAction: WebSocketContract<Any?, Triple<Auth, AuthToken
         WebSocketEvents.Authenticate.User.GetMyUserInfo
 
     override suspend fun process(value: Triple<Auth, AuthToken, Profile>): Triple<Auth, AuthToken, Profile>? {
+        val (auth, token, profile) = value
         dataState.setUserState(
             dataState.user.value.copy(
-                myAuth = value.first,
-                myAuthToken = value.second,
-                myProfile = value.third
+                myAuth = auth,
+                myAuthToken = token,
+                myProfile = profile,
+                authMap = dataState.user.value.authMap + (auth.id to auth),
+                authTokenMap = dataState.user.value.authTokenMap + (token.id to token),
+                profileMap = dataState.user.value.profileMap + (profile.id to profile)
             )
         )
         return value

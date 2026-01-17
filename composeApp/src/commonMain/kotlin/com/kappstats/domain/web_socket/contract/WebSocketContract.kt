@@ -19,6 +19,8 @@ interface WebSocketContract<T, R> : KoinComponent {
 
     val base: WsActionBase<T, R>
 
+    suspend fun process(value: R): R?
+
     suspend fun receive(webSocketResponse: WebSocketResponse) {
         try {
             val webSocketActions by inject<WebSocketActions>()
@@ -42,8 +44,6 @@ interface WebSocketContract<T, R> : KoinComponent {
             e.printStackTrace()
         }
     }
-
-    suspend fun process(value: R): R?
 
     suspend fun send(value: T? = null): R? {
         val webSocketActions by inject<WebSocketActions>()

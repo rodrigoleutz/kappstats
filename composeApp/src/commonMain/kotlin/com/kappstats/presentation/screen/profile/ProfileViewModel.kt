@@ -37,13 +37,11 @@ class ProfileViewModel(
 
     val profile = stateHolder.dataState.user.value.myProfile
 
-    private var oldProfile: Profile? = null
-
     val enabledUpdate: Boolean
-        get() = !uiState.value.loadingUsername && oldProfile != null &&
+        get() = !uiState.value.loadingUsername && profile != null &&
                 (Username.isValidUsername(uiState.value.username) &&
                         (uiState.value.hasUsername == null || uiState.value.hasUsername == false)) &&
-                oldProfile != oldProfile?.copy(
+                profile != profile.copy(
             name = uiState.value.name,
             username = Username(uiState.value.username),
             bio = uiState.value.bio
@@ -86,7 +84,6 @@ class ProfileViewModel(
     }
 
     fun setCurrentProfileData() {
-        oldProfile = profile
         profile?.let { currentProfile ->
             _uiState.update {
                 uiState.value.copy(
