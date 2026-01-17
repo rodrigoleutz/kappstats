@@ -9,6 +9,7 @@ import com.kappstats.domain.web_socket.actions.user.AuthUserProfileUpdateAction
 import com.kappstats.model.user.Profile
 import com.kappstats.presentation.core.view_model.StateViewModel
 import com.kappstats.resources.Res
+import com.kappstats.resources.error_profile_update
 import com.kappstats.resources.error_username
 import com.kappstats.resources.error_username_invalid
 import kotlinx.coroutines.FlowPreview
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import org.jetbrains.compose.resources.getString
+import org.koin.core.component.getScopeName
 
 @OptIn(FlowPreview::class)
 class ProfileViewModel(
@@ -123,7 +125,8 @@ class ProfileViewModel(
                     bio = uiState.value.bio
                 )
                 val result = AuthUserProfileUpdateAction.send(profile)
-                result(true)
+                if (result == null) snackbarMessage(getString(Res.string.error_profile_update))
+                result(result != null)
             }
         }
     }
