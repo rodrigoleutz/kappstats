@@ -55,4 +55,9 @@ sealed class WebSocketResponse {
             is Failure -> webSocketId ?: throw IllegalArgumentException("WebSocketId null.")
         }
 
+    val requestId: String
+        get() = when(this) {
+            is Success -> id
+            is Failure -> id
+        }
 }
