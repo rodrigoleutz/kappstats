@@ -47,11 +47,8 @@ class WebSocketActionsImpl(
                 ?.map { frameText ->
                     Json.decodeFromString<WebSocketResponse>(frameText.readText())
                 }?.collect { webSocketResponse ->
-                    if (webSocketResponse.isSuccess) {
-                        val action =
-                            actionsMap[(webSocketResponse as WebSocketResponse.Success).action]
-                        action?.receive(webSocketResponse)
-                    }
+                    val action = actionsMap[webSocketResponse.requestAction]
+                    action?.receive(webSocketResponse)
                 }
         }
     }

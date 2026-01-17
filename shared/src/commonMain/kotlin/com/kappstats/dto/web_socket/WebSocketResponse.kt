@@ -49,15 +49,21 @@ sealed class WebSocketResponse {
             is Failure -> profileIdList
         }
 
-    val requestWebSocketId: String
+    val requestAction: String
         get() = when(this) {
-            is Success -> webSocketId ?: throw IllegalArgumentException("WebSocketId null.")
-            is Failure -> webSocketId ?: throw IllegalArgumentException("WebSocketId null.")
+            is Success -> action
+            is Failure -> action
         }
 
     val requestId: String
         get() = when(this) {
             is Success -> id
             is Failure -> id
+        }
+
+    val requestWebSocketId: String
+        get() = when(this) {
+            is Success -> webSocketId ?: throw IllegalArgumentException("WebSocketId null.")
+            is Failure -> webSocketId ?: throw IllegalArgumentException("WebSocketId null.")
         }
 }
