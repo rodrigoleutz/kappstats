@@ -88,9 +88,9 @@ class SignViewModel(
         _uiState.update { it.copy(loadingUsername = value) }
     }
 
-    fun signIn(result: (Boolean) -> Unit) {
+    fun signIn(hasLoadingProgress: Boolean = true, result: (Boolean) -> Unit) {
         viewModelScope.launch {
-            stateHolder.onMainEvent(MainEvent.SetIsLoading(true))
+            if(hasLoadingProgress) stateHolder.onMainEvent(MainEvent.SetIsLoading(true))
             try {
                 val email = try {
                     Email(uiState.value.email)
@@ -109,12 +109,15 @@ class SignViewModel(
                         getString(Res.string.error_sign_in),
                         type = AppSnackbarVisuals.Type.Error
                     )
+                } else {
+                    val resourceAuthenticate = authUseCases.authenticate.invoke()
+                    stateHolder.onMainEvent(MainEvent.SetIsLogged(resourceAuthenticate.isSuccess))
                 }
                 result(resource.isSuccess)
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                stateHolder.onMainEvent(MainEvent.SetIsLoading(false))
+                if(hasLoadingProgress) stateHolder.onMainEvent(MainEvent.SetIsLoading(false))
             }
         }
     }
@@ -145,11 +148,25 @@ class SignViewModel(
                     name = uiState.value.name
                 )
                 val resource = authUseCases.signUp.invoke(signUpRequest)
-                if (!resource.isSuccess) stateHolder.uiState.value.snackbarHostState.show(
-                    getString(Res.string.error_sign_up),
-                    type = AppSnackbarVisuals.Type.Error
-                )
-                result(resource.isSuccess)
+                if (!resource.isSuccess) {
+                    stateHolder.uiState.value.snackbarHostState.show(
+                        getString(Res.string.error_sign_up),
+                        type = AppSnackbarVisuals.Type.Error
+                    )
+                    result(resource.isSuccess)
+                } else {
+                    signIn(hasLoadingProgress = false) { result ->
+                        if(!result) {
+                            viewModelScope.launch {
+                                stateHolder.uiState.value.snackbarHostState.show(
+                                    getString(Res.string.error_sign_in),
+                                    type = AppSnackbarVisuals.Type.Error
+                                )
+                            }
+                        }
+                        result(result)
+                    }
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
