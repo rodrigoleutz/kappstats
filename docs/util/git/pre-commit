@@ -24,7 +24,6 @@ if ! diff -q "$HOOK_LOCAL" "$HOOK_SOURCE" > /dev/null; then
     exec "$0" "$@"
 fi
 
-# Pre-commit tests
 echo -e "\n\n#### Start pre-commit tests"
 ./gradlew :server:test
 ./gradlew :composeApp:cleanJvmTest :composeApp:jvmTest
