@@ -92,16 +92,8 @@ class SignViewModel(
         viewModelScope.launch {
             if(hasLoadingProgress) stateHolder.onMainEvent(MainEvent.SetIsLoading(true))
             try {
-                val email = try {
-                    Email(uiState.value.email)
-                } catch (e: Exception) {
-                    return@launch
-                }
-                val password = try {
-                    Password(uiState.value.password)
-                } catch (e: Exception) {
-                    return@launch
-                }
+                val email = Email(uiState.value.email)
+                val password = Password(uiState.value.password)
                 val resource = authUseCases.signIn.invoke(email, password)
                 stateHolder.onMainEvent(MainEvent.SetIsLogged(resource.isSuccess))
                 if (!resource.isSuccess) {
@@ -116,6 +108,7 @@ class SignViewModel(
                 result(resource.isSuccess)
             } catch (e: Exception) {
                 e.printStackTrace()
+                result(false)
             } finally {
                 if(hasLoadingProgress) stateHolder.onMainEvent(MainEvent.SetIsLoading(false))
             }
@@ -126,21 +119,9 @@ class SignViewModel(
         viewModelScope.launch {
             stateHolder.onMainEvent(MainEvent.SetIsLoading(true))
             try {
-                val email = try {
-                    Email(uiState.value.email)
-                } catch (e: Exception) {
-                    return@launch
-                }
-                val password = try {
-                    Password(uiState.value.password)
-                } catch (e: Exception) {
-                    return@launch
-                }
-                val username = try {
-                    Username(uiState.value.username)
-                } catch (e: Exception) {
-                    return@launch
-                }
+                val email = Email(uiState.value.email)
+                val password = Password(uiState.value.password)
+                val username = Username(uiState.value.username)
                 val signUpRequest = SignUpRequest(
                     email = email,
                     username = username,
@@ -169,6 +150,7 @@ class SignViewModel(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                result(false)
             } finally {
                 stateHolder.onMainEvent(MainEvent.SetIsLoading(false))
             }

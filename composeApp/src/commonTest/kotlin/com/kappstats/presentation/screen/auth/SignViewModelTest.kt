@@ -34,9 +34,10 @@ class SignViewModelTest {
 
     private fun setMocks(
         signInAuthService: String? = "acbd",
-
+        signUpAuthService: Boolean = true
     ) {
         everySuspend { authService.signIn(any()) } returns signInAuthService
+        everySuspend { authService.signUp(any()) } returns signUpAuthService
     }
 
     @BeforeTest
@@ -84,6 +85,51 @@ class SignViewModelTest {
         viewModel.onEvent(SignEvent.SetEmail("test@test.com"))
         viewModel.onEvent(SignEvent.SetPassword("Password#123"))
         viewModel.signIn { result ->
+            assertEquals(false, result)
+        }
+    }
+
+    @Test
+    fun `Test sign in fail illegal argument`() = runTest {
+        viewModel.onEvent(SignEvent.SetEmail("test@test"))
+        viewModel.onEvent(SignEvent.SetPassword("Password#123"))
+        viewModel.signIn { result ->
+            assertEquals(false, result)
+        }
+    }
+
+    @Test
+    fun `Test sign up success`() = runTest {
+        setMocks()
+        viewModel.onEvent(SignEvent.SetName("Test Name"))
+        viewModel.onEvent(SignEvent.SetUsername("test123"))
+        viewModel.onEvent(SignEvent.SetEmail("test@test.com"))
+        viewModel.onEvent(SignEvent.SetPassword("Password#123"))
+        viewModel.signUp { result ->
+            assertEquals(true, result)
+        }
+    }
+
+    @Test
+    fun `Test sign up failure`() = runTest {
+        setMocks(signUpAuthService = false)
+        viewModel.onEvent(SignEvent.SetName("Test Name"))
+        viewModel.onEvent(SignEvent.SetUsername("test123"))
+        viewModel.onEvent(SignEvent.SetEmail("test@test.com"))
+        viewModel.onEvent(SignEvent.SetPassword("Password#123"))
+        viewModel.signUp { result ->
+            assertEquals(false, result)
+        }
+    }
+
+    @Test
+    fun `Test sign up fail illegal argument`() = runTest {
+        setMocks()
+        viewModel.onEvent(SignEvent.SetName("Test Name"))
+        viewModel.onEvent(SignEvent.SetUsername("tst"))
+        viewModel.onEvent(SignEvent.SetEmail("test@tes"))
+        viewModel.onEvent(SignEvent.SetPassword("Passw"))
+        viewModel.signUp { result ->
             assertEquals(false, result)
         }
     }
