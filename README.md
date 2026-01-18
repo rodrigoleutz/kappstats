@@ -136,6 +136,16 @@ git clone https://gitlab.com/kappstats/kmp.git
 git checkout dev
 ```
 ---
+### Install pre-commit test helper
+Install pre-commit in `.git/hooks` to run tests before commit: 
+```bash
+./install_pre_commit.sh
+```
+or
+```bash
+chmod +x install_pre_commit.sh && ./install_pre_commit.sh
+```
+---
 ### Server
 Create a test class by extending BaseIntegrationTest. Use the baseTestApplication helper to perform requests:
 ```kotlin
