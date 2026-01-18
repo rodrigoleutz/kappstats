@@ -14,6 +14,7 @@ plugins {
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.mokkery)
 }
 
 kotlin {
@@ -100,6 +101,7 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
             implementation(libs.compose.ui.test)
+            implementation(libs.mokkery)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)

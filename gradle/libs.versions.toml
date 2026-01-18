@@ -26,7 +26,7 @@ commonsCodec = "1.20.0"
 composeIcons = "1.1.1"
 compose-multiplatform-adaptive = "1.3.0-alpha03"
 compose-multiplatform-lifecycle = "2.10.0-alpha07"
-compose-multiplatform-navigation3-browser = "0.2.0"
+compose-multiplatform-navigation3-browser = "0.3.1"
 coreKtx = "1.7.0"
 filekitCore = "0.12.0"
 firebase-crashlytics = "3.0.6"
@@ -34,7 +34,7 @@ google-services = "4.4.4"
 jakartaMail = "2.0.5"
 jakartaMailApi = "2.1.5"
 janino = "3.1.12"
-junit5 = "6.0.1"
+junit5 = "6.0.2"
 koin = "4.1.1"
 kermit = "2.0.8"
 kotlinxCoroutinesTest = "1.10.2"
@@ -42,11 +42,11 @@ kotlinpoet = "2.2.0"
 kotlinxDatetime = "0.7.1"
 kotlinxSerializationJson = "1.9.0"
 krypto = "4.0.10"
-ksp = "2.3.0"
+ksp = "2.3.2"
 kstore = "1.0.0"
 lifecycleProcess = "2.10.0"
 lifecycleViewmodelNav3 = "2.10.0"
-logback = "1.5.23"
+logback = "1.5.25"
 mockkVersion = "1.14.7"
 mongodb = "1.21.4"
 mongodbDriverBom = "5.6.2"
@@ -55,6 +55,7 @@ multiplatform-nav3-ui = "1.0.0-alpha06"
 room = "2.8.4"
 sqlite = "2.6.2"
 testcontainers = "2.0.3"
+mokkery = "3.1.1"
 
 [libraries]
 # Default
@@ -68,7 +69,7 @@ androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 
 # AppDirs
-appdirs = { module = "net.harawata:appdirs", version.ref = "appdirs"}
+appdirs = { module = "net.harawata:appdirs", version.ref = "appdirs" }
 
 # ConstraintLayout
 constraintlayout-compose-multiplatform = { module = "tech.annexflow.compose:constraintlayout-compose-multiplatform", version.ref = "constraintlayoutComposeMultiplatform" }
@@ -219,6 +220,9 @@ testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "
 mongodb = { module = "org.testcontainers:mongodb", version.ref = "mongodb" }
 junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "junitJupiter" }
 
+# Mokkery - mockk for KMP
+mokkery = { module = "dev.mokkery:mokkery-gradle", version.ref = "mokkery" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
@@ -233,3 +237,4 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 androidx-room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
