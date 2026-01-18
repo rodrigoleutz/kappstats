@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+
+HOOK_LOCAL=".git/hooks/pre-commit"
+HOOK_SOURCE="docs/util/git/pre-commit"
+
+# Verify pre-commit update
+if ! diff -q "$HOOK_LOCAL" "$HOOK_SOURCE" > /dev/null; then
+    echo -e "\n\n#### Start pre-commit update"
+
+    cat .git/hooks/pre-commit
+
+    echo -e "\n\n#### pre-commit diff"
+    diff -u "$HOOK_LOCAL" "$HOOK_SOURCE" || true
+
+    echo -e "\n\n#### pre-commit copy file"
+    cp -f "$HOOK_SOURCE" "${HOOK_LOCAL}.tmp"
+    chmod +x "${HOOK_LOCAL}.tmp"
+    mv -f "${HOOK_LOCAL}.tmp" "$HOOK_LOCAL"
+
+    echo -e "\n\n#### End pre-commit update"
+
+    # Restart to ensure the new logic runs
+    exec "$0" "$@"
+fi
+
+# Pre-commit tests
+echo -e "\n\n#### Start pre-commit tests"
+./gradlew :server:test
+./gradlew :composeApp:cleanJvmTest :composeApp:jvmTest
+echo -e "\n\n#### End pre-commit tests"
+
+exit 0

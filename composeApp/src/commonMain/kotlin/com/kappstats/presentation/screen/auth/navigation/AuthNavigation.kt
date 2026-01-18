@@ -83,6 +83,7 @@ fun EntryProviderScope<NavKey>.authNavigation(
             uiState = uiState,
             onEvent = viewModel::onEvent,
             onMainEvent = stateHolder::onMainEvent,
+            hasUsername = uiState.hasUsername,
             onSignUp = {
                 viewModel.signUp { result ->
                     if(result) {

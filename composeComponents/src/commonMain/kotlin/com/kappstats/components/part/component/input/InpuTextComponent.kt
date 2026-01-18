@@ -73,72 +73,68 @@ fun InputTextComponent(
             ""
         }
     }
-    Column(
-        modifier = modifier
-    ) {
-        OutlinedTextField(
-            modifier = modifier,
-            label = {
-                Text(label)
-            },
-            value = value,
-            onValueChange = {
-                onChange(it)
-            },
-            minLines = minLines,
-            maxLines = if(maxLines < minLines) minLines else maxLines,
-            isError = errorMessage != null,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = keyboardType,
-                imeAction = imeAction
-            ),
-            keyboardActions = keyboardActions,
-            visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisibility) PasswordVisualTransformation()
-            else VisualTransformation.None,
-            trailingIcon = {
-                if(trailingIcon != null) {
-                    trailingIcon()
-                } else {
-                    when (keyboardType) {
-                        KeyboardType.Password -> {
-                            IconButton(
-                                onClick = {
-                                    passwordVisibility = !passwordVisibility
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = if (passwordVisibility) TablerIcons.EyeOff else TablerIcons.Eye,
-                                    contentDescription = "Password visibility"
-                                )
+    OutlinedTextField(
+        modifier = modifier,
+        label = {
+            Text(label)
+        },
+        value = value,
+        onValueChange = {
+            onChange(it)
+        },
+        minLines = minLines,
+        maxLines = if (maxLines < minLines) minLines else maxLines,
+        isError = errorMessage != null,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType,
+            imeAction = imeAction
+        ),
+        keyboardActions = keyboardActions,
+        visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisibility) PasswordVisualTransformation()
+        else VisualTransformation.None,
+        trailingIcon = {
+            if (trailingIcon != null) {
+                trailingIcon()
+            } else {
+                when (keyboardType) {
+                    KeyboardType.Password -> {
+                        IconButton(
+                            onClick = {
+                                passwordVisibility = !passwordVisibility
                             }
+                        ) {
+                            Icon(
+                                imageVector = if (passwordVisibility) TablerIcons.EyeOff else TablerIcons.Eye,
+                                contentDescription = "Password visibility"
+                            )
                         }
+                    }
 
-                        else -> {}
-                    }
+                    else -> {}
                 }
-            },
-            supportingText = {
-                AnimatedVisibility(
-                    visible = errorMessage != null,
-                    enter = fadeIn() + slideInVertically(),
-                    exit = fadeOut() + slideOutVertically()
+            }
+        },
+        supportingText = {
+            AnimatedVisibility(
+                visible = errorMessage != null,
+                enter = fadeIn() + slideInVertically(),
+                exit = fadeOut() + slideOutVertically()
+            ) {
+                Row(
+                    modifier = modifier,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = modifier,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = EvaIcons.Fill.AlertTriangle,
-                            contentDescription = displayError
-                        )
-                        Spacer(modifier = Modifier.width(AppDimensions.Small.component))
-                        Text(displayError)
-                    }
+                    Icon(
+                        imageVector = EvaIcons.Fill.AlertTriangle,
+                        contentDescription = displayError
+                    )
+                    Spacer(modifier = Modifier.width(AppDimensions.Small.component))
+                    Text(displayError)
                 }
-            },
-            colors = colors
-        )
-    }
+            }
+        },
+        colors = colors
+    )
 }
 
 @Preview

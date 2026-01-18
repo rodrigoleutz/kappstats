@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.kappstats.components.part.component.button.ButtonComponent
@@ -81,6 +82,7 @@ fun SignUpScreen(
     onSignUp: () -> Unit,
     onEvent: (SignEvent) -> Unit,
     onMainEvent: (MainEvent) -> Unit,
+    hasUsername: Boolean? = null,
     modifier: Modifier = Modifier
 ) {
     var passwordConfirm by remember {
@@ -109,7 +111,7 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.ExtraLarge.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("name_input"),
                 label = stringResource(Res.string.name),
                 value = uiState.name,
                 onChange = {
@@ -120,7 +122,7 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("email_input"),
                 label = stringResource(Res.string.email),
                 value = uiState.email,
                 onChange = {
@@ -133,7 +135,7 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("username_input"),
                 label = stringResource(Res.string.username),
                 value = uiState.username,
                 onChange = {
@@ -165,7 +167,7 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("password_input"),
                 label = stringResource(Res.string.password),
                 value = uiState.password,
                 onChange = {
@@ -181,7 +183,7 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("password_confirm_input"),
                 label = stringResource(Res.string.password_confirm),
                 value = passwordConfirm,
                 onChange = {
@@ -205,7 +207,7 @@ fun SignUpScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 ButtonComponent(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).testTag("clear_button"),
                     label = stringResource(Res.string.clear),
                     icon = EvaIcons.Fill.Close,
                     colors = ButtonDefaults.buttonColors(
@@ -224,7 +226,7 @@ fun SignUpScreen(
                 )
                 Spacer(modifier = Modifier.width(AppDimensions.Medium.component))
                 ButtonComponent(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).testTag("register_button"),
                     label = stringResource(Res.string.register),
                     icon = EvaIcons.Fill.PersonAdd,
                     colors = ButtonDefaults.buttonColors(
@@ -236,7 +238,7 @@ fun SignUpScreen(
                             Password.isValidPassword(uiState.password) &&
                             passwordConfirm == uiState.password &&
                             uiState.name.isNotBlank() &&
-                            uiState.hasUsername == false,
+                            hasUsername == false,
                     onClick = {
                         onSignUp()
                     }

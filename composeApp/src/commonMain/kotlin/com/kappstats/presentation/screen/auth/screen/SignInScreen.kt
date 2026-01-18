@@ -24,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.kappstats.components.part.component.button.ButtonComponent
@@ -89,7 +90,7 @@ fun SignInScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.ExtraLarge.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("email_input"),
                 label = stringResource(Res.string.email),
                 value = uiState.email,
                 onChange = {
@@ -102,7 +103,7 @@ fun SignInScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("password_input"),
                 label = stringResource(Res.string.password),
                 value = uiState.password,
                 onChange = {
@@ -125,7 +126,7 @@ fun SignInScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 ButtonComponent(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).testTag("clear_button"),
                     label = stringResource(Res.string.clear),
                     icon = EvaIcons.Fill.Close,
                     colors = ButtonDefaults.buttonColors(
@@ -140,7 +141,7 @@ fun SignInScreen(
                 )
                 Spacer(modifier = Modifier.width(AppDimensions.Medium.component))
                 ButtonComponent(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).testTag("login_button"),
                     label = stringResource(Res.string.login),
                     icon = EvaIcons.Fill.LogIn,
                     colors = ButtonDefaults.buttonColors(

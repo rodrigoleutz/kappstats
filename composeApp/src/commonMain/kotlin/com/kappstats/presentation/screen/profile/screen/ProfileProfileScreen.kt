@@ -1,4 +1,4 @@
-package com.kappstats.presentation.screen.profile
+package com.kappstats.presentation.screen.profile.screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -29,6 +29,8 @@ import com.kappstats.components.theme.Red20
 import com.kappstats.components.theme.component_color.InputTextColors
 import com.kappstats.custom_object.username.Username
 import com.kappstats.presentation.core.state.MainUiState
+import com.kappstats.presentation.screen.profile.ProfileEvent
+import com.kappstats.presentation.screen.profile.ProfileUiState
 import com.kappstats.resources.Res
 import com.kappstats.resources.bio
 import com.kappstats.resources.cancel
@@ -44,7 +46,7 @@ import compose.icons.evaicons.fill.Save
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun ProfileScreen(
+fun ProfileProfileScreen(
     mainUiState: MainUiState,
     uiState: ProfileUiState,
     onEvent: (ProfileEvent) -> Unit,

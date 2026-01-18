@@ -10,7 +10,7 @@ androidx-espresso = "3.7.0"
 androidx-lifecycle = "2.9.6"
 androidx-testExt = "1.3.0"
 composeHotReload = "1.0.0"
-composeMultiplatform = "1.9.3"
+composeMultiplatform = "1.10.0"
 junit = "4.13.2"
 junitJupiter = "1.21.4"
 kotlin = "2.3.0"
@@ -207,6 +207,12 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 # Android Lifecycle Ads need
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }
 core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
+
+# UI Tests
+compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeMultiplatform" }
+compose-ui-test-junit4 = { module = "org.jetbrains.compose.ui:ui-test-junit4", version.ref = "composeMultiplatform" }
+compose-ui-test-manifest = { module = "org.jetbrains.compose.ui:ui-test-manifest", version.ref = "composeMultiplatform" }
+robolectric = { module = "org.robolectric:robolectric", version = "4.16" }
 
 # TestContainers
 testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }

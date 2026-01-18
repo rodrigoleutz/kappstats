@@ -76,6 +76,10 @@ kotlin {
             // KStore
             implementation(libs.kstore.file)
         }
+        androidUnitTest.dependencies {
+            implementation(libs.compose.ui.test.junit4)
+            implementation(libs.robolectric)
+        }
         commonMain {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
 
@@ -95,7 +99,7 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-            implementation(compose.uiTest)
+            implementation(libs.compose.ui.test)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -123,7 +127,9 @@ kotlin {
 android {
     namespace = "com.kappstats"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
     defaultConfig {
         applicationId = "com.kappstats"
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -174,6 +180,7 @@ compose.desktop {
 
 dependencies {
     add("kspCommonMainMetadata", project(":composeApp:ksp"))
+    testImplementation(libs.robolectric)
 }
 
 ksp {

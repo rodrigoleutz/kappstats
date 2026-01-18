@@ -1,7 +1,5 @@
 package com.kappstats.presentation.core.navigation
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,7 +28,7 @@ import com.kappstats.presentation.screen.home.HomeViewModel
 import com.kappstats.presentation.screen.message.MessageScreen
 import com.kappstats.presentation.screen.privacy_and_terms.PrivacyAndTermsScreen
 import com.kappstats.presentation.screen.privacy_and_terms.navigation.privacyAndTermsNavigation
-import com.kappstats.presentation.screen.profile.ProfileScreen
+import com.kappstats.presentation.screen.profile.screen.ProfileProfileScreen
 import com.kappstats.presentation.screen.profile.ProfileViewModel
 import com.kappstats.presentation.screen.splash.SplashScreen
 import com.kappstats.presentation.screen.splash.SplashViewModel
@@ -115,7 +113,7 @@ fun AppNavigation() {
                     entry<AppScreens.Profile> {
                         val viewModel: ProfileViewModel = koinViewModel()
                         val profileUiState by viewModel.uiState.collectAsState()
-                        ProfileScreen(
+                        ProfileProfileScreen(
                             mainUiState = uiState,
                             uiState = profileUiState,
                             onEvent = viewModel::onEvent,
