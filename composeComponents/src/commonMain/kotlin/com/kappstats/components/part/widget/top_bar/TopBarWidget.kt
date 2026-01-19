@@ -1,7 +1,6 @@
 package com.kappstats.components.part.widget.top_bar
 
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,6 +22,7 @@ import compose.icons.evaicons.fill.Menu
 fun TopBarWidget(
     title: String,
     modifier: Modifier = Modifier,
+    modifierNavIcon: Modifier = Modifier,
     navigationIcon: ImageVector = EvaIcons.Fill.Menu,
     navigationDescription: String = "menu",
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
@@ -36,7 +36,7 @@ fun TopBarWidget(
         },
         navigationIcon = {
             IconButton(
-                modifier = Modifier.pointerHoverIcon(PointerIcon.Hand),
+                modifier = modifierNavIcon.pointerHoverIcon(PointerIcon.Hand).then(modifierNavIcon),
                 onClick = {
                     onNavigationClick()
                 }

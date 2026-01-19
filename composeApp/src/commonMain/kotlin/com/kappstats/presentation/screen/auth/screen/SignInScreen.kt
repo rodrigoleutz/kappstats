@@ -13,12 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -33,17 +29,16 @@ import com.kappstats.components.part.component.input.InputTextComponent
 import com.kappstats.components.part.modifier.verticalScrollbar
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Blue20
-import com.kappstats.components.theme.Green20
 import com.kappstats.components.theme.Red20
 import com.kappstats.components.theme.component_color.InputTextColors
 import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
+import com.kappstats.presentation.constants.Tags
 import com.kappstats.presentation.core.state.MainEvent
 import com.kappstats.presentation.screen.auth.SignEvent
 import com.kappstats.presentation.screen.auth.SignUiState
 import com.kappstats.resources.Res
 import com.kappstats.resources.app_name
-import com.kappstats.resources.cancel
 import com.kappstats.resources.clear
 import com.kappstats.resources.email
 import com.kappstats.resources.error_email
@@ -90,7 +85,7 @@ fun SignInScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.ExtraLarge.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth().testTag("email_input"),
+                modifier = Modifier.fillMaxWidth().testTag(Tags.EMAIL),
                 label = stringResource(Res.string.email),
                 value = uiState.email,
                 onChange = {
@@ -103,7 +98,7 @@ fun SignInScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth().testTag("password_input"),
+                modifier = Modifier.fillMaxWidth().testTag(Tags.PASSWORD),
                 label = stringResource(Res.string.password),
                 value = uiState.password,
                 onChange = {
@@ -126,7 +121,7 @@ fun SignInScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 ButtonComponent(
-                    modifier = Modifier.weight(1f).testTag("clear_button"),
+                    modifier = Modifier.weight(1f).testTag(Tags.CLEAR),
                     label = stringResource(Res.string.clear),
                     icon = EvaIcons.Fill.Close,
                     colors = ButtonDefaults.buttonColors(
@@ -141,7 +136,7 @@ fun SignInScreen(
                 )
                 Spacer(modifier = Modifier.width(AppDimensions.Medium.component))
                 ButtonComponent(
-                    modifier = Modifier.weight(1f).testTag("login_button"),
+                    modifier = Modifier.weight(1f).testTag(Tags.CONFIRM),
                     label = stringResource(Res.string.login),
                     icon = EvaIcons.Fill.LogIn,
                     colors = ButtonDefaults.buttonColors(

@@ -11,4 +11,8 @@ interface ComposeRoute {
 
     val subRoutes: Set<ComposeRoute>
         get() = emptySet()
+
+    val bottomBar: List<ComposeRoute>?
+        get() = null
+
 }

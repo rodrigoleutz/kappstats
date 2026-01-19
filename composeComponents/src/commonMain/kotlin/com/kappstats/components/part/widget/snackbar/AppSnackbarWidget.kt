@@ -24,13 +24,14 @@ import compose.icons.evaicons.outline.Close
 @Composable
 fun AppSnackbarWidget(
     snackbarHostState: SnackbarHostState,
-    closeDescription: String = "Close"
+    closeDescription: String = "Close",
+    modifier: Modifier = Modifier
 ) {
     SnackbarHost(snackbarHostState) { data ->
         val custom = data.visuals as AppSnackbarVisuals
         Snackbar(
             modifier = Modifier
-                .padding(AppDimensions.Medium.component),
+                .padding(AppDimensions.Medium.component).then(modifier),
             containerColor = custom.showColors.containerColor,
             contentColor = custom.showColors.contentColor,
             action = {

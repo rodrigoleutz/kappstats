@@ -46,8 +46,7 @@ fun DrawerMenuWidget(
         ) {
             drawerCard?.let {
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(AppDimensions.Large.image).padding(
-                        AppDimensions.Large.component),
+                    modifier = Modifier.fillMaxWidth().height(AppDimensions.Large.image),
                     contentAlignment = Alignment.Center
                 ) {
                     drawerCard()
@@ -55,7 +54,7 @@ fun DrawerMenuWidget(
             }
             Spacer(modifier = Modifier)
             itemList.forEach { item ->
-                if(item in dividerBefore)
+                if (item in dividerBefore)
                     HorizontalDivider(
                         modifier = Modifier.fillMaxWidth(),
                         color = Blue40
@@ -68,6 +67,21 @@ fun DrawerMenuWidget(
                         onClick(item)
                     }
                 )
+                if (item.subRoutes.isNotEmpty()) {
+                    if (selected in item.subRoutes) {
+                        item.subRoutes.forEach { subRoute ->
+                            DrawerMenuItemWidget(
+                                item = subRoute,
+                                selected = subRoute == selected,
+                                colors = colors,
+                                onClick = {
+                                    onClick(subRoute)
+                                },
+                                isSubRoute = true
+                            )
+                        }
+                    }
+                }
             }
         }
     }

@@ -16,9 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -39,15 +37,14 @@ import com.kappstats.components.part.component.input.InputTextComponent
 import com.kappstats.components.part.modifier.verticalScrollbar
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Blue20
-import com.kappstats.components.theme.Green20
 import com.kappstats.components.theme.Orange20
-import com.kappstats.components.theme.Orange60
 import com.kappstats.components.theme.Orange80
 import com.kappstats.components.theme.Red20
 import com.kappstats.components.theme.component_color.InputTextColors
 import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
 import com.kappstats.custom_object.username.Username
+import com.kappstats.presentation.constants.Tags
 import com.kappstats.presentation.core.state.MainEvent
 import com.kappstats.presentation.screen.auth.SignEvent
 import com.kappstats.presentation.screen.auth.SignUiState
@@ -60,7 +57,6 @@ import com.kappstats.resources.error_password
 import com.kappstats.resources.error_password_confirm
 import com.kappstats.resources.error_username
 import com.kappstats.resources.error_username_already_exists
-import com.kappstats.resources.login
 import com.kappstats.resources.logo
 import com.kappstats.resources.name
 import com.kappstats.resources.password
@@ -70,7 +66,6 @@ import com.kappstats.resources.username
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.Close
-import compose.icons.evaicons.fill.LogIn
 import compose.icons.evaicons.fill.PersonAdd
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -111,7 +106,7 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.ExtraLarge.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth().testTag("name_input"),
+                modifier = Modifier.fillMaxWidth().testTag(Tags.NAME),
                 label = stringResource(Res.string.name),
                 value = uiState.name,
                 onChange = {
@@ -122,7 +117,7 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth().testTag("email_input"),
+                modifier = Modifier.fillMaxWidth().testTag(Tags.EMAIL),
                 label = stringResource(Res.string.email),
                 value = uiState.email,
                 onChange = {
@@ -135,7 +130,7 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth().testTag("username_input"),
+                modifier = Modifier.fillMaxWidth().testTag(Tags.USERNAME),
                 label = stringResource(Res.string.username),
                 value = uiState.username,
                 onChange = {
@@ -167,7 +162,7 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth().testTag("password_input"),
+                modifier = Modifier.fillMaxWidth().testTag(Tags.PASSWORD),
                 label = stringResource(Res.string.password),
                 value = uiState.password,
                 onChange = {
@@ -183,7 +178,7 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             InputTextComponent(
-                modifier = Modifier.fillMaxWidth().testTag("password_confirm_input"),
+                modifier = Modifier.fillMaxWidth().testTag(Tags.PASSWORD_CONFIRM),
                 label = stringResource(Res.string.password_confirm),
                 value = passwordConfirm,
                 onChange = {
@@ -207,7 +202,7 @@ fun SignUpScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 ButtonComponent(
-                    modifier = Modifier.weight(1f).testTag("clear_button"),
+                    modifier = Modifier.weight(1f).testTag(Tags.CLEAR),
                     label = stringResource(Res.string.clear),
                     icon = EvaIcons.Fill.Close,
                     colors = ButtonDefaults.buttonColors(
@@ -221,12 +216,13 @@ fun SignUpScreen(
                     onClick = {
                         onEvent(SignEvent.SetName(""))
                         onEvent(SignEvent.SetEmail(""))
+                        onEvent(SignEvent.SetUsername(""))
                         onEvent(SignEvent.SetPassword(""))
                     }
                 )
                 Spacer(modifier = Modifier.width(AppDimensions.Medium.component))
                 ButtonComponent(
-                    modifier = Modifier.weight(1f).testTag("register_button"),
+                    modifier = Modifier.weight(1f).testTag(Tags.CONFIRM),
                     label = stringResource(Res.string.register),
                     icon = EvaIcons.Fill.PersonAdd,
                     colors = ButtonDefaults.buttonColors(

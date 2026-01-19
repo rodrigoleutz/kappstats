@@ -36,6 +36,7 @@ class ProfileViewModel(
     val uiState = _uiState.asStateFlow()
 
     val profile = stateHolder.dataState.user.value.myProfile
+    val auth = stateHolder.dataState.user.value.myAuth
 
     val enabledUpdate: Boolean
         get() = !uiState.value.loadingUsername && profile != null &&
@@ -46,6 +47,9 @@ class ProfileViewModel(
             username = Username(uiState.value.username),
             bio = uiState.value.bio
         )
+
+    val authEnableUpdate: Boolean
+        get() = stateHolder.dataState.user.value.myAuth?.email?.asString != uiState.value.email
 
 
     init {
@@ -77,6 +81,7 @@ class ProfileViewModel(
 
     fun onEvent(event: ProfileEvent) {
         when (event) {
+            is ProfileEvent.SetEmail -> _uiState.update { it.copy(email = event.email) }
             is ProfileEvent.SetBio -> _uiState.update { it.copy(bio = event.bio) }
             is ProfileEvent.SetName -> _uiState.update { it.copy(name = event.name) }
             is ProfileEvent.SetUsername -> _uiState.update { it.copy(username = event.username) }
@@ -84,12 +89,14 @@ class ProfileViewModel(
     }
 
     fun setCurrentProfileData() {
+        val email = auth?.email?.asString ?: "Error"
         profile?.let { currentProfile ->
             _uiState.update {
                 uiState.value.copy(
                     name = currentProfile.name,
                     username = currentProfile.username.asString,
-                    bio = currentProfile.bio
+                    bio = currentProfile.bio,
+                    email = email
                 )
             }
         }

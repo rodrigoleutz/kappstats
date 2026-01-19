@@ -23,6 +23,7 @@ import compose.icons.Octicons
 import compose.icons.TablerIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.Close
+import compose.icons.evaicons.fill.Email
 import compose.icons.evaicons.fill.LogIn
 import compose.icons.evaicons.fill.LogOut
 import compose.icons.evaicons.fill.Person
@@ -45,7 +46,8 @@ sealed interface AppScreens : ComposeRoute, NavKey {
     companion object {
         val all: List<AppScreens> = listOf(
             Home, Splash, Auth.LogOut, Auth.SignIn, Auth.SignUp,
-            PrivacyAndTerms, PrivacyAndTerms.PrivacyPolicy, PrivacyAndTerms.TermsAndConditions
+            PrivacyAndTerms, PrivacyAndTerms.PrivacyPolicy, PrivacyAndTerms.TermsAndConditions,
+            Exit
         )
         val unlogged: List<AppScreens> = listOf(
             Auth.SignIn,
@@ -160,6 +162,21 @@ sealed interface AppScreens : ComposeRoute, NavKey {
         override val title: StringResource = Res.string.profile
         override val icon: ImageVector = EvaIcons.Fill.Person
         override val route: @Serializable Profile = this
+        override val subRoutes: Set<ComposeRoute> = setOf(ProfileProfile, ProfileAuth)
+
+        data object ProfileProfile: AppScreens {
+            override val title: StringResource = Res.string.profile
+            override val icon: ImageVector = EvaIcons.Fill.Person
+            override val route: @Serializable ProfileProfile = this
+            override val bottomBar: List<ComposeRoute> = listOf(ProfileProfile, ProfileAuth)
+        }
+
+        data object ProfileAuth: AppScreens {
+            override val title: StringResource = Res.string.auth
+            override val icon: ImageVector = EvaIcons.Fill.Email
+            override val route: @Serializable ProfileAuth = this
+            override val bottomBar: List<ComposeRoute> = listOf(ProfileProfile, ProfileAuth)
+        }
     }
 
     @Serializable

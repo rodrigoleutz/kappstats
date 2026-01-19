@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -30,6 +31,7 @@ import com.kappstats.presentation.screen.privacy_and_terms.PrivacyAndTermsScreen
 import com.kappstats.presentation.screen.privacy_and_terms.navigation.privacyAndTermsNavigation
 import com.kappstats.presentation.screen.profile.screen.ProfileProfileScreen
 import com.kappstats.presentation.screen.profile.ProfileViewModel
+import com.kappstats.presentation.screen.profile.navigation.profileNavigation
 import com.kappstats.presentation.screen.splash.SplashScreen
 import com.kappstats.presentation.screen.splash.SplashViewModel
 import com.kappstats.presentation.util.exitApplication
@@ -69,6 +71,9 @@ fun AppNavigation() {
         uiState = uiState,
         onEvent = stateHolder::onMainEvent,
         selectedRoute = currentScreen ?: AppScreens.Home,
+        onBottomBarClick = {
+            navBackStack.add(it.route as AppScreens)
+        },
         content = {
             NavDisplay(
                 backStack = navBackStack,
@@ -82,6 +87,7 @@ fun AppNavigation() {
                 entryProvider = entryProvider {
                     authNavigation(navBackStack, stateHolder)
                     privacyAndTermsNavigation(navBackStack, stateHolder)
+                    profileNavigation(navBackStack, stateHolder)
                     entry<AppScreens.Exit> {
                         MessageScreen(
                             mainUiState = uiState,
@@ -111,22 +117,7 @@ fun AppNavigation() {
                         PrivacyAndTermsScreen(paddingValues = uiState.paddingValues)
                     }
                     entry<AppScreens.Profile> {
-                        val viewModel: ProfileViewModel = koinViewModel()
-                        val profileUiState by viewModel.uiState.collectAsState()
-                        ProfileProfileScreen(
-                            mainUiState = uiState,
-                            uiState = profileUiState,
-                            onEvent = viewModel::onEvent,
-                            enableUpdate = viewModel.enabledUpdate,
-                            onUpdate = {
-                                viewModel.updateProfile { result ->
-                                    if (result) navBackStack.removeLastOrNull()
-                                }
-                            },
-                            onCancel = {
-                                navBackStack.removeLastOrNull()
-                            }
-                        )
+                        navBackStack.replace(AppScreens.Profile.ProfileProfile)
                     }
                     entry<AppScreens.Splash> {
                         val viewModel: SplashViewModel = koinViewModel()

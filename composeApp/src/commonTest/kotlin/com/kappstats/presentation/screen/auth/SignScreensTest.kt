@@ -11,33 +11,16 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.runComposeUiTest
-import com.kappstats.di.dataModule
-import com.kappstats.di.domainModule
-import com.kappstats.di.presentationModule
+import com.kappstats.presentation.constants.Tags
 import com.kappstats.presentation.screen.auth.screen.SignInScreen
 import com.kappstats.presentation.screen.auth.screen.SignUpScreen
+import com.kappstats.util.BaseComposeIntegrationTest
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
-class SignScreensTest {
-
-    @BeforeTest
-    fun setUp() {
-        startKoin {
-            modules(dataModule, domainModule, presentationModule)
-        }
-    }
-
-    @AfterTest
-    fun tearDown() {
-        stopKoin()
-    }
+class SignScreensTest: BaseComposeIntegrationTest() {
 
     @Test
     fun `Test Sign In Screen`() = runComposeUiTest {
@@ -57,28 +40,37 @@ class SignScreensTest {
                 }
             )
         }
-
         onNodeWithText("Email").assertExists()
         onNodeWithText("Password").assertExists()
-        onNodeWithTag("email_input").assertExists()
-        onNodeWithTag("password_input").assertExists()
-        onNodeWithTag("clear_button").assertExists()
-        onNodeWithTag("login_button").assertExists()
-        onNodeWithTag("login_button").assertIsNotEnabled()
-        with(onNodeWithTag("email_input")) {
+        val email = onNodeWithTag(Tags.EMAIL)
+        email.assertExists()
+        val password = onNodeWithTag(Tags.PASSWORD)
+        password.assertExists()
+        val clear = onNodeWithTag(Tags.CLEAR)
+        clear.assertExists()
+        val login = onNodeWithTag(Tags.CONFIRM)
+        login.assertExists()
+        login.assertIsNotEnabled()
+        with(email) {
             performClick()
             performTextReplacement("test@test.com")
         }
         waitForIdle()
         assertEquals("test@test.com", viewModel?.uiState?.value?.email)
-        with(onNodeWithTag("password_input")) {
+        with(password) {
             performClick()
             performTextReplacement("Password#123")
         }
         waitForIdle()
         assertEquals("Password#123", viewModel?.uiState?.value?.password)
-        onNodeWithTag("login_button").performClick()
+        login.performClick()
         assertEquals(true, signInClicked)
+        assertEquals("test@test.com", viewModel?.uiState?.value?.email)
+        assertEquals("Password#123", viewModel?.uiState?.value?.password)
+        clear.performClick()
+        assertEquals("", viewModel?.uiState?.value?.email)
+        assertEquals("", viewModel?.uiState?.value?.password)
+        login.assertIsNotEnabled()
     }
 
 
@@ -103,19 +95,19 @@ class SignScreensTest {
             )
         }
 
-        val nameNode = onNodeWithTag("name_input")
+        val nameNode = onNodeWithTag(Tags.NAME)
         nameNode.assertExists()
-        val emailNode = onNodeWithTag("email_input")
+        val emailNode = onNodeWithTag(Tags.EMAIL)
         emailNode.assertExists()
-        val usernameNode = onNodeWithTag("username_input")
+        val usernameNode = onNodeWithTag(Tags.USERNAME)
         usernameNode.assertExists()
-        val passwordNode = onNodeWithTag("password_input")
+        val passwordNode = onNodeWithTag(Tags.PASSWORD)
         passwordNode.assertExists()
-        val passwordConfirmNode = onNodeWithTag("password_confirm_input")
+        val passwordConfirmNode = onNodeWithTag(Tags.PASSWORD_CONFIRM)
         passwordConfirmNode.assertExists()
-        val registerButtonNode = onNodeWithTag("register_button")
+        val registerButtonNode = onNodeWithTag(Tags.CONFIRM)
         registerButtonNode.assertExists()
-        val clearButtonNode = onNodeWithTag("clear_button")
+        val clearButtonNode = onNodeWithTag(Tags.CLEAR)
         clearButtonNode.assertExists()
         registerButtonNode.assertIsNotEnabled()
 
@@ -151,9 +143,18 @@ class SignScreensTest {
             performTextInput("23")
         }
         waitForIdle()
-
         registerButtonNode.assertIsEnabled()
         registerButtonNode.performClick()
         assertEquals(true, signUpClick)
+        assertEquals("Test Name", viewModel?.uiState?.value?.name)
+        assertEquals("test@test.com", viewModel?.uiState?.value?.email)
+        assertEquals("test123", viewModel?.uiState?.value?.username)
+        assertEquals("Password#123", viewModel?.uiState?.value?.password)
+        clearButtonNode.performClick()
+        assertEquals("", viewModel?.uiState?.value?.name)
+        assertEquals("", viewModel?.uiState?.value?.email)
+        assertEquals("", viewModel?.uiState?.value?.username)
+        assertEquals("", viewModel?.uiState?.value?.password)
+        registerButtonNode.assertIsNotEnabled()
     }
 }

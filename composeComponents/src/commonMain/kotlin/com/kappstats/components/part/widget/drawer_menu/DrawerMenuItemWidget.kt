@@ -28,6 +28,7 @@ fun DrawerMenuItemWidget(
     modifier: Modifier = Modifier,
     selected: Boolean,
     colors: DrawerMenuWidgetColors = DrawerMenuWidgetColors(),
+    isSubRoute: Boolean = false,
     onClick: () -> Unit
 ) {
     Row(
@@ -43,6 +44,11 @@ fun DrawerMenuItemWidget(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
+            modifier = Modifier
+                .padding(
+                    start = if (isSubRoute) AppDimensions.Large.component
+                    else AppDimensions.None.component
+                ),
             imageVector = item.icon,
             contentDescription = stringResource(item.title),
             tint = if (selected) colors.selectedItemContentColor else colors.itemContentColor
