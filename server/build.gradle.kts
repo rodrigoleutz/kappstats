@@ -19,9 +19,6 @@ dependencies {
 
     // Default -> Change engine to CIO
     implementation(projects.shared)
-    testImplementation(libs.ktor.serverTestHost)
-    testImplementation(libs.kotlin.testJunit)
-
     implementation(projects.server.ksp)
     ksp(projects.server.ksp)
     implementation(libs.logback)
@@ -64,6 +61,8 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.ktor.client.content.negotiation)
     testImplementation(libs.ktor.client.websockets)
+    testImplementation(libs.ktor.serverTestHost)
+    testImplementation(libs.kotlin.testJunit)
 }
 
 tasks.test {
@@ -72,10 +71,6 @@ tasks.test {
 
 kotlin {
     jvmToolchain(21)
-}
-
-tasks.named("build") {
-    dependsOn(":shared:kspKotlinMetadata")
 }
 
 ksp {

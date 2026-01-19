@@ -2,13 +2,20 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
 }
 
 kotlin {
-    androidTarget()
+    androidLibrary {
+        namespace = "com.kappstats.components"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+
+        androidResources {
+            enable = true
+        }
+    }
 
     listOf(
         iosArm64(),
@@ -33,17 +40,17 @@ kotlin {
     
     sourceSets {
         androidMain.dependencies {
-            implementation(compose.preview)
+            implementation(libs.ui.tooling.preview)
             api(libs.ktor.client.cio)
         }
         commonMain.dependencies {
             // Default
-            api(compose.runtime)
-            api(compose.foundation)
-            api(compose.material3)
-            api(compose.ui)
-            api(compose.components.resources)
-            api(compose.components.uiToolingPreview)
+            api(libs.compose.runtime)
+            api(libs.compose.foundation)
+            api(libs.material3)
+            api(libs.compose.ui)
+            api(libs.compose.components.resources)
+            api(libs.ui.tooling.preview)
             api(libs.androidx.lifecycle.viewmodelCompose)
             api(libs.androidx.lifecycle.runtimeCompose)
             api(projects.shared)
@@ -103,19 +110,5 @@ compose {
         publicResClass = true
         packageOfResClass = "com.kappstats.components.resources"
         generateResClass = always
-    }
-}
-android {
-    namespace = "com.kappstats.components"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
     }
 }

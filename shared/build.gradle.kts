@@ -2,17 +2,19 @@ import com.google.devtools.ksp.gradle.KspAATask
 import com.google.devtools.ksp.gradle.KspExtension
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
-    androidTarget {
+    androidLibrary {
+        namespace = "com.kappstats.shared"
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -47,18 +49,6 @@ kotlin {
         }
     }
 
-}
-
-android {
-    namespace = "com.kappstats.shared"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
 }
 
 dependencies {

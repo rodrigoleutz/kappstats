@@ -2,11 +2,11 @@ package com.kappstats
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import com.kappstats.di.dataModule
 import com.kappstats.di.domainModule
 import com.kappstats.di.presentationModule
 import com.kappstats.presentation.core.navigation.AppNavigation
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.core.context.startKoin
 import org.koin.mp.KoinPlatformTools
 

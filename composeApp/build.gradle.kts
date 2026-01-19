@@ -1,6 +1,3 @@
-@file:OptIn(ExperimentalComposeLibrary::class)
-
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.compose.resources.ResourcesExtension
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
@@ -8,7 +5,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
@@ -18,9 +15,16 @@ plugins {
 }
 
 kotlin {
-    androidTarget {
+    androidLibrary {
+        namespace = "com.kappstats.library"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
+        }
+
+        androidResources {
+            enable = true
         }
     }
 
@@ -71,15 +75,8 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-
             // KStore
             implementation(libs.kstore.file)
-        }
-        androidUnitTest.dependencies {
-            implementation(libs.compose.ui.test.junit4)
-            implementation(libs.robolectric)
         }
         commonMain {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
@@ -126,35 +123,6 @@ kotlin {
     }
 }
 
-android {
-    namespace = "com.kappstats"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    testOptions {
-        unitTests.isIncludeAndroidResources = true
-    }
-    defaultConfig {
-        applicationId = "com.kappstats"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
 compose {
     resources {
         nameOfResClass = "Res"
@@ -164,16 +132,12 @@ compose {
     }
 }
 
-dependencies {
-    debugImplementation(compose.uiTooling)
-}
-
 compose.desktop {
     application {
         mainClass = "com.kappstats.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.AppImage)
             packageName = "com.kappstats"
             packageVersion = "1.0.0"
         }
@@ -182,7 +146,6 @@ compose.desktop {
 
 dependencies {
     add("kspCommonMainMetadata", project(":composeApp:ksp"))
-    testImplementation(libs.robolectric)
 }
 
 ksp {

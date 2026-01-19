@@ -146,6 +146,16 @@ or
 chmod +x install_pre_commit.sh && ./install_pre_commit.sh
 ```
 ---
+### Install pre-push build test helper
+Install pre-push in `.git/hooks` to run build tests before commit:
+```bash
+./install_pre_push.sh
+```
+or
+```bash
+chmod +x install_pre_push.sh && ./install_pre_push.sh
+```
+---
 ### Server
 Create a test class by extending BaseIntegrationTest. Use the baseTestApplication helper to perform requests:
 ```kotlin

@@ -1,30 +1,30 @@
 #!/bin/bash
 set -e
 
-HOOK_LOCAL=".git/hooks/pre-commit"
-HOOK_SOURCE="docs/util/git/pre-commit"
+HOOK_LOCAL=".git/hooks/pre-push"
+HOOK_SOURCE="docs/util/git/pre-push"
 
 # Verify pre-commit update
 if ! diff -q "$HOOK_LOCAL" "$HOOK_SOURCE" > /dev/null; then
-    echo -e "\n\n#### Start pre-commit update"
+    echo -e "\n\n#### Start pre-push update"
 
     cat $HOOK_SOURCE
 
-    echo -e "\n\n#### pre-commit diff"
+    echo -e "\n\n#### pre-push diff"
     diff -u "$HOOK_LOCAL" "$HOOK_SOURCE" || true
 
-    echo -e "\n\n#### pre-commit copy file"
+    echo -e "\n\n#### pre-push copy file"
     cp -f "$HOOK_SOURCE" "${HOOK_LOCAL}.tmp"
     chmod +x "${HOOK_LOCAL}.tmp"
     mv -f "${HOOK_LOCAL}.tmp" "$HOOK_LOCAL"
 
-    echo -e "\n\n#### End pre-commit update"
+    echo -e "\n\n#### End pre-push update"
 
     # Restart to ensure the new logic runs
     exec "$0" "$@"
 fi
 
-chmod +x runTests.sh
-./runTests.sh
+chmod +x runBuilds.sh
+./runBuilds.sh
 
 exit 0

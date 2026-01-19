@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import com.kappstats.components.theme.AppDimensions
 import compose.icons.EvaIcons
 import compose.icons.TablerIcons
@@ -43,8 +44,6 @@ import compose.icons.evaicons.fill.AlertTriangle
 import compose.icons.tablericons.Eye
 import compose.icons.tablericons.EyeOff
 import kotlinx.coroutines.delay
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.math.min
 
 @Composable
 fun InputTextComponent(

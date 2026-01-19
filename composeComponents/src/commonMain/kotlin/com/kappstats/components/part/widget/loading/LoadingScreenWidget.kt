@@ -19,7 +19,6 @@ import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Blue20
 import com.kappstats.components.theme.Orange40
 import com.kappstats.components.theme.Orange80
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LoadingScreenWidget(
