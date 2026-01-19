@@ -133,7 +133,7 @@ git clone https://gitlab.com/kappstats/kmp.git
 ---
 ### Checkout to dev branch (current dev branch)
 ```bash
-git checkout dev
+git -b checkout dev
 ```
 ---
 ### Install pre-commit test helper
