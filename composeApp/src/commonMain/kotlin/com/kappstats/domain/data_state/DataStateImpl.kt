@@ -14,9 +14,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.updateAndGet
 import org.jetbrains.compose.resources.getString
 
-class DataStateImpl: DataState {
+class DataStateImpl(
+    private val userState: UserState = UserState()
+): DataState {
 
-    private val _user = MutableStateFlow(UserState())
+    private val _user = MutableStateFlow(userState)
     override val user: StateFlow<UserState> = _user.asStateFlow()
 
     private val _errorState = mutableStateOf<String?>(null)

@@ -231,6 +231,34 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
             assertEquals(auth.updatedAt.size + 1, authDecoded.updatedAt.size)
             assertEquals(emptyList<String>(), webSocketResponseAuth.profiles)
             assertEquals(null, webSocketResponseAuth.webSocketId)
+            val webSocketRequestChangePassword = WebSocketRequest(
+                data = Json.encodeToString(
+                    Pair(
+                        Pair(auth.email, Password("Hello!123")),
+                        signUp.password
+                    )
+                ),
+                action = WebSocketEvents.Authenticate.User.AuthUpdate.action
+            )
+            val jsonChangePassword = Json.encodeToString(webSocketRequestChangePassword)
+            send(jsonChangePassword)
+            val webSocketResponseChangePasswordFrame = incoming.receive() as Frame.Text
+            val webSocketResponseChangePasswordDecoded =
+                Json.decodeFromString<WebSocketResponse>(webSocketResponseChangePasswordFrame.readText())
+            val webSocketResponseChangePasswordAuth = Json.decodeFromString<Auth>(
+                (webSocketResponseChangePasswordDecoded as WebSocketResponse.Success).data
+            )
+            assert(webSocketResponseChangePasswordDecoded.isSuccess)
+            assertEquals(auth.email, webSocketResponseChangePasswordAuth.email)
+            send(jsonChangePassword)
+            val changePasswordErrorFrame = incoming.receive() as Frame.Text
+            val changePasswordErrorDecoded =
+                Json.decodeFromString<WebSocketResponse>(changePasswordErrorFrame.readText())
+            assert(!changePasswordErrorDecoded.isSuccess)
+            assertEquals(
+                WebSocketResponse.Companion.FailureType.Unauthorized,
+                (changePasswordErrorDecoded as WebSocketResponse.Failure).failureType
+            )
         }
     }
 }

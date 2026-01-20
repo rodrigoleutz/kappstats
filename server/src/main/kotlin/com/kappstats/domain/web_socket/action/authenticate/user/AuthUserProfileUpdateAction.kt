@@ -14,7 +14,7 @@ import com.kappstats.model.user.Profile
 import org.koin.core.component.inject
 
 @WsAction
-object AuthProfileUpdateAction : WebSocketContract<Profile, Profile?> {
+object AuthUserProfileUpdateAction : WebSocketContract<Profile, Profile?> {
 
     private val profileRepository by inject<ProfileRepository>()
 

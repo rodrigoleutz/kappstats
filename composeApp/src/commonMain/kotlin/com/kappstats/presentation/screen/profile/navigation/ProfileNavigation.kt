@@ -1,11 +1,13 @@
 package com.kappstats.presentation.screen.profile.navigation
 
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import androidx.navigationevent.OnBackCompletedFallback
 import com.kappstats.presentation.core.navigation.AppScreens
 import com.kappstats.presentation.core.state.MainStateHolder
 import com.kappstats.presentation.screen.profile.ProfileViewModel
@@ -19,17 +21,19 @@ fun EntryProviderScope<NavKey>.profileNavigation(
 ) {
     entry<AppScreens.Profile.ProfileProfile> {
         val viewModel: ProfileViewModel = koinViewModel()
-        val profileUiState by viewModel.uiState.collectAsState()
-        val mainUiState by stateHolder.uiState.collectAsState()
+        val profileUiState by viewModel.uiState.collectAsStateWithLifecycle()
+        val mainUiState by stateHolder.uiState.collectAsStateWithLifecycle()
+        val userState by stateHolder.user.collectAsStateWithLifecycle()
+        val enableUpdate = remember(userState, profileUiState) {
+            viewModel.enabledUpdateProfile
+        }
         ProfileProfileScreen(
             mainUiState = mainUiState,
             uiState = profileUiState,
             onEvent = viewModel::onEvent,
-            enableUpdate = viewModel.enabledUpdate,
+            enableUpdate = enableUpdate,
             onUpdate = {
-                viewModel.updateProfile { result ->
-                    if (result) navBackStack.removeLastOrNull()
-                }
+                viewModel.updateProfile()
             },
             onCancel = {
                 navBackStack.removeLastOrNull()
@@ -38,15 +42,19 @@ fun EntryProviderScope<NavKey>.profileNavigation(
     }
     entry<AppScreens.Profile.ProfileAuth> {
         val viewModel: ProfileViewModel = koinViewModel()
-        val profileUiState by viewModel.uiState.collectAsState()
-        val mainUiState by stateHolder.uiState.collectAsState()
+        val profileUiState by viewModel.uiState.collectAsStateWithLifecycle()
+        val mainUiState by stateHolder.uiState.collectAsStateWithLifecycle()
+        val userState by stateHolder.user.collectAsStateWithLifecycle()
+        val enableUpdate = remember(userState, profileUiState) {
+            viewModel.enableUpdateAuth
+        }
         ProfileAuthScreen(
             mainUiState = mainUiState,
             uiState = profileUiState,
             onEvent = viewModel::onEvent,
-            updateEnabled = viewModel.authEnableUpdate,
+            updateEnabled = enableUpdate,
             onSave = {
-
+                viewModel.updateAuth()
             },
             onCancel = {
                 navBackStack.removeLastOrNull()

@@ -5,11 +5,14 @@
     <string name="back">Back</string>
     <string name="bio">Bio</string>
     <string name="cancel">Cancel</string>
+    <string name="change_password">Change password</string>
     <string name="clear">Clear</string>
     <string name="close">Close</string>
     <string name="close_application">Close application?</string>
     <string name="confirm">Confirm</string>
+    <string name="current_password_required">Current password is required.</string>
     <string name="email">Email</string>
+    <string name="error_auth_update">Auth update error.</string>
     <string name="error_email">Please enter a valid email (e.g., name@example.com).</string>
     <string name="error_logout">Error in application log out.</string>
     <string name="error_password">Password must be at least 8 characters, with one uppercase letter, one number, and one special character.</string>
@@ -17,9 +20,11 @@
     <string name="error_profile_update">Profile update error.</string>
     <string name="error_sign_in">Invalid email or password.</string>
     <string name="error_sign_up">Sign Up error.</string>
+    <string name="error_update">Update error.</string>
     <string name="error_username">Username must be at least 4 characters, with one number.</string>
     <string name="error_username_invalid">Invalid username.</string>
     <string name="error_username_already_exists">Username already exists.</string>
+    <string name="error_unknown">Unknown error.</string>
     <string name="exit">Exit</string>
     <string name="failure_conflict">Conflict failure.</string>
     <string name="failure_database">Database failure.</string>
@@ -38,6 +43,8 @@
     <string name="logout_message">Are you sure you want to log out?</string>
     <string name="menu">Menu</string>
     <string name="name">Name</string>
+    <string name="new_password">New Password</string>
+    <string name="new_password_confirm">New Password Confirm</string>
     <string name="ok">Ok</string>
     <string name="password">Password</string>
     <string name="password_confirm">Confirm Password</string>
@@ -50,6 +57,7 @@
     <string name="sign_up">Sign Up</string>
     <string name="splash">Splash</string>
     <string name="success_sign_up">Sign Up success.</string>
+    <string name="success_update">Update successfully.</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
     <string name="welcome">Welcome</string>
     <string name="update">Update</string>

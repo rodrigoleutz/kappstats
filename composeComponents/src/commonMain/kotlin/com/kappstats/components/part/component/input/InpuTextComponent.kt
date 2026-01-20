@@ -31,6 +31,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -89,7 +91,8 @@ fun InputTextComponent(
             imeAction = imeAction
         ),
         keyboardActions = keyboardActions,
-        visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisibility) PasswordVisualTransformation()
+        visualTransformation = if (keyboardType == KeyboardType.Password && !passwordVisibility)
+            PasswordVisualTransformation()
         else VisualTransformation.None,
         trailingIcon = {
             if (trailingIcon != null) {
@@ -98,6 +101,7 @@ fun InputTextComponent(
                 when (keyboardType) {
                     KeyboardType.Password -> {
                         IconButton(
+                            modifier = Modifier.pointerHoverIcon(PointerIcon.Hand),
                             onClick = {
                                 passwordVisibility = !passwordVisibility
                             }

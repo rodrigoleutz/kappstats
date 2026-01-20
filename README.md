@@ -112,10 +112,14 @@ git clone https://gitlab.com/kappstats/kmp.git
     ```bash
     ./gradlew :composeApp:run
     ```
+    or development Hot Reload script:
+    ```bash
+    ./runDesktopHotReload.sh
+    ```
 
 5.  **Run the Android App:**
     ```bash
-    ./gradlew :composeApp:installDebug
+    ./gradlew :androidApp:installDebug
     ```
 
 6.  **Run the Web App:**

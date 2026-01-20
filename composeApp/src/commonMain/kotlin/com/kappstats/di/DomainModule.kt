@@ -16,7 +16,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val domainModule = module {
-    singleOf(::DataStateImpl) bind DataState::class
+    single<DataState> { DataStateImpl() }
 
     factoryOf(::AuthAuthenticateUseCase)
     factoryOf(::AuthHasUsernameUseCase)

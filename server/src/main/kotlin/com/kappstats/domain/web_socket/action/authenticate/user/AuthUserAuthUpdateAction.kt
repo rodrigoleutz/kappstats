@@ -14,11 +14,10 @@ import com.kappstats.dto.web_socket.WebSocketResponse
 import com.kappstats.dto.web_socket.WsAction
 import com.kappstats.dto.web_socket.WsActionBase
 import com.kappstats.model.user.Auth
-import com.kappstats.presentation.util.apiLog
 import org.koin.core.component.inject
 
 @WsAction
-object AuthAuthUpdateAction : WebSocketContract<Pair<Pair<Email, Password?>, Password>, Auth?> {
+object AuthUserAuthUpdateAction : WebSocketContract<Pair<Pair<Email, Password?>, Password>, Auth?> {
 
     private val authRepository by inject<AuthRepository>()
     private val hashingService by inject<HashingService>()
