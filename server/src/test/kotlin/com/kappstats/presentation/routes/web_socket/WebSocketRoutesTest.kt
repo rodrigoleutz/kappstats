@@ -189,4 +189,48 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
             assertEquals(null, webSocketResponseProfile.webSocketId)
         }
     }
+
+    @Test
+    @Order(5)
+    fun `Test webSocket update auth`() = baseTestApplication { client ->
+        client.webSocket(
+            AppEndpoints.WebSocket.Auth.fullPath,
+            request = {
+                bearerAuth(token)
+            }
+        ) {
+            send(jsonUserInfo)
+            val frame = incoming.receive() as Frame.Text
+            val jsonDecoded =
+                Json.decodeFromString<WebSocketResponse>(frame.readText())
+            assert(jsonDecoded.isSuccess)
+            assertInstanceOf(WebSocketResponse::class.java, jsonDecoded)
+            val tripleUserInfo =
+                Json.decodeFromString<Triple<Auth, AuthToken, Profile>>(
+                    (jsonDecoded as WebSocketResponse.Success).data
+                )
+            assertEquals(signUp.email, tripleUserInfo.first.email)
+            val auth = tripleUserInfo.first.copy(
+                email = Email("hello@test.com"),
+            )
+            val webSocketRequest = WebSocketRequest(
+                data = Json.encodeToString(Pair(Pair(auth.email, null), signUp.password)),
+                action = WebSocketEvents.Authenticate.User.AuthUpdate.action
+            )
+            send(Json.encodeToString(webSocketRequest))
+            val frame1 = incoming.receive() as Frame.Text
+            val webSocketResponseAuth =
+                Json.decodeFromString<WebSocketResponse>(frame1.readText())
+            assert(webSocketResponseAuth.isSuccess)
+            val authDecoded = Json.decodeFromString<Auth>(
+                (webSocketResponseAuth as WebSocketResponse.Success).data
+            )
+            assertEquals(auth.email, authDecoded.email)
+            assertEquals(auth.createdAt, authDecoded.createdAt)
+            assertNotEquals(auth.updatedAt, authDecoded.updatedAt)
+            assertEquals(auth.updatedAt.size + 1, authDecoded.updatedAt.size)
+            assertEquals(emptyList<String>(), webSocketResponseAuth.profiles)
+            assertEquals(null, webSocketResponseAuth.webSocketId)
+        }
+    }
 }

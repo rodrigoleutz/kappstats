@@ -1,9 +1,12 @@
 package com.kappstats.dto.web_socket
 
 import com.kappstats.custom_object.app_date_time.AppDateTime
+import com.kappstats.custom_object.email.Email
+import com.kappstats.custom_object.password.Password
 import com.kappstats.model.user.Auth
 import com.kappstats.model.user.AuthToken
 import com.kappstats.model.user.Profile
+import kotlinx.serialization.builtins.PairSerializer
 import kotlinx.serialization.builtins.TripleSerializer
 import kotlinx.serialization.builtins.nullable
 
@@ -17,9 +20,23 @@ object WebSocketEvents : WsActionBase<Any?, Any?>(null, "/web_socket", isAuth = 
     object Authenticate : WsActionBase<Any?, Any?>(WebSocketEvents, "/auth") {
 
         object User : WsActionBase<Any?, Any?>(Authenticate, "/user") {
+
+            object AuthUpdate : WsActionBase<Pair<Pair<Email, Password?>, Password>, Auth?>(
+                parent = User,
+                command = "/auth_update",
+                inputSerializer = PairSerializer(
+                    PairSerializer(
+                        Email.serializer(),
+                        Password.serializer().nullable
+                    ), Password.serializer()
+                ),
+                outputSerializer = Auth.serializer().nullable,
+                isAuth = true
+            )
+
             object GetMyUserInfo :
                 WsActionBase<Any?, Triple<Auth, AuthToken, Profile>>(
-                    parent= User,
+                    parent = User,
                     command = "/get_my_user_info",
                     inputSerializer = null,
                     outputSerializer = TripleSerializer(
@@ -30,7 +47,7 @@ object WebSocketEvents : WsActionBase<Any?, Any?>(null, "/web_socket", isAuth = 
                     isAuth = true
                 )
 
-            object ProfileUpdate: WsActionBase<Profile, Profile?>(
+            object ProfileUpdate : WsActionBase<Profile, Profile?>(
                 parent = User,
                 command = "/profile_update",
                 inputSerializer = Profile.serializer(),

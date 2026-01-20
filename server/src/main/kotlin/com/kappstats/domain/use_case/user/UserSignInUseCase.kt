@@ -24,7 +24,7 @@ class UserSignInUseCase(
 ) {
     suspend operator fun invoke(signInRequest: SignInRequest): Resource<String> {
         return try {
-            val authAndSaltedHash = authRepository.getAuthAndSaltedHash(signInRequest.email)
+            val authAndSaltedHash = authRepository.getAuthAndSaltedHashByEmail(signInRequest.email)
                 ?: return Resource.Failure(
                     status = HttpStatusCode.Unauthorized,
                     message = "User not exists.",

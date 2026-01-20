@@ -44,3 +44,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+
+tasks.register<Exec>("installAndRun") {
+    group = "install"
+    description = "Install debug and run."
+    dependsOn("installDebug")
+    val appId = android.defaultConfig.applicationId
+    val mainActivity = ".MainActivity"
+    commandLine("adb", "shell", "am", "start", "-n", "$appId/$appId$mainActivity")
+}
