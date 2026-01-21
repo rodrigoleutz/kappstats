@@ -166,19 +166,23 @@ Create a test class by extending BaseIntegrationTest. Use the baseTestApplicatio
 class TestClass : BaseIntegrationTest() {
     
     @Test
-    fun `Should return OK when posting valid info`() = baseTestApplication { client ->
+    fun `Should return OK when posting valid info`() = baseTestApplication { callProvider, client ->
         val bodyInfo = "{ \"key\": \"value\" }"
 
         val response = client.post("route") {
             contentType(ContentType.Application.Json)
             bearerAuth("token")
+            header("X-HeaderA", "Test Header")
             
             setBody(bodyInfo)
         }
 
+        val call = callProvider()
+        val headerA = call.request.header("X-HeaderA")
+        assertEquals("Test Header", headerA)
+        
         assertEquals(HttpStatusCode.OK, response.status)
     }
-    
 }
 ```
 ---

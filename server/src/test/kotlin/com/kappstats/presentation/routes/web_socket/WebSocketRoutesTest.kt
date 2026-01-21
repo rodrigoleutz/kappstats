@@ -77,7 +77,7 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
 
     @Test
     @Order(1)
-    fun `Test webSocket connection test ping`() = baseTestApplication { client ->
+    fun `Test webSocket connection test ping`() = baseTestApplication { _, client ->
         client.webSocket(AppEndpoints.WebSocket.fullPath) {
             send(jsonPing)
             val frame = incoming.receive() as Frame.Text
@@ -94,7 +94,7 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
 
     @Test
     @Order(2)
-    fun `SignUp route test`() = baseTestApplication { client ->
+    fun `SignUp route test`() = baseTestApplication { _, client ->
         val signUpRequest = client.post(AppEndpoints.Api.User.SignUp.fullPath) {
             contentType(ContentType.Application.Json)
             setBody(signUp)
@@ -104,7 +104,7 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
 
     @Test
     @Order(3)
-    fun `SignIn and authenticate route test`() = baseTestApplication { client ->
+    fun `SignIn and authenticate route test`() = baseTestApplication { _, client ->
         val signInRequest = client.post(AppEndpoints.Api.User.SignIn.fullPath) {
             contentType(ContentType.Application.Json)
             setBody(signIn)
@@ -120,7 +120,7 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
 
     @Test
     @Order(4)
-    fun `Test webSocket auth connection test get user info`() = baseTestApplication { client ->
+    fun `Test webSocket auth connection test get user info`() = baseTestApplication { _, client ->
         client.webSocket(
             AppEndpoints.WebSocket.Auth.fullPath,
             request = {
@@ -145,7 +145,7 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
 
     @Test
     @Order(4)
-    fun `Test webSocket update profile`() = baseTestApplication { client ->
+    fun `Test webSocket update profile`() = baseTestApplication { _, client ->
         client.webSocket(
             AppEndpoints.WebSocket.Auth.fullPath,
             request = {
@@ -192,7 +192,7 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
 
     @Test
     @Order(5)
-    fun `Test webSocket update auth`() = baseTestApplication { client ->
+    fun `Test webSocket update auth`() = baseTestApplication { _, client ->
         client.webSocket(
             AppEndpoints.WebSocket.Auth.fullPath,
             request = {

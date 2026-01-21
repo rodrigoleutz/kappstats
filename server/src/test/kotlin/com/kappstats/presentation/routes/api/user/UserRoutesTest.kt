@@ -59,7 +59,7 @@ class UserRoutesTest : BaseIntegrationTest() {
 
     @Test
     @Order(1)
-    fun `SignUp route test`() = baseTestApplication { client ->
+    fun `SignUp route test`() = baseTestApplication { _, client ->
         val signUpRequest = client.post(AppEndpoints.Api.User.SignUp.fullPath) {
             contentType(ContentType.Application.Json)
             setBody(signUp)
@@ -69,7 +69,7 @@ class UserRoutesTest : BaseIntegrationTest() {
 
     @Test
     @Order(2)
-    fun `SignIn and authenticate route test`() = baseTestApplication { client ->
+    fun `SignIn and authenticate route test`() = baseTestApplication { _, client ->
         val signInRequest = client.post(AppEndpoints.Api.User.SignIn.fullPath) {
             contentType(ContentType.Application.Json)
             setBody(signIn)
@@ -85,7 +85,7 @@ class UserRoutesTest : BaseIntegrationTest() {
 
     @Test
     @Order(3)
-    fun `Authenticate route test fail deactivated token`() = baseTestApplication { client ->
+    fun `Authenticate route test fail deactivated token`() = baseTestApplication { _, client ->
         val authCollection =
             mongoApi.database.getCollection<AuthEntity>(AuthEntity::class.simpleName.toString())
         val authList = authCollection.find().toList()
@@ -117,7 +117,7 @@ class UserRoutesTest : BaseIntegrationTest() {
 
     @Test
     @Order(4)
-    fun `Check if username already exists`() = baseTestApplication { client ->
+    fun `Check if username already exists`() = baseTestApplication { _, client ->
         client.get(AppEndpoints.Api.User.HasUsername.fullPath) {
             contentType(ContentType.Application.Json)
         }.apply {

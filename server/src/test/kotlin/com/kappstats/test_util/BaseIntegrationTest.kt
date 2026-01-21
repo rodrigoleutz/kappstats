@@ -17,6 +17,9 @@ import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.ApplicationCallPipeline
+import io.ktor.server.application.call
 import io.ktor.server.application.install
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
@@ -88,14 +91,19 @@ abstract class BaseIntegrationTest {
 
     fun baseTestApplication(
         modules: Application.() -> Unit = { testServerModules() },
-        block: suspend ApplicationTestBuilder.(client: HttpClient) -> Unit
+        block: suspend ApplicationTestBuilder.(callProvider: () -> ApplicationCall?, client: HttpClient) -> Unit
     ) = testApplication {
+        var applicationCall: ApplicationCall? = null
         application {
             modules()
+            intercept(ApplicationCallPipeline.Plugins) {
+                applicationCall = call
+                proceed()
+            }
         }
         val testClient = configuredClient()
         try {
-            block(testClient)
+            block({applicationCall}, testClient)
         } finally {
             testClient.close()
         }

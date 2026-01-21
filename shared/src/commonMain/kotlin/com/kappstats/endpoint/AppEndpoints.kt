@@ -5,6 +5,10 @@ import com.kappstats.constants.SERVER_URL
 object AppEndpoints : Route(null, SERVER_URL) {
 
     object Api : Route(AppEndpoints, "/v1") {
+        object AppMonitor: Route(Api, "/app_monitor") {
+            object Test: Route(AppMonitor, "/test")
+        }
+
         object User : Route(Api, "/user") {
             object Authenticate : Route(User, "/authenticate")
             object SignIn : Route(User, "/sign_in")
