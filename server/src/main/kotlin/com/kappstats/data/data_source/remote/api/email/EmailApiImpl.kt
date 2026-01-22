@@ -1,4 +1,4 @@
-package com.kappstats.data.service.email
+package com.kappstats.data.data_source.remote.api.email
 
 import com.kappstats.constants.APP_NAME
 import com.kappstats.domain.model.email.EmailRequest
@@ -17,38 +17,38 @@ import java.util.Date
 import java.util.Properties
 import java.util.UUID
 
-class EmailServiceImpl : EmailService {
+class EmailApiImpl : EmailApi {
 
-    override suspend fun exec(value: EmailRequest): EmailResponse {
-        val result = send(
-            smtp = value.smtp,
-            username = value.username,
-            token = value.token,
-            senderName = value.senderName,
-            senderEmail = value.senderEmail,
-            receiverEmail = value.receiverEmail,
-            receiverName = value.receiverName,
-            subject = value.subject,
-            linkUnsubscribe = value.linkUnsubscribe,
-            body = value.body,
-            isHtml = value.isHtml
+    override suspend fun send(emailRequest: EmailRequest): EmailResponse {
+        val result = sendEmail(
+            smtp = emailRequest.smtp,
+            username = emailRequest.username,
+            token = emailRequest.token,
+            senderName = emailRequest.senderName,
+            senderEmail = emailRequest.senderEmail,
+            receiverEmail = emailRequest.receiverEmail,
+            receiverName = emailRequest.receiverName,
+            subject = emailRequest.subject,
+            linkUnsubscribe = emailRequest.linkUnsubscribe,
+            body = emailRequest.body,
+            isHtml = emailRequest.isHtml
         )
         val errorType = EmailResult.fromResult(result)
         if (result == null || errorType != null) {
             return EmailResponse(
-                request = value,
+                request = emailRequest,
                 messageId = null,
                 result = errorType ?: EmailResult.Unknown
             )
         }
         return EmailResponse(
-            request = value,
+            request = emailRequest,
             messageId = result,
             result = EmailResult.Success
         )
     }
 
-    private fun send(
+    private fun sendEmail(
         smtp: String,
         username: String,
         token: String,

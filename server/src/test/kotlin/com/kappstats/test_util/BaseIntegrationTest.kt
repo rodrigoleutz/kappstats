@@ -1,6 +1,7 @@
 package com.kappstats.test_util
 
 import com.kappstats.data.data_source.remote.api.database.mongo.MongoApi
+import com.kappstats.data.data_source.remote.api.email.EmailApiImpl
 import com.kappstats.di.dataModule
 import com.kappstats.di.domainModule
 import com.kappstats.di.presentationModule
@@ -26,6 +27,7 @@ import io.ktor.server.testing.testApplication
 import kotlinx.coroutines.cancel
 import org.junit.jupiter.api.AfterEach
 import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 
 abstract class BaseIntegrationTest {
@@ -44,6 +46,7 @@ abstract class BaseIntegrationTest {
         MongoTestContainer.connectionString,
         "KAppStatsTest"
     )
+    val emailApi = EmailApiImpl()
 
     /**
      * Koin for tests
@@ -53,9 +56,13 @@ abstract class BaseIntegrationTest {
         val databaseTestModule = org.koin.dsl.module {
             single { mongoApi }
         }
+        val emailApiTestModule = module {
+            single { emailApi }
+        }
         install(Koin) {
             modules(
                 databaseTestModule,
+                emailApiTestModule,
                 dataModule,
                 domainModule,
                 presentationModule
