@@ -1,8 +1,8 @@
-package com.kappstats.data.entity.app
+package com.kappstats.data.data_source.entity.app
 
 import com.kappstats.custom_object.app_date_time.AppDateTime
-import com.kappstats.data.entity.EntityMapper
-import com.kappstats.data.entity.EntityWithModel
+import com.kappstats.data.data_source.entity.EntityMapper
+import com.kappstats.data.data_source.entity.EntityWithModel
 import com.kappstats.model.app.AppMonitor
 import org.bson.types.ObjectId
 import kotlin.reflect.KProperty1

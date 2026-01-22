@@ -1,9 +1,9 @@
 package com.kappstats.data.repository
 
 import com.kappstats.contracts.Model
-import com.kappstats.data.entity.EntityWithModel
-import com.kappstats.data.entity.EntityMapper
-import com.kappstats.data.remote.api.database.Database
+import com.kappstats.data.data_source.entity.EntityWithModel
+import com.kappstats.data.data_source.entity.EntityMapper
+import com.kappstats.data.data_source.remote.api.database.Database
 import kotlin.reflect.KProperty1
 
 class GenericRepositoryWithModelImpl<M : Model, E : EntityWithModel<M>>(

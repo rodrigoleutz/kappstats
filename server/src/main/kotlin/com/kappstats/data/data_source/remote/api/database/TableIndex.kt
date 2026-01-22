@@ -1,6 +1,6 @@
-package com.kappstats.data.remote.api.database
+package com.kappstats.data.data_source.remote.api.database
 
-import com.kappstats.data.entity.Entity
+import com.kappstats.data.data_source.entity.Entity
 import kotlin.reflect.KProperty1
 
 data class TableIndex<T: Entity>(

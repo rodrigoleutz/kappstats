@@ -1,4 +1,4 @@
-package com.kappstats.data.entity
+package com.kappstats.data.data_source.entity
 
 import com.kappstats.contracts.Model
 import com.kappstats.custom_object.app_date_time.AppDateTime

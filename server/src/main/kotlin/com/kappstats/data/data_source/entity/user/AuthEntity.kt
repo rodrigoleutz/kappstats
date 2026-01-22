@@ -1,9 +1,9 @@
-package com.kappstats.data.entity.user
+package com.kappstats.data.data_source.entity.user
 
 import com.kappstats.custom_object.app_date_time.AppDateTime
 import com.kappstats.custom_object.email.Email
-import com.kappstats.data.entity.EntityWithModel
-import com.kappstats.data.entity.EntityMapper
+import com.kappstats.data.data_source.entity.EntityWithModel
+import com.kappstats.data.data_source.entity.EntityMapper
 import com.kappstats.model.user.Auth
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.codecs.pojo.annotations.BsonIgnore

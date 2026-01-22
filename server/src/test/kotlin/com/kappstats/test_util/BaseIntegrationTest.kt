@@ -1,6 +1,6 @@
 package com.kappstats.test_util
 
-import com.kappstats.data.remote.api.database.mongo.MongoApi
+import com.kappstats.data.data_source.remote.api.database.mongo.MongoApi
 import com.kappstats.di.dataModule
 import com.kappstats.di.domainModule
 import com.kappstats.di.presentationModule

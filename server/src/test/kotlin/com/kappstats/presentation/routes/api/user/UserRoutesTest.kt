@@ -5,8 +5,8 @@ import com.kappstats.constants.USERNAME
 import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
 import com.kappstats.custom_object.username.Username
-import com.kappstats.data.entity.user.AuthEntity
-import com.kappstats.data.entity.user.AuthTokenEntity
+import com.kappstats.data.data_source.entity.user.AuthEntity
+import com.kappstats.data.data_source.entity.user.AuthTokenEntity
 import com.kappstats.dto.request.user.SignInRequest
 import com.kappstats.dto.request.user.SignUpRequest
 import com.kappstats.endpoint.AppEndpoints
@@ -23,8 +23,6 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import io.ktor.http.parameters
-import io.ktor.http.parseQueryString
 import kotlinx.coroutines.flow.toList
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.MethodOrderer

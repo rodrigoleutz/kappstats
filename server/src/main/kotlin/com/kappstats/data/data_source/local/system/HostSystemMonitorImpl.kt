@@ -1,4 +1,4 @@
-package com.kappstats.data.local.system
+package com.kappstats.data.data_source.local.system
 
 import com.kappstats.model.system_metrics.LinuxSystemMetrics
 import com.kappstats.model.system_metrics.LoadAverage

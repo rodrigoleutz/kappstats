@@ -1,8 +1,8 @@
-package com.kappstats.data.remote.api.database.mongo
+package com.kappstats.data.data_source.remote.api.database.mongo
 
-import com.kappstats.data.entity.Entity
-import com.kappstats.data.remote.api.database.Database
-import com.kappstats.data.remote.api.database.TableIndex
+import com.kappstats.data.data_source.entity.Entity
+import com.kappstats.data.data_source.remote.api.database.Database
+import com.kappstats.data.data_source.remote.api.database.TableIndex
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes

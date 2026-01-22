@@ -1,6 +1,6 @@
-package com.kappstats.data.remote.api.database.mongo
+package com.kappstats.data.data_source.remote.api.database.mongo
 
-import com.kappstats.data.remote.api.database.mongo.codec.KotlinAppDateTimeCodec
+import com.kappstats.data.data_source.remote.api.database.mongo.codec.KotlinAppDateTimeCodec
 import com.mongodb.ConnectionString
 import com.mongodb.KotlinCodecProvider
 import com.mongodb.MongoClientSettings

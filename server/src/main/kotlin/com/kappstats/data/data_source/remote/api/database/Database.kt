@@ -1,8 +1,7 @@
-package com.kappstats.data.remote.api.database
+package com.kappstats.data.data_source.remote.api.database
 
-import com.kappstats.data.entity.Entity
+import com.kappstats.data.data_source.entity.Entity
 import com.mongodb.kotlin.client.coroutine.MongoCollection
-import org.koin.core.component.KoinComponent
 import kotlin.reflect.KProperty1
 
 interface Database<T: Entity> {

@@ -1,4 +1,4 @@
-package com.kappstats.data.remote.api.database.mongo.codec
+package com.kappstats.data.data_source.remote.api.database.mongo.codec
 
 import com.kappstats.custom_object.app_date_time.AppDateTime
 import org.bson.BsonReader

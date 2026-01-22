@@ -1,7 +1,7 @@
 package com.kappstats.data.repository
 
-import com.kappstats.data.entity.Entity
-import com.kappstats.data.remote.api.database.Database
+import com.kappstats.data.data_source.entity.Entity
+import com.kappstats.data.data_source.remote.api.database.Database
 import kotlin.reflect.KProperty1
 
 interface GenericRepository<T, E: Entity> {

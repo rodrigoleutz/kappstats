@@ -1,10 +1,10 @@
 package com.kappstats.data.repository.user
 
 import com.kappstats.custom_object.email.Email
-import com.kappstats.data.entity.user.AuthEntity
-import com.kappstats.data.remote.api.database.TableIndex
-import com.kappstats.data.remote.api.database.mongo.MongoApi
-import com.kappstats.data.remote.api.database.mongo.MongoDatabaseImpl
+import com.kappstats.data.data_source.entity.user.AuthEntity
+import com.kappstats.data.data_source.remote.api.database.TableIndex
+import com.kappstats.data.data_source.remote.api.database.mongo.MongoApi
+import com.kappstats.data.data_source.remote.api.database.mongo.MongoDatabaseImpl
 import com.kappstats.data.repository.GenericRepository
 import com.kappstats.data.repository.GenericRepositoryWithModelImpl
 import com.kappstats.domain.core.security.hashing.SaltedHash

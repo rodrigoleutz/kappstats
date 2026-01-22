@@ -1,8 +1,8 @@
 package com.kappstats.data.repository.user
 
 import com.kappstats.custom_object.username.Username
-import com.kappstats.data.entity.user.ProfileEntity
-import com.kappstats.data.remote.api.database.mongo.MongoApi
+import com.kappstats.data.data_source.entity.user.ProfileEntity
+import com.kappstats.data.data_source.remote.api.database.mongo.MongoApi
 import com.kappstats.test_util.container.MongoTestContainer
 import com.kappstats.model.user.Profile
 import kotlinx.coroutines.flow.toList
