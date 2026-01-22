@@ -37,11 +37,11 @@ Make a KMP (Kotlin Multiplatform) app — cross-platform and efficient — viabl
 ---
 ## 🧩 Structure
 
-[/androidApp](/kappstats/kmp/-/tree/main/androidApp/src) contains Android application code. 
+[/androidApp](./androidApp/src) contains Android application code. 
 
-[/composeApp](/kappstats/kmp/-/tree/main/composeApp/src) is for code that will be shared across your Compose Multiplatform applications. 
+[/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications. 
 
-[/iosApp](/kappstats/kmp/-/tree/main/iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+[/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
 
 [/server](./server/src/main/kotlin) is for the Ktor server application.
 
