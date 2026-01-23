@@ -25,6 +25,9 @@ import org.koin.ktor.ext.inject
 fun Route.webSocketRoutes() {
     val webSocketData by inject<WebSocketData>()
     authenticate(PresentationConstants.Auth.JWT) {
+        webSocket(AppEndpoints.WebSocket.Dashboard.fullPath) {
+
+        }
         webSocket(AppEndpoints.WebSocket.Auth.fullPath) {
             val webSocketId = IdGenerator.createUuid
             val connectionInfo = call.getAuthConnectionInfo(webSocketId) ?: run {

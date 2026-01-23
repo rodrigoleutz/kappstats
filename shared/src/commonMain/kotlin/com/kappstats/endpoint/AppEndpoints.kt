@@ -19,5 +19,6 @@ object AppEndpoints : Route(null, SERVER_URL) {
 
     object WebSocket : Route(AppEndpoints, "/ws") {
         object Auth : Route(WebSocket, "/auth")
+        object Dashboard: Route(WebSocket, "/dashboard")
     }
 }

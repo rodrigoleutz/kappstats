@@ -1,8 +1,8 @@
-package com.kappstats.data.data_source.local.system
+package com.kappstats.data.data_source.local.host_system_monitor
 
 import com.kappstats.model.system_metrics.LinuxSystemMetrics
 import kotlinx.coroutines.flow.Flow
 
 interface HostSystemMonitor {
-    fun collect(period: Long = 2L): Flow<LinuxSystemMetrics>
+    fun getInfo(): LinuxSystemMetrics
 }

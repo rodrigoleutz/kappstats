@@ -1,10 +1,14 @@
 package com.kappstats.di
 
+import com.kappstats.data.service.host_system_monitor.HostSystemMonitorService
+import com.kappstats.data.service.host_system_monitor.HostSystemMonitorServiceImpl
 import com.kappstats.domain.constants.DomainConstants
 import com.kappstats.domain.core.security.hashing.HashingService
 import com.kappstats.domain.core.security.hashing.SHA256HashingServiceImpl
 import com.kappstats.domain.core.security.token.JwtTokenServiceImpl
 import com.kappstats.domain.core.security.token.TokenService
+import com.kappstats.domain.use_case.system_monitor.SystemMonitorCollectInfoUseCase
+import com.kappstats.domain.use_case.system_monitor.SystemMonitorUseCases
 import com.kappstats.domain.use_case.user.UserHasUsernameUseCase
 import com.kappstats.domain.use_case.user.UserSignInUseCase
 import com.kappstats.domain.use_case.user.UserSignUpUseCase
@@ -27,6 +31,10 @@ val domainModule = module {
     factoryOf(::UserSignUpUseCase)
     factoryOf(::UserUseCases)
 
+    factoryOf(::SystemMonitorCollectInfoUseCase)
+    factoryOf(::SystemMonitorUseCases)
+
     singleOf(::WebSocketDataImpl) bind WebSocketData::class
     singleOf(::WebSocketActionsImpl) bind WebSocketActions::class
+
 }

@@ -1,13 +1,19 @@
 package com.kappstats.presentation.routes.web_socket
 
 import com.kappstats.domain.model.connection.ConnectionInfo
+import com.kappstats.domain.use_case.system_monitor.SystemMonitorUseCases
 import com.kappstats.domain.web_socket.action.WebSocketActions
 import com.kappstats.domain.web_socket.data.WebSocketData
 import com.kappstats.dto.web_socket.WebSocketRequest
 import com.kappstats.dto.web_socket.WebSocketResponse
+import com.kappstats.model.dashboard.Dashboard
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -15,6 +21,17 @@ object WebSocketEventBus : KoinComponent {
 
     private val wsData by inject<WebSocketData>()
     private val wsActions by inject<WebSocketActions>()
+    private val systemMonitorUseCases by inject<SystemMonitorUseCases>()
+    private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+
+    init {
+        scope.launch {
+            systemMonitorUseCases.collectInfo.invoke().collect {
+
+            }
+        }
+    }
 
     private val _messages = MutableSharedFlow<WebSocketResponse>(
         replay = 0,
@@ -29,6 +46,13 @@ object WebSocketEventBus : KoinComponent {
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
     val authMessages = _authMessages.asSharedFlow()
+
+    private val _dashboardMessages = MutableSharedFlow<Dashboard>(
+        replay = 1,
+        extraBufferCapacity = 30,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val dashboardMessages = _dashboardMessages.asSharedFlow()
 
     suspend fun sendAuthMessage(
         connectionInfo: ConnectionInfo,

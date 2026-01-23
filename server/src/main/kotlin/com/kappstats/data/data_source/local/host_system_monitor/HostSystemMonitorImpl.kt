@@ -1,26 +1,15 @@
-package com.kappstats.data.data_source.local.system
+package com.kappstats.data.data_source.local.host_system_monitor
 
 import com.kappstats.model.system_metrics.LinuxSystemMetrics
 import com.kappstats.model.system_metrics.LoadAverage
 import com.kappstats.model.system_metrics.NetworkInterfaceStats
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.isActive
 import java.io.File
 
 
 class HostSystemMonitorImpl(private val procPath: String = "/host_proc") : HostSystemMonitor {
 
-    override fun collect(period: Long): Flow<LinuxSystemMetrics> = flow {
-        while (currentCoroutineContext().isActive) {
-            delay(period * 1_000)
-            emit(getInfo())
-        }
-    }
 
-    private fun getInfo(): LinuxSystemMetrics {
+    override fun getInfo(): LinuxSystemMetrics {
         val memInfo = readMemInfo()
         val loadAvg = readLoadAvg()
         val cpuInfo = readCpuInfo()
