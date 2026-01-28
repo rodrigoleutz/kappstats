@@ -22,7 +22,7 @@ class HostSystemMonitorServiceImpl(
 ): HostSystemMonitorService {
     override val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    private val periodFlow = MutableStateFlow(1000L)
+    private val periodFlow = MutableStateFlow(3_000L)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val metricsSharedFlow: SharedFlow<LinuxSystemMetrics> = periodFlow

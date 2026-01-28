@@ -1,6 +1,7 @@
 package com.kappstats.domain.web_socket.data
 
 import com.kappstats.domain.model.connection.AuthConnectionInfo
+import com.kappstats.domain.model.connection.DashboardConnectionInfo
 import com.kappstats.domain.web_socket.model.WebSocketConnection
 import io.ktor.websocket.DefaultWebSocketSession
 import java.util.Collections
@@ -17,6 +18,10 @@ class WebSocketDataImpl : WebSocketData {
         Collections.synchronizedMap<String, WebSocketConnection>(LinkedHashMap())
     override val connections: Map<String, WebSocketConnection> = _connections
 
+    private val _dashboardConnections =
+        Collections.synchronizedMap<String, WebSocketConnection>(LinkedHashMap())
+    override val dashboardConnections: Map<String, WebSocketConnection> = _dashboardConnections
+
     @OptIn(ExperimentalAtomicApi::class)
     private val _messagesSent = AtomicInt(0)
 
@@ -25,12 +30,20 @@ class WebSocketDataImpl : WebSocketData {
         get() = _messagesSent.load()
 
     override fun addConnection(webSocketConnection: WebSocketConnection): Boolean {
-        if (webSocketConnection.connectionInfo is AuthConnectionInfo)
-            _authConnections[webSocketConnection.id] = webSocketConnection
-        else _connections[webSocketConnection.id] = webSocketConnection
-        return if (webSocketConnection.connectionInfo is AuthConnectionInfo)
-            _authConnections.containsKey(webSocketConnection.id)
-        else _connections.containsKey(webSocketConnection.id)
+        return when(webSocketConnection.connectionInfo) {
+            is AuthConnectionInfo -> {
+                _authConnections[webSocketConnection.id] = webSocketConnection
+                _authConnections.containsKey(webSocketConnection.id)
+            }
+            is DashboardConnectionInfo -> {
+                _dashboardConnections[webSocketConnection.id] = webSocketConnection
+                _dashboardConnections.containsKey(webSocketConnection.id)
+            }
+            else -> {
+                _connections[webSocketConnection.id] = webSocketConnection
+                _connections.containsKey(webSocketConnection.id)
+            }
+        }
     }
 
     @OptIn(ExperimentalAtomicApi::class)

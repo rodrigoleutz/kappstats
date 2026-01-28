@@ -1,5 +1,6 @@
 package com.kappstats.presentation.routes.web_socket
 
+import com.kappstats.custom_object.app_date_time.AppDateTime
 import com.kappstats.domain.model.connection.ConnectionInfo
 import com.kappstats.domain.use_case.system_monitor.SystemMonitorUseCases
 import com.kappstats.domain.web_socket.action.WebSocketActions
@@ -7,6 +8,7 @@ import com.kappstats.domain.web_socket.data.WebSocketData
 import com.kappstats.dto.web_socket.WebSocketRequest
 import com.kappstats.dto.web_socket.WebSocketResponse
 import com.kappstats.model.dashboard.Dashboard
+import com.kappstats.presentation.util.apiLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -27,8 +29,13 @@ object WebSocketEventBus : KoinComponent {
 
     init {
         scope.launch {
-            systemMonitorUseCases.collectInfo.invoke().collect {
-
+            systemMonitorUseCases.collectInfo.invoke().collect { systemMetrics ->
+                val dashboard = Dashboard(
+                    linuxSystemMetrics = systemMetrics,
+                    currentDate = AppDateTime.now
+                )
+                apiLog(dashboard, "DASHBOARD")
+                _dashboardMessages.emit(dashboard)
             }
         }
     }
