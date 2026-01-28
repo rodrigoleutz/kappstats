@@ -14,11 +14,12 @@ class WebSocketServiceImpl(
     private val remoteDataSource: RemoteDataSource
 ) : WebSocketService {
 
-    override var webSocketSession: WebSocketSession? = null
+    override var authWebSocketSession: WebSocketSession? = null
+    override var dashboardWebSocketSession: WebSocketSession? = null
 
     override suspend fun connect(token: String) {
-        webSocketSession = remoteDataSource.client.webSocketSession(
-            AppEndpoints.WebSocket.Auth.route.replace("http", "ws")
+        authWebSocketSession = remoteDataSource.client.webSocketSession(
+            AppEndpoints.WebSocket.Auth.route.replaceFirst("http", "ws")
         ) {
             contentType(ContentType.Application.Json)
             bearerAuth(token)
@@ -26,11 +27,25 @@ class WebSocketServiceImpl(
     }
 
     override suspend fun disconnect() {
-        webSocketSession?.close()
-        webSocketSession = null
+        authWebSocketSession?.close()
+        authWebSocketSession = null
     }
 
     override suspend fun send(message: String) {
-        webSocketSession?.send(message)
+        authWebSocketSession?.send(message)
+    }
+
+    override suspend fun dashboardConnect(token: String) {
+        dashboardWebSocketSession = remoteDataSource.client.webSocketSession(
+            AppEndpoints.WebSocket.Dashboard.route.replaceFirst("http", "ws")
+        ) {
+            contentType(ContentType.Application.Json)
+            bearerAuth(token)
+        }
+    }
+
+    override suspend fun dashboardDisconnect() {
+        dashboardWebSocketSession?.close()
+        dashboardWebSocketSession = null
     }
 }

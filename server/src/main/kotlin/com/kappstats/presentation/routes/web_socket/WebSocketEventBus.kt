@@ -30,12 +30,14 @@ object WebSocketEventBus : KoinComponent {
     init {
         scope.launch {
             systemMonitorUseCases.collectInfo.invoke().collect { systemMetrics ->
-                val dashboard = Dashboard(
-                    linuxSystemMetrics = systemMetrics,
-                    currentDate = AppDateTime.now
-                )
-                apiLog(dashboard, "DASHBOARD")
-                _dashboardMessages.emit(dashboard)
+                if (wsData.dashboardConnections.isNotEmpty()) {
+                    val dashboard = Dashboard(
+                        linuxSystemMetrics = systemMetrics,
+                        currentDate = AppDateTime.now
+                    )
+                    apiLog(dashboard, "DASHBOARD")
+                    _dashboardMessages.emit(dashboard)
+                }
             }
         }
     }

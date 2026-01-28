@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
@@ -24,6 +25,8 @@ import com.kappstats.presentation.core.MainScreen
 import com.kappstats.presentation.core.state.MainEvent
 import com.kappstats.presentation.core.state.MainStateHolder
 import com.kappstats.presentation.screen.auth.navigation.authNavigation
+import com.kappstats.presentation.screen.dashboard.DashboardScreen
+import com.kappstats.presentation.screen.dashboard.DashboardViewModel
 import com.kappstats.presentation.screen.home.HomeScreen
 import com.kappstats.presentation.screen.home.HomeViewModel
 import com.kappstats.presentation.screen.message.MessageScreen
@@ -88,6 +91,14 @@ fun AppNavigation() {
                     authNavigation(navBackStack, stateHolder)
                     privacyAndTermsNavigation(navBackStack, stateHolder)
                     profileNavigation(navBackStack, stateHolder)
+                    entry<AppScreens.Dashboard> {
+                        val viewModel: DashboardViewModel = koinViewModel()
+                        val dashboardUiState by viewModel.uiState.collectAsStateWithLifecycle()
+                        DashboardScreen(
+                            mainUiState = uiState,
+                            uiState = dashboardUiState
+                        )
+                    }
                     entry<AppScreens.Exit> {
                         MessageScreen(
                             mainUiState = uiState,

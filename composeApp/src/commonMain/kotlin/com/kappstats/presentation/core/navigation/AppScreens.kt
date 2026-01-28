@@ -7,6 +7,7 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import com.kappstats.components.navigation.ComposeRoute
 import com.kappstats.resources.Res
 import com.kappstats.resources.auth
+import com.kappstats.resources.dashboard
 import com.kappstats.resources.exit
 import com.kappstats.resources.home
 import com.kappstats.resources.logout
@@ -30,6 +31,7 @@ import compose.icons.evaicons.fill.Person
 import compose.icons.evaicons.fill.PersonAdd
 import compose.icons.feathericons.Home
 import compose.icons.octicons.SignIn24
+import compose.icons.tablericons.Dashboard
 import compose.icons.tablericons.Loader
 import compose.icons.tablericons.Registered
 import compose.icons.tablericons.Shield
@@ -45,7 +47,7 @@ sealed interface AppScreens : ComposeRoute, NavKey {
 
     companion object {
         val all: List<AppScreens> = listOf(
-            Home, Splash, Auth.LogOut, Auth.SignIn, Auth.SignUp,
+            Home, Splash, Auth.LogOut, Auth.SignIn, Auth.SignUp, Dashboard,
             PrivacyAndTerms, PrivacyAndTerms.PrivacyPolicy, PrivacyAndTerms.TermsAndConditions,
             Exit
         )
@@ -59,6 +61,7 @@ sealed interface AppScreens : ComposeRoute, NavKey {
         val unloggedDrawerDivider: List<AppScreens> = listOf(PrivacyAndTerms.TermsAndConditions, Exit)
         val logged: List<AppScreens> = listOf(
             AppScreens.Home,
+            Dashboard,
             Profile,
             PrivacyAndTerms.TermsAndConditions,
             PrivacyAndTerms.PrivacyPolicy,
@@ -119,6 +122,13 @@ sealed interface AppScreens : ComposeRoute, NavKey {
             override val icon: ImageVector = EvaIcons.Fill.PersonAdd
             override val route: @Serializable SignUp = this
         }
+    }
+
+    @Serializable
+    data object Dashboard: AppScreens {
+        override val title: StringResource = Res.string.dashboard
+        override val icon: ImageVector = TablerIcons.Dashboard
+        override val route: @Serializable Dashboard = this
     }
 
     @Serializable

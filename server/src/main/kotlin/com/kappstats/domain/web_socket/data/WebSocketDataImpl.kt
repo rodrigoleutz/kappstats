@@ -55,11 +55,23 @@ class WebSocketDataImpl : WebSocketData {
 
     override fun removeConnectionBySession(defaultWebSocketSession: DefaultWebSocketSession): Boolean {
         val remove =
-            connections.values.firstOrNull { it.session == defaultWebSocketSession } ?: run {
+            _connections.values.firstOrNull { it.session == defaultWebSocketSession } ?: run {
                 val authRemove =
                     authConnections.values.firstOrNull { it.session == defaultWebSocketSession }
-                return _authConnections.remove(authRemove?.id) != null
+                _authConnections.remove(authRemove?.id) ?: run {
+                    dashboardConnections.values.firstOrNull { it.session == defaultWebSocketSession }
+                }
             }
-        return _connections.remove(remove.id) != null
+        return when(remove?.connectionInfo) {
+            is AuthConnectionInfo -> {
+                _authConnections.remove(remove.id) != null
+            }
+            is DashboardConnectionInfo -> {
+                _dashboardConnections.remove(remove.id) != null
+            }
+            else -> {
+                _connections.remove(remove?.id) != null
+            }
+        }
     }
 }

@@ -40,7 +40,7 @@ class WebSocketActionsImpl(
         scope.launch {
             val token = authTokenRepository.getToken() ?: return@launch
             webSocketService.connect(token)
-            webSocketService.webSocketSession?.incoming
+            webSocketService.authWebSocketSession?.incoming
                 ?.receiveAsFlow()
                 ?.cancellable()
                 ?.filterIsInstance<Frame.Text>()

@@ -3,6 +3,7 @@ package com.kappstats.di
 import com.kappstats.presentation.core.state.MainStateHolder
 import com.kappstats.presentation.core.view_model.StateViewModel
 import com.kappstats.presentation.screen.auth.SignViewModel
+import com.kappstats.presentation.screen.dashboard.DashboardViewModel
 import com.kappstats.presentation.screen.home.HomeViewModel
 import com.kappstats.presentation.screen.profile.ProfileViewModel
 import com.kappstats.presentation.screen.splash.SplashViewModel
@@ -16,4 +17,5 @@ val presentationModule = module {
     viewModel { HomeViewModel() }
     viewModel { SignViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
+    viewModel { DashboardViewModel(get()) }
 }

@@ -29,10 +29,13 @@ class MainStateHolder(val dataState: DataState) {
             is MainEvent.NavigatePush -> navPush(event.route)
             is MainEvent.SetHasTopBar -> _uiState.update { it.copy(hasTopBar = event.value) }
             is MainEvent.SetIsBackButton -> {
-                if(!event.value) navPop()
+                if (!event.value) navPop()
                 _uiState.update { it.copy(isBackButton = event.value) }
             }
-            is MainEvent.SetIsLoading -> _uiState.update { it.copy(isLoading = event.value) }
+
+            is MainEvent.SetIsLoading -> if (event.value != uiState.value.isLoading)
+                _uiState.update { it.copy(isLoading = event.value) }
+
             is MainEvent.SetIsLogged -> _uiState.update { it.copy(isLogged = event.value) }
             is MainEvent.SetPaddingValues -> _uiState.update { it.copy(paddingValues = event.value) }
             is MainEvent.SetTitle -> _uiState.update { it.copy(title = event.value) }

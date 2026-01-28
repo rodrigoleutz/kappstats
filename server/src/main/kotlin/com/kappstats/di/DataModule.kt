@@ -23,7 +23,8 @@ val dataModule = module {
     singleOf(::ProfileRepositoryImpl) bind ProfileRepository::class
 
     single<HostSystemMonitor> {
-        HostSystemMonitorImpl(System.getenv("PROC_DIR"))
+        val procPath = System.getenv("PROC_DIR") ?: "/proc"
+        HostSystemMonitorImpl(procPath)
     }
     single<HostSystemMonitorService> {
         HostSystemMonitorServiceImpl(get())

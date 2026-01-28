@@ -17,6 +17,7 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
+import jdk.jfr.internal.OldObjectSample.emit
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -46,9 +47,8 @@ fun Route.webSocketRoutes() {
             }
             val job = launch {
                 WebSocketEventBus.dashboardMessages.distinctUntilChanged().collect { message ->
-                    when {
-
-                    }
+                    val json = Json.encodeToString(message)
+                    send(json)
                 }
             }
             runCatching {
