@@ -1,21 +1,15 @@
 package com.kappstats.components.part.widget.dashboard
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import com.kappstats.components.part.component.text.MemoryTextComponent
 import com.kappstats.components.theme.AppDimensions
-import com.kappstats.components.theme.Blue20
 import com.kappstats.components.theme.Green40
-import com.kappstats.components.theme.Red20
 
 @Composable
 fun MemoryTextWidget(
@@ -35,10 +29,6 @@ fun MemoryTextWidget(
     padding: Dp = AppDimensions.Medium.component,
     innerPadding: Dp = AppDimensions.Medium.component
 ) {
-    val memoryFreeColor by animateColorAsState(
-        targetValue = if ((totalValue.toDouble() / (usedValue.toDouble() + cachedValue.toDouble())) < 1.4) Red20 else Blue20,
-        label = "MemoryColorState"
-    )
     Card(
         modifier = modifier.padding(padding)
     ) {
@@ -54,7 +44,6 @@ fun MemoryTextWidget(
                 modifier = Modifier.weight(1f),
                 label = freeLabel,
                 value = freeValue,
-                valueColor = memoryFreeColor
             )
             MemoryTextComponent(
                 modifier = Modifier.weight(1f),

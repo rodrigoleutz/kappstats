@@ -25,19 +25,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import com.kappstats.components.part.component.progress.RadialGradientProgressComponent
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Blue20
 import com.kappstats.components.theme.Blue40
+import com.kappstats.components.theme.Blue80
 import com.kappstats.components.theme.Orange20
 import com.kappstats.components.theme.Orange40
 import com.kappstats.components.theme.Orange60
+import com.kappstats.components.theme.Orange80
 
 @Composable
 fun CpuCoreUsageWidget(
     label: String,
     value: Double,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    cardRadialGradient: List<Color> = listOf(Blue20, Blue40),
+    firstColor: Color = Blue20,
+    secondColor: Color = Blue80,
+    thirdColor: Color = Orange80,
+    auxColor: Color = Orange60.copy(0.3f),
+    gradientSize: Dp = AppDimensions.Large.image
 ) {
     val targetProgress = (value / 100).toFloat()
     val animatedProgress by animateFloatAsState(
@@ -69,7 +78,7 @@ fun CpuCoreUsageWidget(
                 Card(
                     modifier = Modifier.background(
                         Brush.radialGradient(
-                            colors = listOf(Blue20, Blue40)
+                            colors = cardRadialGradient
                         ),
                         shape = CircleShape
                     ),
@@ -82,7 +91,12 @@ fun CpuCoreUsageWidget(
                         RadialGradientProgressComponent(
                             modifier = Modifier,
                             progress = animatedProgress,
-                            strokeWidth = AppDimensions.Large.component
+                            strokeWidth = AppDimensions.Large.component,
+                            firstColor = firstColor,
+                            secondColor = secondColor,
+                            thirdColor = thirdColor,
+                            auxColor = auxColor,
+                            gradientSize = gradientSize
                         )
                         Text(
                             text = value.toInt().toString() + "%",

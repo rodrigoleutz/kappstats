@@ -10,8 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
-import com.ionspin.kotlin.bignum.decimal.BigDecimal
-import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import com.kappstats.components.theme.AppDimensions
 
 @Composable
@@ -23,8 +21,6 @@ fun MemoryTextComponent(
     valueColor: Color = Color.Black,
     modifier: Modifier = Modifier
 ) {
-    val valueInGb = BigDecimal.parseString(value).div(1024)
-        .roundToDigitPosition(2, RoundingMode.ROUND_HALF_TO_EVEN).toPlainString()
     Column(
         modifier = modifier.padding(horizontal = padding),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -35,10 +31,11 @@ fun MemoryTextComponent(
             color = labelColor
         )
         Text(
-            text = valueInGb + "Gb",
+            text = value,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            color = valueColor
+            color = valueColor,
+            maxLines = 1
         )
     }
 }

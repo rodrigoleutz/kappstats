@@ -32,12 +32,21 @@ import com.kappstats.components.part.component.container.ScrollableContainerComp
 import com.kappstats.components.part.component.scroll.HorizontalScrollComponent
 import com.kappstats.components.part.widget.dashboard.CpuCoreUsageWidget
 import com.kappstats.components.part.widget.dashboard.CpuTextWidget
+import com.kappstats.components.part.widget.dashboard.HostInfoWidget
 import com.kappstats.components.part.widget.dashboard.MemoryTextWidget
+import com.kappstats.components.part.widget.dashboard.NetworkStatsWidget
+import com.kappstats.components.part.widget.dashboard.ProcessesWidget
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Blue20
 import com.kappstats.components.theme.Blue40
+import com.kappstats.components.theme.Green20
+import com.kappstats.components.theme.Orange20
 import com.kappstats.components.theme.Orange40
+import com.kappstats.components.theme.Orange80
 import com.kappstats.presentation.core.state.MainUiState
+import com.kappstats.presentation.util.fromBytesToGigabyteString
+import com.kappstats.presentation.util.fromMbToGbString
+import com.kappstats.presentation.util.secondsToMinString
 import com.kappstats.resources.Res
 import com.kappstats.resources.cpu
 import com.kappstats.resources.cpu_cores_logical
@@ -46,6 +55,7 @@ import com.kappstats.resources.memory_cache
 import com.kappstats.resources.memory_free
 import com.kappstats.resources.memory_total
 import com.kappstats.resources.memory_used
+import com.kappstats.resources.processes
 import com.kappstats.resources.swap_free
 import com.kappstats.resources.swap_total
 import org.jetbrains.compose.resources.stringResource
@@ -68,69 +78,95 @@ fun DashboardScreen(
         Spacer(modifier = Modifier.height(mainUiState.paddingValues.calculateTopPadding()))
 
         uiState.dashboard?.let { dashboard ->
-            MemoryTextWidget(
-                modifier = Modifier.fillMaxWidth(),
-                totalLabel = stringResource(Res.string.memory_total),
-                totalValue = dashboard.linuxSystemMetrics.memTotal.toString(),
-                freeLabel = stringResource(Res.string.memory_free),
-                freeValue = dashboard.linuxSystemMetrics.memFree.toString(),
-                cachedLabel = stringResource(Res.string.memory_cache),
-                cachedValue = dashboard.linuxSystemMetrics.memCached.toString(),
-                usedLabel = stringResource(Res.string.memory_used),
-                usedValue = dashboard.linuxSystemMetrics.memUsed.toString(),
-                swapFreeLabel = stringResource(Res.string.swap_free),
-                swapFreeValue = (dashboard.linuxSystemMetrics.swapTotal - dashboard.linuxSystemMetrics.swapUsed).toString(),
-                swapTotalLabel = stringResource(Res.string.swap_total),
-                swapTotalValue = dashboard.linuxSystemMetrics.swapTotal.toString()
+            HostInfoWidget(
+                hostname = dashboard.linuxSystemMetrics.hostname,
+                kernelVersion = dashboard.linuxSystemMetrics.kernelVersion,
+                uptime = dashboard.linuxSystemMetrics.uptimeSeconds.secondsToMinString()
             )
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                CpuCoreUsageWidget(
+                    label = stringResource(Res.string.cpu),
+                    value = dashboard.linuxSystemMetrics.cpuUsagePercent,
+                    cardRadialGradient = listOf(Blue40, Blue40, Blue20, Orange20)
+                )
+            }
             FlowRow {
                 CpuTextWidget(
-                    modifier = Modifier.weight(3f),
+                    modifier = Modifier.weight(1f),
                     label = stringResource(Res.string.cpu),
                     value = dashboard.linuxSystemMetrics.cpuModel
                 )
-                FlowRow(
-                    modifier = Modifier,
+                Row(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     CpuTextWidget(
+                        modifier = Modifier.weight(1f),
                         label = stringResource(Res.string.cpu_cores_logical),
                         value = dashboard.linuxSystemMetrics.cpuCoresLogical.toString()
                     )
                     CpuTextWidget(
+                        modifier = Modifier.weight(1f),
                         label = stringResource(Res.string.cpu_cores_physical),
                         value = dashboard.linuxSystemMetrics.cpuCoresPhysical.toString()
                     )
                 }
             }
-            val lazyRowState = rememberLazyListState()
-
-            LazyRow(
-                state = lazyRowState,
-                modifier = Modifier.fillMaxWidth().focusable()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                Color.Transparent,
-                                Blue20.copy(0.9f),
-                                Color.Transparent
-                            )
-                        )
-                    )
+            Column(
+                verticalArrangement = Arrangement.Bottom
             ) {
-                itemsIndexed(dashboard.linuxSystemMetrics.coreUsagePercents) { index, core ->
-                    CpuCoreUsageWidget(
+                val lazyRowState = rememberLazyListState()
+                LazyRow(
+                    state = lazyRowState,
+                    modifier = Modifier.fillMaxWidth().focusable()
+                ) {
+                    itemsIndexed(dashboard.linuxSystemMetrics.coreUsagePercents) { index, core ->
+                        CpuCoreUsageWidget(
+                            modifier = Modifier,
+                            label = (index + 1).toString(),
+                            value = core,
+                            gradientSize = AppDimensions.Medium.image,
+                            cardRadialGradient = listOf(Blue40, Blue40, Blue20, Green20)
+                        )
+                    }
+                }
+                HorizontalScrollComponent(
+                    modifier = Modifier.fillMaxWidth(),
+                    scrollState = lazyRowState
+                )
+            }
+            MemoryTextWidget(
+                modifier = Modifier.fillMaxWidth(),
+                totalLabel = stringResource(Res.string.memory_total),
+                totalValue = dashboard.linuxSystemMetrics.memTotal.fromMbToGbString(),
+                freeLabel = stringResource(Res.string.memory_free),
+                freeValue = dashboard.linuxSystemMetrics.memFree.fromMbToGbString(),
+                cachedLabel = stringResource(Res.string.memory_cache),
+                cachedValue = dashboard.linuxSystemMetrics.memCached.fromMbToGbString(),
+                usedLabel = stringResource(Res.string.memory_used),
+                usedValue = dashboard.linuxSystemMetrics.memUsed.fromMbToGbString(),
+                swapFreeLabel = stringResource(Res.string.swap_free),
+                swapFreeValue = (dashboard.linuxSystemMetrics.swapTotal - dashboard.linuxSystemMetrics.swapUsed).fromMbToGbString(),
+                swapTotalLabel = stringResource(Res.string.swap_total),
+                swapTotalValue = dashboard.linuxSystemMetrics.swapTotal.fromMbToGbString()
+            )
+            ProcessesWidget(
+                label = stringResource(Res.string.processes),
+                current = dashboard.linuxSystemMetrics.runningProcesses.toLong(),
+                total = dashboard.linuxSystemMetrics.totalProcesses.toLong()
+            )
+            Column {
+                dashboard.linuxSystemMetrics.interfaces.forEach { network ->
+                    NetworkStatsWidget(
                         modifier = Modifier,
-                        label = (index + 1).toString(),
-                        value = core
+                        label = network.name,
+                        rxBytes = network.rxBytes.fromBytesToGigabyteString(),
+                        txBytes = network.txBytes.fromBytesToGigabyteString(),
                     )
                 }
             }
-            HorizontalScrollComponent(
-                modifier = Modifier.fillMaxWidth(),
-                scrollState = lazyRowState
-            )
         }
 
         Spacer(modifier = Modifier.height(mainUiState.paddingValues.calculateBottomPadding()))
