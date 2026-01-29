@@ -11,23 +11,25 @@ class HostSystemMonitorImpl(private val procPath: String = "/host_proc") : HostS
     private val lastCpuTicksMap = ConcurrentHashMap<String, LongArray>()
 
     override fun getInfo(): LinuxSystemMetrics {
-        val currentTicks = readAllCpuTicks()
-        val cpuUsageMap = calculateCpuUsage(currentTicks)
+        val currentTicksAndProcesses = readAllCpuTicksAndProcesses()
+        val cpuUsageMap = calculateCpuUsage(currentTicksAndProcesses.first)
 
-        currentTicks.forEach { (name, ticks) -> lastCpuTicksMap[name] = ticks }
+        currentTicksAndProcesses.first.forEach { (name, ticks) -> lastCpuTicksMap[name] = ticks }
 
         val memInfo = readMemInfo()
-        val loadAvg = readLoadAvg()
-
+        val loadAvgAndRunningProcess = readLoadAvgAndRunningProcess()
+        val cpuModelAndCores = readModelAndPhysicalCores()
         return LinuxSystemMetrics(
             hostname = readSimpleFile("$procPath/sys/kernel/hostname"),
-            kernelVersion = readSimpleFile("$procPath/version").split(" ").getOrElse(2) { "Unknown" },
-            uptimeSeconds = readSimpleFile("$procPath/uptime").split(" ")[0].toDoubleOrNull()?.toLong() ?: 0L,
+            kernelVersion = readSimpleFile("$procPath/version").split(" ")
+                .getOrElse(2) { "Unknown" },
+            uptimeSeconds = readSimpleFile("$procPath/uptime").split(" ")[0].toDoubleOrNull()
+                ?.toLong() ?: 0L,
 
-            cpuModel = readCpuModel(),
-            cpuCoresPhysical = readPhysicalCores(),
+            cpuModel = cpuModelAndCores.first,
+            cpuCoresPhysical = cpuModelAndCores.second,
             cpuCoresLogical = Runtime.getRuntime().availableProcessors(),
-            cpuLoadAverage = loadAvg,
+            cpuLoadAverage = loadAvgAndRunningProcess.first,
             cpuUsagePercent = cpuUsageMap["cpu"] ?: 0.0,
             coreUsagePercents = cpuUsageMap.filterKeys { it != "cpu" && it.startsWith("cpu") }
                 .toSortedMap().values.toList(),
@@ -43,41 +45,49 @@ class HostSystemMonitorImpl(private val procPath: String = "/host_proc") : HostS
 
             interfaces = readNetworkStats(),
 
-            totalProcesses = File("$procPath/stat").useLines { lines ->
-                lines.firstOrNull { it.startsWith("processes") }?.split(Regex("\\s+"))?.lastOrNull()?.toIntOrNull() ?: 0
-            },
-            runningProcesses = parseRunningProcesses()
+            totalProcesses = currentTicksAndProcesses.second,
+            runningProcesses = loadAvgAndRunningProcess.second
         )
     }
 
     private fun calculateCpuUsage(current: Map<String, LongArray>): Map<String, Double> {
         return current.mapValues { (name, currentTicks) ->
             val lastTicks = lastCpuTicksMap[name] ?: return@mapValues 0.0
-
             val totalDiff = currentTicks.sum() - lastTicks.sum()
-            val idleDiff = currentTicks[3] - lastTicks[3] // index 3 é idle em /proc/stat
-
+            val idleDiff = currentTicks[3] - lastTicks[3]
             if (totalDiff > 0) {
                 (100.0 * (1.0 - (idleDiff.toDouble() / totalDiff))).coerceIn(0.0, 100.0)
             } else 0.0
         }
     }
 
-    private fun readAllCpuTicks(): Map<String, LongArray> = File("$procPath/stat").useLines { lines ->
-        lines.takeWhile { it.startsWith("cpu") }.associate { line ->
-            val parts = line.trim().split(Regex("\\s+"))
-            val name = parts[0]
-            val ticks = LongArray(parts.size - 1) { i -> parts[i + 1].toLongOrNull() ?: 0L }
-            name to ticks
+    private fun readAllCpuTicksAndProcesses(): Pair<Map<String, LongArray>, Int> =
+        File("$procPath/stat").useLines { lines ->
+            val map = mutableMapOf<String, LongArray>()
+            var processes = 0
+            lines.forEach { line ->
+                when {
+                    line.startsWith("cpu") -> {
+                        val parts = line.trim().split(Regex("\\s+"))
+                        val ticks =
+                            LongArray(parts.size - 1) { i -> parts[i + 1].toLongOrNull() ?: 0L }
+                        map[parts[0]] = ticks
+                    }
+
+                    line.startsWith("processes") -> {
+                        processes = line.split(Regex("\\s+")).lastOrNull()?.toIntOrNull() ?: 0
+                    }
+                }
+            }
+            map to processes
         }
-    }
 
     private fun readMemInfo(): Map<String, Long> = File("$procPath/meminfo").useLines { lines ->
         lines.associate { line ->
             val parts = line.split(":")
             val key = parts[0].trim()
             val value = parts[1].trim().split(" ")[0].toLongOrNull() ?: 0L
-            key to value / 1024 // Convert KB to MB
+            key to value / 1024
         }
     }
 
@@ -101,22 +111,40 @@ class HostSystemMonitorImpl(private val procPath: String = "/host_proc") : HostS
         }
     }
 
-    private fun readCpuModel() = File("$procPath/cpuinfo").useLines { lines ->
-        lines.firstOrNull { it.startsWith("model name") }?.substringAfter(":")?.trim() ?: "Unknown"
+    private fun readModelAndPhysicalCores() =
+        File("$procPath/cpuinfo").useLines { lines ->
+            var model = "Unknown"
+            val coreIds = mutableSetOf<String>()
+            lines.forEach { line ->
+                when {
+                    line.startsWith("model name") -> {
+                        if (model == "Unknown") model = line.substringAfter(":").trim()
+                    }
+                    line.startsWith("core id") -> {
+                        coreIds.add(line.substringAfter(":").trim())
+                    }
+                }
+            }
+            model to coreIds.size
+        }
+
+    private fun readLoadAvgAndRunningProcess(): Pair<LoadAverage, Int> = try {
+        File("$procPath/loadavg").useLines { lines ->
+            val parts = lines.first().split(" ")
+            LoadAverage(
+                parts[0].toDouble(),
+                parts[1].toDouble(),
+                parts[2].toDouble()
+            ) to parts[3].split("/")[0].toInt()
+        }
+    } catch (e: Exception) {
+        LoadAverage(0.0, 0.0, 0.0) to 0
     }
 
-    private fun readPhysicalCores() = File("$procPath/cpuinfo").useLines { lines ->
-        lines.filter { it.startsWith("core id") }.distinct().count().coerceAtLeast(1)
+
+    private fun readSimpleFile(path: String) = try {
+        File(path).readText().trim()
+    } catch (e: Exception) {
+        ""
     }
-
-    private fun readLoadAvg(): LoadAverage = try {
-        val parts = readSimpleFile("$procPath/loadavg").split(" ")
-        LoadAverage(parts[0].toDouble(), parts[1].toDouble(), parts[2].toDouble())
-    } catch (e: Exception) { LoadAverage(0.0, 0.0, 0.0) }
-
-    private fun parseRunningProcesses(): Int = try {
-        readSimpleFile("$procPath/loadavg").split(" ")[3].split("/")[0].toInt()
-    } catch (e: Exception) { 0 }
-
-    private fun readSimpleFile(path: String) = try { File(path).readText().trim() } catch (e: Exception) { "" }
 }
