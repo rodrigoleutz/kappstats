@@ -3,6 +3,10 @@ package com.kappstats.data.data_source.local.host_system_monitor
 import com.kappstats.model.system_metrics.LinuxSystemMetrics
 import com.kappstats.model.system_metrics.LoadAverage
 import com.kappstats.model.system_metrics.NetworkInterfaceStats
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -10,22 +14,40 @@ class HostSystemMonitorImpl(private val procPath: String = "/host_proc") : HostS
 
     private val lastCpuTicksMap = ConcurrentHashMap<String, LongArray>()
 
-    override fun getInfo(): LinuxSystemMetrics {
-        val currentTicksAndProcesses = readAllCpuTicksAndProcesses()
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
+    override suspend fun getInfo(): LinuxSystemMetrics {
+        val hostnameJob =
+            scope.async { readSimpleFile("$procPath/sys/kernel/hostname") }
+        val kernelVersionJob =
+            scope.async {
+                readSimpleFile("$procPath/version").split(" ").getOrElse(2) { "Unknown" }
+            }
+        val uptimeSecondsJob =
+            scope.async {
+                readSimpleFile("$procPath/uptime").split(" ")[0].toDoubleOrNull()?.toLong() ?: 0L
+            }
+        val ticksAndProcessJob =
+            scope.async { readAllCpuTicksAndProcesses() }
+        val memInfoJob =
+            scope.async { readMemInfo() }
+        val loadAvgAndRunningProcessJob =
+            scope.async { readLoadAvgAndRunningProcess() }
+        val cpuModelAndCoresJob =
+            scope.async { readModelAndPhysicalCores() }
+        val currentTicksAndProcesses = ticksAndProcessJob.await()
         val cpuUsageMap = calculateCpuUsage(currentTicksAndProcesses.first)
-
         currentTicksAndProcesses.first.forEach { (name, ticks) -> lastCpuTicksMap[name] = ticks }
-
-        val memInfo = readMemInfo()
-        val loadAvgAndRunningProcess = readLoadAvgAndRunningProcess()
-        val cpuModelAndCores = readModelAndPhysicalCores()
+        val hostname = hostnameJob.await()
+        val kernelVersion = kernelVersionJob.await()
+        val uptimeSeconds = uptimeSecondsJob.await()
+        val loadAvgAndRunningProcess = loadAvgAndRunningProcessJob.await()
+        val memInfo = memInfoJob.await()
+        val cpuModelAndCores = cpuModelAndCoresJob.await()
         return LinuxSystemMetrics(
-            hostname = readSimpleFile("$procPath/sys/kernel/hostname"),
-            kernelVersion = readSimpleFile("$procPath/version").split(" ")
-                .getOrElse(2) { "Unknown" },
-            uptimeSeconds = readSimpleFile("$procPath/uptime").split(" ")[0].toDoubleOrNull()
-                ?.toLong() ?: 0L,
-
+            hostname = hostname,
+            kernelVersion = kernelVersion,
+            uptimeSeconds = uptimeSeconds,
             cpuModel = cpuModelAndCores.first,
             cpuCoresPhysical = cpuModelAndCores.second,
             cpuCoresLogical = Runtime.getRuntime().availableProcessors(),
@@ -33,7 +55,6 @@ class HostSystemMonitorImpl(private val procPath: String = "/host_proc") : HostS
             cpuUsagePercent = cpuUsageMap["cpu"] ?: 0.0,
             coreUsagePercents = cpuUsageMap.filterKeys { it != "cpu" && it.startsWith("cpu") }
                 .toSortedMap().values.toList(),
-
             memTotal = memInfo["MemTotal"] ?: 0,
             memAvailable = memInfo["MemAvailable"] ?: 0,
             memUsed = (memInfo["MemTotal"] ?: 0) - (memInfo["MemAvailable"] ?: 0),
@@ -42,23 +63,31 @@ class HostSystemMonitorImpl(private val procPath: String = "/host_proc") : HostS
             memCached = memInfo["Cached"] ?: 0,
             swapTotal = memInfo["SwapTotal"] ?: 0,
             swapUsed = (memInfo["SwapTotal"] ?: 0) - (memInfo["SwapFree"] ?: 0),
-
             interfaces = readNetworkStats(),
-
             totalProcesses = currentTicksAndProcesses.second,
             runningProcesses = loadAvgAndRunningProcess.second
         )
     }
 
     private fun calculateCpuUsage(current: Map<String, LongArray>): Map<String, Double> {
-        return current.mapValues { (name, currentTicks) ->
-            val lastTicks = lastCpuTicksMap[name] ?: return@mapValues 0.0
-            val totalDiff = currentTicks.sum() - lastTicks.sum()
+        val result = mutableMapOf<String, Double>()
+        for ((name, currentTicks) in current) {
+            val lastTicks = lastCpuTicksMap[name] ?: continue
+            var currentTotal = 0L
+            var lastTotal = 0L
+            for (i in currentTicks.indices) {
+                currentTotal += currentTicks[i]
+                lastTotal += lastTicks[i]
+            }
+            val totalDiff = currentTotal - lastTotal
             val idleDiff = currentTicks[3] - lastTicks[3]
-            if (totalDiff > 0) {
+            result[name] = if (totalDiff > 0) {
                 (100.0 * (1.0 - (idleDiff.toDouble() / totalDiff))).coerceIn(0.0, 100.0)
-            } else 0.0
+            } else {
+                0.0
+            }
         }
+        return result
     }
 
     private fun readAllCpuTicksAndProcesses(): Pair<Map<String, LongArray>, Int> =
@@ -120,6 +149,7 @@ class HostSystemMonitorImpl(private val procPath: String = "/host_proc") : HostS
                     line.startsWith("model name") -> {
                         if (model == "Unknown") model = line.substringAfter(":").trim()
                     }
+
                     line.startsWith("core id") -> {
                         coreIds.add(line.substringAfter(":").trim())
                     }

@@ -2,8 +2,8 @@
 set -e
 
 echo -e "\n\n#### Start pre-commit tests"
-./gradlew clean \
-          :server:test \
+./gradlew clean
+./gradlew :server:test \
           :composeApp:jvmTest \
           --parallel \
           --no-configuration-cache
