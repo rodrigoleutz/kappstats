@@ -3,6 +3,7 @@ package com.kappstats.components.part.widget.dashboard
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,10 +22,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import com.kappstats.components.part.component.progress.RadialGradientProgressComponent
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Blue20
+import com.kappstats.components.theme.Blue40
+import com.kappstats.components.theme.Orange20
 import com.kappstats.components.theme.Orange40
+import com.kappstats.components.theme.Orange60
 
 @Composable
 fun CpuCoreUsageWidget(
@@ -46,18 +56,42 @@ fun CpuCoreUsageWidget(
         ) {
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
             Text(text = label, style = MaterialTheme.typography.bodyMedium)
-            Box(contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(AppDimensions.Medium.image),
-                    progress = { animatedProgress },
-                    trackColor = Orange40,
-                    color = Blue20
+            Card(
+                modifier = Modifier.padding(AppDimensions.Large.component),
+                colors = CardDefaults.elevatedCardColors(
+                    containerColor = Color.Transparent
+                ),
+                shape = CircleShape,
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = AppDimensions.Medium.component
                 )
-                Text(
-                    text = value.toInt().toString()+"%",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
+            ) {
+                Card(
+                    modifier = Modifier.background(
+                        Brush.radialGradient(
+                            colors = listOf(Blue20, Blue40)
+                        ),
+                        shape = CircleShape
+                    ),
+                    colors = CardDefaults.elevatedCardColors(
+                        containerColor = Color.Transparent
+                    ),
+                    shape = CircleShape
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        RadialGradientProgressComponent(
+                            modifier = Modifier,
+                            progress = animatedProgress,
+                            strokeWidth = AppDimensions.Large.component
+                        )
+                        Text(
+                            text = value.toInt().toString() + "%",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
+                }
             }
             Spacer(modifier = Modifier.height(AppDimensions.Medium.component))
         }

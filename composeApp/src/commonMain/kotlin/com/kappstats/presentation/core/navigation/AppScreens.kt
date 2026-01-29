@@ -51,6 +51,9 @@ sealed interface AppScreens : ComposeRoute, NavKey {
             PrivacyAndTerms, PrivacyAndTerms.PrivacyPolicy, PrivacyAndTerms.TermsAndConditions,
             Exit
         )
+        val gestureDisabled = listOf<AppScreens>(
+            Dashboard, PrivacyAndTerms.PrivacyPolicy, PrivacyAndTerms.TermsAndConditions
+        )
         val unlogged: List<AppScreens> = listOf(
             Auth.SignIn,
             Auth.SignUp,

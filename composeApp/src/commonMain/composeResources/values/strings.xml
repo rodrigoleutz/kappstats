@@ -48,10 +48,10 @@
     <string name="logout">Log Out</string>
     <string name="logout_message">Are you sure you want to log out?</string>
     <string name="memory">Memory</string>
-    <string name="memory_cache">Memory cache</string>
-    <string name="memory_free">Memory free</string>
-    <string name="memory_total">Memory total</string>
-    <string name="memory_used">Memory used</string>
+    <string name="memory_cache">Cache</string>
+    <string name="memory_free">Free</string>
+    <string name="memory_total">Total</string>
+    <string name="memory_used">Used</string>
     <string name="menu">Menu</string>
     <string name="name">Name</string>
     <string name="network">Network</string>
@@ -68,6 +68,8 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="splash">Splash</string>
+    <string name="swap_free">Swap free</string>
+    <string name="swap_total">Swap total</string>
     <string name="success_sign_up">Sign Up success.</string>
     <string name="success_update">Update successfully.</string>
     <string name="terms_and_conditions">Terms and Conditions</string>

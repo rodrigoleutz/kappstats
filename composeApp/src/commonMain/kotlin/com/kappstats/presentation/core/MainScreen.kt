@@ -70,6 +70,7 @@ fun MainScreen(
     ModalNavigationDrawer(
         modifier = Modifier.testTag(Tags.MODAL_DRAWER),
         drawerState = drawerState,
+        gesturesEnabled = selectedRoute !in AppScreens.gestureDisabled,
         drawerContent = {
             DrawerMenuWidget(
                 modifier = Modifier.testTag(Tags.DRAWER_MENU),
