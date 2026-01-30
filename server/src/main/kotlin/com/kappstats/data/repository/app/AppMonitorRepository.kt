@@ -5,4 +5,6 @@ import com.kappstats.data.repository.Repository
 import com.kappstats.model.app.AppMonitor
 
 interface AppMonitorRepository: Repository<AppMonitor, AppMonitorEntity> {
+
+    suspend fun getListByProfileId(profileId: String): List<AppMonitor>
 }

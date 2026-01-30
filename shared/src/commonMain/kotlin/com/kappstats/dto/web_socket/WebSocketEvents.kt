@@ -3,9 +3,11 @@ package com.kappstats.dto.web_socket
 import com.kappstats.custom_object.app_date_time.AppDateTime
 import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
+import com.kappstats.model.app.AppMonitor
 import com.kappstats.model.user.Auth
 import com.kappstats.model.user.AuthToken
 import com.kappstats.model.user.Profile
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.PairSerializer
 import kotlinx.serialization.builtins.TripleSerializer
 import kotlinx.serialization.builtins.nullable
@@ -18,6 +20,26 @@ object WebSocketEvents : WsActionBase<Any?, Any?>(null, "/web_socket", isAuth = 
      * Use object Authenticate
      */
     object Authenticate : WsActionBase<Any?, Any?>(WebSocketEvents, "/auth") {
+
+        object AppsMonitor : WsActionBase<Any?, Any?>(Authenticate, "/apps_monitor") {
+
+            object Add : WsActionBase<AppMonitor, AppMonitor?>(
+                parent = AppsMonitor,
+                command = "/add",
+                inputSerializer = AppMonitor.serializer(),
+                outputSerializer = AppMonitor.serializer().nullable,
+                isAuth = true
+            )
+
+            object GetAll: WsActionBase<Any?, List<AppMonitor>>(
+                parent = AppsMonitor,
+                command = "/get_all",
+                inputSerializer = null,
+                outputSerializer = ListSerializer(AppMonitor.serializer()),
+                isAuth = true
+            )
+
+        }
 
         object User : WsActionBase<Any?, Any?>(Authenticate, "/user") {
 

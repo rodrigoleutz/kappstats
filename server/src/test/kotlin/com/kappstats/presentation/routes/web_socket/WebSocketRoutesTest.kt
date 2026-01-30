@@ -12,6 +12,7 @@ import com.kappstats.dto.web_socket.WebSocketEvents
 import com.kappstats.dto.web_socket.WebSocketRequest
 import com.kappstats.dto.web_socket.WebSocketResponse
 import com.kappstats.endpoint.AppEndpoints
+import com.kappstats.model.app.AppMonitor
 import com.kappstats.model.user.Auth
 import com.kappstats.model.user.AuthToken
 import com.kappstats.model.user.PlatformData
@@ -266,4 +267,61 @@ class WebSocketRoutesTest : BaseIntegrationTest() {
             )
         }
     }
+
+    @Test
+    @Order(6)
+    fun `Add Apps Monitor and gerAll test`() = baseTestApplication { call, client ->
+        client.webSocket(
+            AppEndpoints.WebSocket.Auth.fullPath,
+            request = {
+                bearerAuth(token)
+            }
+        ) {
+            send(jsonUserInfo)
+            val frame = incoming.receive() as Frame.Text
+            val jsonDecoded =
+                Json.decodeFromString<WebSocketResponse>(frame.readText())
+            assert(jsonDecoded.isSuccess)
+            assertInstanceOf(WebSocketResponse::class.java, jsonDecoded)
+            val tripleUserInfo =
+                Json.decodeFromString<Triple<Auth, AuthToken, Profile>>(
+                    (jsonDecoded as WebSocketResponse.Success).data
+                )
+            val appMonitorName = "Test App Monitor Name"
+            val appMonitorDesc = "Test App Monitor Description"
+            val request = WebSocketRequest(
+                data = Json.encodeToString(AppMonitor(
+                    id = "",
+                    owner = "",
+                    name = appMonitorName,
+                    description = appMonitorDesc,
+                )),
+                action = WebSocketEvents.Authenticate.AppsMonitor.Add.action,
+            )
+            send(Json.encodeToString(request))
+            val addResponse = incoming.receive() as Frame.Text
+            val add = Json.decodeFromString<WebSocketResponse>(addResponse.readText())
+            assertInstanceOf(WebSocketResponse.Success::class.java, add)
+            assert(add is WebSocketResponse.Success)
+            val appMonitor = Json.decodeFromString<AppMonitor>((add as WebSocketResponse.Success).data)
+            assertEquals(appMonitorName, appMonitor.name)
+            assertEquals(appMonitorDesc, appMonitor.description)
+            assertEquals(tripleUserInfo.third.id, appMonitor.owner)
+
+            val jsonGetAllRequest = Json.encodeToString(WebSocketRequest(
+                action = WebSocketEvents.Authenticate.AppsMonitor.GetAll.action
+            ))
+            send(jsonGetAllRequest)
+            val getAllResponse = incoming.receive() as Frame.Text
+            val decodeGetAllResponse = Json.decodeFromString<WebSocketResponse>(getAllResponse.readText())
+            assertInstanceOf(WebSocketResponse.Success::class.java, decodeGetAllResponse)
+            val listAppsMonitor = Json.decodeFromString<List<AppMonitor>>((decodeGetAllResponse as WebSocketResponse.Success).data)
+            assertEquals(1,listAppsMonitor.size)
+            assertEquals(appMonitor.name, listAppsMonitor[0].name)
+            assertEquals(appMonitor.description, listAppsMonitor[0].description)
+            assertEquals(appMonitor.owner, listAppsMonitor[0].owner)
+            assertEquals(appMonitor.hashId, listAppsMonitor[0].hashId)
+        }
+    }
+
 }

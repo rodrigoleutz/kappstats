@@ -4,6 +4,8 @@ import com.kappstats.data.data_source.local.host_system_monitor.HostSystemMonito
 import com.kappstats.data.data_source.local.host_system_monitor.HostSystemMonitorImpl
 import com.kappstats.data.data_source.remote.api.email.EmailApi
 import com.kappstats.data.data_source.remote.api.email.EmailApiImpl
+import com.kappstats.data.repository.app.AppMonitorRepository
+import com.kappstats.data.repository.app.AppMonitorRepositoryImpl
 import com.kappstats.data.repository.user.AuthRepository
 import com.kappstats.data.repository.user.AuthRepositoryImpl
 import com.kappstats.data.repository.user.AuthTokenRepository
@@ -21,6 +23,7 @@ val dataModule = module {
     singleOf(::AuthRepositoryImpl) bind AuthRepository::class
     singleOf(::AuthTokenRepositoryImpl) bind AuthTokenRepository::class
     singleOf(::ProfileRepositoryImpl) bind ProfileRepository::class
+    singleOf(::AppMonitorRepositoryImpl) bind AppMonitorRepository::class
 
     single<HostSystemMonitor> {
         val procPath = System.getenv("PROC_DIR") ?: "/proc"
