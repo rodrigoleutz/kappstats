@@ -34,6 +34,7 @@ abstract class BaseIntegrationTest {
 
     @AfterEach
     fun tearDown() {
+
         stopKoin()
     }
 
@@ -114,7 +115,6 @@ abstract class BaseIntegrationTest {
         } finally {
             testClient.close()
         }
-        this.application.parentCoroutineContext.cancel()
     }
 
     /**
