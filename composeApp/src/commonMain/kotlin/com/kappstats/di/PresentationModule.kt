@@ -2,6 +2,7 @@ package com.kappstats.di
 
 import com.kappstats.presentation.core.state.MainStateHolder
 import com.kappstats.presentation.core.view_model.StateViewModel
+import com.kappstats.presentation.screen.apps.AppsMonitorViewModel
 import com.kappstats.presentation.screen.auth.SignViewModel
 import com.kappstats.presentation.screen.dashboard.DashboardViewModel
 import com.kappstats.presentation.screen.home.HomeViewModel
@@ -20,4 +21,5 @@ val presentationModule = module {
     viewModel { ProfileViewModel(get()) }
     viewModel { DashboardViewModel(get()) }
     viewModel { SettingsViewModel() }
+    viewModel { AppsMonitorViewModel() }
 }

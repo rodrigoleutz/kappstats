@@ -19,6 +19,10 @@ class AppMonitorRepositoryImpl(
             clazz = AppMonitorEntity::class,
             TableIndex(
                 AppMonitorEntity::owner
+            ),
+            TableIndex(
+                AppMonitorEntity::hashId,
+                isUnique = true
             )
         )
 

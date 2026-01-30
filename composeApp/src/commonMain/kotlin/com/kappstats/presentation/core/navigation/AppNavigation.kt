@@ -24,6 +24,7 @@ import com.kappstats.components.theme.AppDimensions
 import com.kappstats.presentation.core.MainScreen
 import com.kappstats.presentation.core.state.MainEvent
 import com.kappstats.presentation.core.state.MainStateHolder
+import com.kappstats.presentation.screen.apps.navigation.appsMonitorNavigation
 import com.kappstats.presentation.screen.auth.navigation.authNavigation
 import com.kappstats.presentation.screen.dashboard.DashboardScreen
 import com.kappstats.presentation.screen.dashboard.DashboardViewModel
@@ -90,6 +91,7 @@ fun AppNavigation() {
                     navBackStack.removeLastOrNull()
                 },
                 entryProvider = entryProvider {
+                    appsMonitorNavigation(navBackStack, uiState)
                     authNavigation(navBackStack, stateHolder)
                     privacyAndTermsNavigation(navBackStack, stateHolder)
                     profileNavigation(navBackStack, stateHolder)

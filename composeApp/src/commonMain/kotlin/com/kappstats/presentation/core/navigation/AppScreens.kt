@@ -1,13 +1,15 @@
 package com.kappstats.presentation.core.navigation
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavKey
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.kappstats.components.navigation.ComposeRoute
 import com.kappstats.resources.Res
+import com.kappstats.resources.add
+import com.kappstats.resources.apps_monitor
 import com.kappstats.resources.auth
 import com.kappstats.resources.dashboard
+import com.kappstats.resources.edit
 import com.kappstats.resources.exit
 import com.kappstats.resources.home
 import com.kappstats.resources.logout
@@ -21,7 +23,6 @@ import com.kappstats.resources.splash
 import com.kappstats.resources.terms_and_conditions
 import compose.icons.EvaIcons
 import compose.icons.FeatherIcons
-import compose.icons.Octicons
 import compose.icons.TablerIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.Close
@@ -31,8 +32,10 @@ import compose.icons.evaicons.fill.LogOut
 import compose.icons.evaicons.fill.Person
 import compose.icons.evaicons.fill.PersonAdd
 import compose.icons.feathericons.Home
-import compose.icons.octicons.SignIn24
+import compose.icons.tablericons.Apps
+import compose.icons.tablericons.CodePlus
 import compose.icons.tablericons.Dashboard
+import compose.icons.tablericons.EditCircle
 import compose.icons.tablericons.Loader
 import compose.icons.tablericons.Registered
 import compose.icons.tablericons.Settings
@@ -63,9 +66,11 @@ sealed interface AppScreens : ComposeRoute, NavKey {
             PrivacyAndTerms.PrivacyPolicy,
             Exit
         )
-        val unloggedDrawerDivider: List<AppScreens> = listOf(PrivacyAndTerms.TermsAndConditions, Exit)
+        val unloggedDrawerDivider: List<AppScreens> =
+            listOf(PrivacyAndTerms.TermsAndConditions, Exit)
         val logged: List<AppScreens> = listOf(
             AppScreens.Home,
+            AppsMonitor,
             Dashboard,
             Settings,
             Profile,
@@ -80,6 +85,9 @@ sealed interface AppScreens : ComposeRoute, NavKey {
         val configuration = SavedStateConfiguration {
             serializersModule = SerializersModule {
                 polymorphic(NavKey::class) {
+                    subclass(AppsMonitor::class, AppsMonitor.serializer())
+                    subclass(AppsMonitor.Add::class, AppsMonitor.Add.serializer())
+                    subclass(AppsMonitor.Edit::class, AppsMonitor.Edit.serializer())
                     subclass(Auth::class, Auth.serializer())
                     subclass(Auth.LogOut::class, Auth.LogOut.serializer())
                     subclass(Auth.SignIn::class, Auth.SignIn.serializer())
@@ -98,6 +106,30 @@ sealed interface AppScreens : ComposeRoute, NavKey {
                     subclass(Splash::class, Splash.serializer())
                 }
             }
+        }
+    }
+
+    @Serializable
+    data object AppsMonitor : AppScreens {
+        override val title: StringResource = Res.string.apps_monitor
+        override val icon: ImageVector = TablerIcons.Apps
+        override val route: @Serializable AppsMonitor = this
+        override val subRoutes: Set<ComposeRoute> = setOf(Add)
+
+        @Serializable
+        data object Add : AppScreens {
+            override val title: StringResource = Res.string.add
+            override val icon: ImageVector = TablerIcons.CodePlus
+            override val route: @Serializable Add = this
+        }
+
+        @Serializable
+        data class Edit(val id: String) : AppScreens {
+            override val title: StringResource
+                get() = Res.string.edit
+            override val icon: ImageVector
+                get() = TablerIcons.EditCircle
+            override val route: @Serializable Edit = this
         }
     }
 
@@ -131,14 +163,14 @@ sealed interface AppScreens : ComposeRoute, NavKey {
     }
 
     @Serializable
-    data object Dashboard: AppScreens {
+    data object Dashboard : AppScreens {
         override val title: StringResource = Res.string.dashboard
         override val icon: ImageVector = TablerIcons.Dashboard
         override val route: @Serializable Dashboard = this
     }
 
     @Serializable
-    data object Exit: AppScreens {
+    data object Exit : AppScreens {
         override val title: StringResource = Res.string.exit
         override val icon: ImageVector = EvaIcons.Fill.Close
         override val route: @Serializable Exit = this
@@ -174,20 +206,20 @@ sealed interface AppScreens : ComposeRoute, NavKey {
     }
 
     @Serializable
-    data object Profile: AppScreens {
+    data object Profile : AppScreens {
         override val title: StringResource = Res.string.profile
         override val icon: ImageVector = EvaIcons.Fill.Person
         override val route: @Serializable Profile = this
         override val subRoutes: Set<ComposeRoute> = setOf(ProfileProfile, ProfileAuth)
 
-        data object ProfileProfile: AppScreens {
+        data object ProfileProfile : AppScreens {
             override val title: StringResource = Res.string.profile
             override val icon: ImageVector = EvaIcons.Fill.Person
             override val route: @Serializable ProfileProfile = this
             override val bottomBar: List<ComposeRoute> = listOf(ProfileProfile, ProfileAuth)
         }
 
-        data object ProfileAuth: AppScreens {
+        data object ProfileAuth : AppScreens {
             override val title: StringResource = Res.string.auth
             override val icon: ImageVector = EvaIcons.Fill.Email
             override val route: @Serializable ProfileAuth = this
@@ -196,7 +228,7 @@ sealed interface AppScreens : ComposeRoute, NavKey {
     }
 
     @Serializable
-    data object Settings: AppScreens {
+    data object Settings : AppScreens {
         override val title: StringResource = Res.string.settings
         override val icon: ImageVector = TablerIcons.Settings
         override val route: @Serializable Settings = this

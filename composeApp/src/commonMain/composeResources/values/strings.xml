@@ -1,5 +1,7 @@
 <resources>
     <string name="accept_terms">I accept the Terms and Conditions and Privacy Policy.</string>
+    <string name="add">Add</string>
+    <string name="apps_monitor">Apps Monitor</string>
     <string name="app_name">KAppStats</string>
     <string name="auth">Auth</string>
     <string name="back">Back</string>
@@ -16,7 +18,10 @@
     <string name="cpu_cores_physical">CPU Cores Physical</string>
     <string name="current_password_required">Current password is required.</string>
     <string name="dashboard">Dashboard</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
     <string name="email">Email</string>
+    <string name="empty_list">Empty List</string>
     <string name="error_auth_update">Auth update error.</string>
     <string name="error_email">Please enter a valid email (e.g., name@example.com).</string>
     <string name="error_logout">Error in application log out.</string>
