@@ -3,6 +3,7 @@ package com.kappstats.presentation.screen.dashboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -78,39 +79,57 @@ fun DashboardScreen(
         Spacer(modifier = Modifier.height(mainUiState.paddingValues.calculateTopPadding()))
 
         uiState.dashboard?.let { dashboard ->
-            HostInfoWidget(
-                hostname = dashboard.linuxSystemMetrics.hostname,
-                kernelVersion = dashboard.linuxSystemMetrics.kernelVersion,
-                uptime = dashboard.linuxSystemMetrics.uptimeSeconds.secondsToMinString()
-            )
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 CpuCoreUsageWidget(
+                    modifier = Modifier,
                     label = stringResource(Res.string.cpu),
                     value = dashboard.linuxSystemMetrics.cpuUsagePercent,
                     cardRadialGradient = listOf(Blue40, Blue40, Blue20, Orange20)
                 )
-            }
-            FlowRow {
-                CpuTextWidget(
+                Column(
                     modifier = Modifier.weight(1f),
-                    label = stringResource(Res.string.cpu),
-                    value = dashboard.linuxSystemMetrics.cpuModel
-                )
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    CpuTextWidget(
-                        modifier = Modifier.weight(1f),
-                        label = stringResource(Res.string.cpu_cores_logical),
-                        value = dashboard.linuxSystemMetrics.cpuCoresLogical.toString()
+                    HostInfoWidget(
+                        hostname = dashboard.linuxSystemMetrics.hostname,
+                        kernelVersion = dashboard.linuxSystemMetrics.kernelVersion,
+                        uptime = dashboard.linuxSystemMetrics.uptimeSeconds.secondsToMinString()
                     )
                     CpuTextWidget(
-                        modifier = Modifier.weight(1f),
-                        label = stringResource(Res.string.cpu_cores_physical),
-                        value = dashboard.linuxSystemMetrics.cpuCoresPhysical.toString()
+                        modifier = Modifier.fillMaxWidth(),
+                        label = stringResource(Res.string.cpu),
+                        value = dashboard.linuxSystemMetrics.cpuModel
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        CpuTextWidget(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(Res.string.cpu_cores_logical),
+                            value = dashboard.linuxSystemMetrics.cpuCoresLogical.toString()
+                        )
+                        CpuTextWidget(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(Res.string.cpu_cores_physical),
+                            value = dashboard.linuxSystemMetrics.cpuCoresPhysical.toString()
+                        )
+                    }
+                    MemoryTextWidget(
+                        modifier = Modifier.fillMaxWidth(),
+                        totalLabel = stringResource(Res.string.memory_total),
+                        totalValue = dashboard.linuxSystemMetrics.memTotal.fromMbToGbString(),
+                        freeLabel = stringResource(Res.string.memory_free),
+                        freeValue = dashboard.linuxSystemMetrics.memFree.fromMbToGbString(),
+                        cachedLabel = stringResource(Res.string.memory_cache),
+                        cachedValue = dashboard.linuxSystemMetrics.memCached.fromMbToGbString(),
+                        usedLabel = stringResource(Res.string.memory_used),
+                        usedValue = dashboard.linuxSystemMetrics.memUsed.fromMbToGbString(),
+                        swapFreeLabel = stringResource(Res.string.swap_free),
+                        swapFreeValue = (dashboard.linuxSystemMetrics.swapTotal - dashboard.linuxSystemMetrics.swapUsed).fromMbToGbString(),
+                        swapTotalLabel = stringResource(Res.string.swap_total),
+                        swapTotalValue = dashboard.linuxSystemMetrics.swapTotal.fromMbToGbString()
                     )
                 }
             }
@@ -137,21 +156,6 @@ fun DashboardScreen(
                     scrollState = lazyRowState
                 )
             }
-            MemoryTextWidget(
-                modifier = Modifier.fillMaxWidth(),
-                totalLabel = stringResource(Res.string.memory_total),
-                totalValue = dashboard.linuxSystemMetrics.memTotal.fromMbToGbString(),
-                freeLabel = stringResource(Res.string.memory_free),
-                freeValue = dashboard.linuxSystemMetrics.memFree.fromMbToGbString(),
-                cachedLabel = stringResource(Res.string.memory_cache),
-                cachedValue = dashboard.linuxSystemMetrics.memCached.fromMbToGbString(),
-                usedLabel = stringResource(Res.string.memory_used),
-                usedValue = dashboard.linuxSystemMetrics.memUsed.fromMbToGbString(),
-                swapFreeLabel = stringResource(Res.string.swap_free),
-                swapFreeValue = (dashboard.linuxSystemMetrics.swapTotal - dashboard.linuxSystemMetrics.swapUsed).fromMbToGbString(),
-                swapTotalLabel = stringResource(Res.string.swap_total),
-                swapTotalValue = dashboard.linuxSystemMetrics.swapTotal.fromMbToGbString()
-            )
             ProcessesWidget(
                 label = stringResource(Res.string.processes),
                 current = dashboard.linuxSystemMetrics.runningProcesses.toLong(),

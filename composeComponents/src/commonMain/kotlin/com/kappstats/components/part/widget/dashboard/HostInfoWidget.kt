@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fitInside
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.RectRulers
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.kappstats.components.theme.AppDimensions
@@ -24,7 +26,7 @@ fun HostInfoWidget(
 ) {
 
     Card(
-        modifier = modifier.fillMaxWidth().padding(AppDimensions.Medium.component),
+        modifier = modifier.padding(AppDimensions.Medium.component),
         elevation = CardDefaults.cardElevation(
             defaultElevation = AppDimensions.Medium.component
         )
@@ -45,7 +47,7 @@ fun HostInfoWidget(
                 )
             }
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier,
                 text = uptime,
                 textAlign = TextAlign.End
             )
