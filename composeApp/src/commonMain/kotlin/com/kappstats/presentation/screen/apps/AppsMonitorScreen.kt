@@ -10,12 +10,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import com.kappstats.components.part.component.card.CardMessageComponent
 import com.kappstats.components.theme.AppDimensions
+import com.kappstats.domain.data_state.apps_monitor.AppsMonitorState
 import com.kappstats.presentation.core.state.MainUiState
 import com.kappstats.resources.Res
 import com.kappstats.resources.add
@@ -30,6 +32,7 @@ import org.jetbrains.compose.resources.stringResource
 fun AppsMonitorScreen(
     mainUiState: MainUiState,
     uiState: AppsMonitorUiState,
+    appsMonitorState: AppsMonitorState,
     onEvent: (AppsMonitorEvent) -> Unit,
     onClickAdd: () -> Unit,
     modifier: Modifier = Modifier
@@ -37,7 +40,7 @@ fun AppsMonitorScreen(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        if (uiState.appsList.isEmpty()) {
+        if (appsMonitorState.mapAppsMonitor.values.toList().isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -53,8 +56,8 @@ fun AppsMonitorScreen(
                 verticalArrangement = Arrangement.Center,
                 contentPadding = mainUiState.paddingValues
             ) {
-                items(uiState.appsList) { item ->
-
+                items(appsMonitorState.mapAppsMonitor.values.toList()) { item ->
+                    Text(text = item.toString())
                 }
             }
         }

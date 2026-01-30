@@ -6,6 +6,7 @@ import com.kappstats.data.service.web_socket.WebSocketService
 import com.kappstats.domain.core.FailureType
 import com.kappstats.domain.core.Resource
 import com.kappstats.domain.web_socket.WebSocketActions
+import com.kappstats.domain.web_socket.actions.apps_monitor.AppsMonitorGetAllAction
 import com.kappstats.domain.web_socket.actions.user.AuthUserGetUserInfoAction
 import kotlinx.coroutines.delay
 
@@ -23,6 +24,7 @@ class AuthAuthenticateUseCase(
             webSocketActions.connectAndReceiveMessages()
             delay(1_000)
             AuthUserGetUserInfoAction.send()
+            AppsMonitorGetAllAction.send()
             Resource.Success(data = true)
         } catch (e: Exception) {
             e.printStackTrace()

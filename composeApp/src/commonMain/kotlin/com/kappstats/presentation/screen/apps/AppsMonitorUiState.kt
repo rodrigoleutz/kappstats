@@ -1,10 +1,8 @@
 package com.kappstats.presentation.screen.apps
 
 import com.kappstats.model.app.AppMemberType
-import com.kappstats.model.app.AppMonitor
 
 data class AppsMonitorUiState(
-    val appsList: List<AppMonitor> = emptyList(),
     val name: String = "",
     val description: String = "",
     val members: Map<String, AppMemberType> = emptyMap()

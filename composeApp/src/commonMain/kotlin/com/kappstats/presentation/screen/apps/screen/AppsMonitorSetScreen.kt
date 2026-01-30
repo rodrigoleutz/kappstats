@@ -19,6 +19,7 @@ import com.kappstats.components.part.component.input.InputTextComponent
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Blue20
 import com.kappstats.components.theme.Red20
+import com.kappstats.domain.data_state.apps_monitor.AppsMonitorState
 import com.kappstats.presentation.core.state.MainUiState
 import com.kappstats.presentation.screen.apps.AppsMonitorEvent
 import com.kappstats.presentation.screen.apps.AppsMonitorUiState
@@ -39,6 +40,7 @@ import org.jetbrains.compose.resources.stringResource
 fun AppsMonitorSetScreen(
     mainUiState: MainUiState,
     uiState: AppsMonitorUiState,
+    appsMonitorState: AppsMonitorState,
     onEvent: (AppsMonitorEvent) -> Unit,
     id: String? = null,
     modifier: Modifier = Modifier,

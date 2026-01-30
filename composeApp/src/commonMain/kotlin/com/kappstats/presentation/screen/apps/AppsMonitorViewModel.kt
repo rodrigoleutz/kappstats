@@ -1,14 +1,22 @@
 package com.kappstats.presentation.screen.apps
 
 import androidx.lifecycle.viewModelScope
+import com.kappstats.components.part.widget.snackbar.AppSnackbarVisuals
+import com.kappstats.domain.web_socket.actions.apps_monitor.AppsMonitorAddAction
+import com.kappstats.model.app.AppMonitor
 import com.kappstats.presentation.core.view_model.StateViewModel
+import com.kappstats.resources.Res
+import com.kappstats.resources.failure_save_data
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 
 class AppsMonitorViewModel: StateViewModel() {
 
+    val appsMonitorState = stateHolder.dataState.appsMonitor
     private val _uiState = MutableStateFlow(AppsMonitorUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -19,9 +27,22 @@ class AppsMonitorViewModel: StateViewModel() {
         }
     }
 
-    fun add() {
+    fun add(result: (Boolean) -> Unit) {
         viewModelScope.launch {
-
+            val appMonitor = AppMonitor(
+                id = "",
+                owner = "",
+                name = uiState.value.name,
+                description = uiState.value.description,
+            )
+            val request = AppsMonitorAddAction.send(appMonitor)
+            if(request == null) {
+                snackbarMessage(
+                    message = getString(Res.string.failure_save_data),
+                    type = AppSnackbarVisuals.Type.Error
+                )
+            }
+            result(request != null)
         }
     }
 

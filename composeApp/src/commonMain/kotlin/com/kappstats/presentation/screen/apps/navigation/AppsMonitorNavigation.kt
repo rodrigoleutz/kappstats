@@ -19,9 +19,11 @@ fun EntryProviderScope<NavKey>.appsMonitorNavigation(
     entry<AppScreens.AppsMonitor> {
         val viewModel: AppsMonitorViewModel = koinViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        val appsMonitorState by viewModel.appsMonitorState.collectAsStateWithLifecycle()
         AppsMonitorScreen(
             mainUiState = mainUiState,
             uiState = uiState,
+            appsMonitorState = appsMonitorState,
             onEvent = viewModel::onEvent,
             onClickAdd = {
                 navBackStack.add(AppScreens.AppsMonitor.Add)
@@ -31,12 +33,16 @@ fun EntryProviderScope<NavKey>.appsMonitorNavigation(
     entry<AppScreens.AppsMonitor.Add> {
         val viewModel: AppsMonitorViewModel = koinViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+        val appsMonitorState by viewModel.appsMonitorState.collectAsStateWithLifecycle()
         AppsMonitorSetScreen(
             mainUiState = mainUiState,
             uiState = uiState,
+            appsMonitorState = appsMonitorState,
             onEvent = viewModel::onEvent,
             onClickSave = {
-                viewModel.add()
+                viewModel.add { result ->
+                    if(result) navBackStack.removeLast()
+                }
             },
             onClickCancel = {
                 navBackStack.removeLast()
