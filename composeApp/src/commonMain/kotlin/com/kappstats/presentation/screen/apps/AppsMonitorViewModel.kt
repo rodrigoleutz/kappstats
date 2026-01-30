@@ -1,9 +1,11 @@
 package com.kappstats.presentation.screen.apps
 
+import androidx.lifecycle.viewModelScope
 import com.kappstats.presentation.core.view_model.StateViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class AppsMonitorViewModel: StateViewModel() {
 
@@ -17,5 +19,10 @@ class AppsMonitorViewModel: StateViewModel() {
         }
     }
 
+    fun add() {
+        viewModelScope.launch {
+
+        }
+    }
 
 }

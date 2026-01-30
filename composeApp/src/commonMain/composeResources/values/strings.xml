@@ -19,6 +19,7 @@
     <string name="current_password_required">Current password is required.</string>
     <string name="dashboard">Dashboard</string>
     <string name="delete">Delete</string>
+    <string name="description">Description</string>
     <string name="edit">Edit</string>
     <string name="email">Email</string>
     <string name="empty_list">Empty List</string>

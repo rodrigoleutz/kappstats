@@ -34,7 +34,13 @@ fun EntryProviderScope<NavKey>.appsMonitorNavigation(
         AppsMonitorSetScreen(
             mainUiState = mainUiState,
             uiState = uiState,
-            onEvent = viewModel::onEvent
+            onEvent = viewModel::onEvent,
+            onClickSave = {
+                viewModel.add()
+            },
+            onClickCancel = {
+                navBackStack.removeLast()
+            }
         )
     }
 }
