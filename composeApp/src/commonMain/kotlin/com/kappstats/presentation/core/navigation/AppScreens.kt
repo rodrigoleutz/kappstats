@@ -14,6 +14,7 @@ import com.kappstats.resources.logout
 import com.kappstats.resources.privacy_policy
 import com.kappstats.resources.privacy_policy_and_terms
 import com.kappstats.resources.profile
+import com.kappstats.resources.settings
 import com.kappstats.resources.sign_in
 import com.kappstats.resources.sign_up
 import com.kappstats.resources.splash
@@ -34,6 +35,7 @@ import compose.icons.octicons.SignIn24
 import compose.icons.tablericons.Dashboard
 import compose.icons.tablericons.Loader
 import compose.icons.tablericons.Registered
+import compose.icons.tablericons.Settings
 import compose.icons.tablericons.Shield
 import compose.icons.tablericons.ShieldCheck
 import compose.icons.tablericons.ShieldLock
@@ -47,7 +49,7 @@ sealed interface AppScreens : ComposeRoute, NavKey {
 
     companion object {
         val all: List<AppScreens> = listOf(
-            Home, Splash, Auth.LogOut, Auth.SignIn, Auth.SignUp, Dashboard,
+            Home, Splash, Auth.LogOut, Auth.SignIn, Auth.SignUp, Dashboard, Settings,
             PrivacyAndTerms, PrivacyAndTerms.PrivacyPolicy, PrivacyAndTerms.TermsAndConditions,
             Exit
         )
@@ -65,6 +67,7 @@ sealed interface AppScreens : ComposeRoute, NavKey {
         val logged: List<AppScreens> = listOf(
             AppScreens.Home,
             Dashboard,
+            Settings,
             Profile,
             PrivacyAndTerms.TermsAndConditions,
             PrivacyAndTerms.PrivacyPolicy,
@@ -190,6 +193,13 @@ sealed interface AppScreens : ComposeRoute, NavKey {
             override val route: @Serializable ProfileAuth = this
             override val bottomBar: List<ComposeRoute> = listOf(ProfileProfile, ProfileAuth)
         }
+    }
+
+    @Serializable
+    data object Settings: AppScreens {
+        override val title: StringResource = Res.string.settings
+        override val icon: ImageVector = TablerIcons.Settings
+        override val route: @Serializable Settings = this
     }
 
     @Serializable

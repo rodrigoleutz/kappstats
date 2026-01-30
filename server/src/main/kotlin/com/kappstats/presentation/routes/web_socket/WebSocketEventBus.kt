@@ -26,16 +26,17 @@ object WebSocketEventBus : KoinComponent {
     private val systemMonitorUseCases by inject<SystemMonitorUseCases>()
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
+    private var oldDashboard: Dashboard? = null
 
     init {
         scope.launch {
-            systemMonitorUseCases.collectInfo.invoke().collect { systemMetrics ->
+            systemMonitorUseCases.collectInfo.invoke().collect { dashboard ->
                 if (wsData.dashboardConnections.isNotEmpty()) {
-                    val dashboard = Dashboard(
-                        linuxSystemMetrics = systemMetrics,
-                        currentDate = AppDateTime.now
-                    )
                     apiLog(dashboard, "DASHBOARD")
+                    val sendDelay = (dashboard.createdAt - (oldDashboard?.createdAt
+                        ?: AppDateTime.now)).inMilliseconds
+                    apiLog(sendDelay, "SEND DELAY")
+                    oldDashboard = dashboard
                     _dashboardMessages.emit(dashboard)
                 }
             }

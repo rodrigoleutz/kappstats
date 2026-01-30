@@ -6,6 +6,7 @@ import com.kappstats.presentation.screen.auth.SignViewModel
 import com.kappstats.presentation.screen.dashboard.DashboardViewModel
 import com.kappstats.presentation.screen.home.HomeViewModel
 import com.kappstats.presentation.screen.profile.ProfileViewModel
+import com.kappstats.presentation.screen.settings.SettingsViewModel
 import com.kappstats.presentation.screen.splash.SplashViewModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModel
@@ -18,4 +19,5 @@ val presentationModule = module {
     viewModel { SignViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { DashboardViewModel(get()) }
+    viewModel { SettingsViewModel() }
 }

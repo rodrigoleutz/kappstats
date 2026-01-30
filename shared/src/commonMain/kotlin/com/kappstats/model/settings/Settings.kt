@@ -1,14 +1,14 @@
-package com.kappstats.model.dashboard
+package com.kappstats.model.settings
 
 import com.kappstats.contracts.Model
 import com.kappstats.custom_object.app_date_time.AppDateTime
-import com.kappstats.model.system_metrics.LinuxSystemMetrics
-import kotlinx.serialization.Serializable
 
-@Serializable
-data class Dashboard(
+data class Settings(
     override val id: String,
-    val linuxSystemMetrics: LinuxSystemMetrics,
+    val authId: String,
+
     override val createdAt: AppDateTime = AppDateTime.now,
     override val updatedAt: List<AppDateTime> = emptyList()
-): Model
+) : Model {
+
+}

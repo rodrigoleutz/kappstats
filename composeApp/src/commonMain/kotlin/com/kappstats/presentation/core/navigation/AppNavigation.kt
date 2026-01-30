@@ -35,6 +35,8 @@ import com.kappstats.presentation.screen.privacy_and_terms.navigation.privacyAnd
 import com.kappstats.presentation.screen.profile.screen.ProfileProfileScreen
 import com.kappstats.presentation.screen.profile.ProfileViewModel
 import com.kappstats.presentation.screen.profile.navigation.profileNavigation
+import com.kappstats.presentation.screen.settings.SettingsScreen
+import com.kappstats.presentation.screen.settings.SettingsViewModel
 import com.kappstats.presentation.screen.splash.SplashScreen
 import com.kappstats.presentation.screen.splash.SplashViewModel
 import com.kappstats.presentation.util.exitApplication
@@ -129,6 +131,15 @@ fun AppNavigation() {
                     }
                     entry<AppScreens.Profile> {
                         navBackStack.replace(AppScreens.Profile.ProfileProfile)
+                    }
+                    entry<AppScreens.Settings> {
+                        val viewModel: SettingsViewModel = koinViewModel()
+                        val settingsUiState by viewModel.uiState.collectAsStateWithLifecycle()
+                        SettingsScreen(
+                            mainUiState = uiState,
+                            uiState = settingsUiState,
+                            onEvent = viewModel::onEvent
+                        )
                     }
                     entry<AppScreens.Splash> {
                         val viewModel: SplashViewModel = koinViewModel()
