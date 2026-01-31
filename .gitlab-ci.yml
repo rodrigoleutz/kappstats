@@ -13,7 +13,7 @@ test-job:
     TESTCONTAINERS_HOST_OVERRIDE: "docker"
     TESTCONTAINERS_RYUK_DISABLED: "true"
   before_script:
-    - apt-get update && apt-get install -y git docker.io libmesa-gl1 libegl1 libfontconfig1 libx11-6
+    - apt-get update && apt-get install -y git docker.io libmesa-gl1 libgl1 libfontconfig1 libx11-6
     - chmod +x runClean.sh
     - chmod +x runServerTest.sh
     - chmod +x runComposeAppTest.sh
