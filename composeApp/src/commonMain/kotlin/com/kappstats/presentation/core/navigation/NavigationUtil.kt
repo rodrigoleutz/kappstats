@@ -5,6 +5,6 @@ import androidx.navigation3.runtime.NavKey
 
 fun NavBackStack<NavKey>.replace(route: NavKey) {
     val lastIndex = this.lastIndex
-    if(lastIndex < 0) this.add(route)
+    if (lastIndex < 0) this.add(route)
     this[lastIndex] = route
 }

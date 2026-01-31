@@ -10,10 +10,12 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,20 +35,26 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun AppMonitorItemPart(
     appMonitor: AppMonitor,
+    swipeToDismissBoxState: SwipeToDismissBoxState,
     modifier: Modifier = Modifier,
-    swipeLeftToRight: (AppMonitor) -> Unit,
-    swipeRightToLeft: (AppMonitor) -> Unit
+    swipeLeftToRight: () -> Unit,
+    swipeRightToLeft: () -> Unit
 ) {
-    val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
     SwipeToDismissBox(
         state = swipeToDismissBoxState,
         backgroundContent = {
+            when (swipeToDismissBoxState.settledValue) {
+                SwipeToDismissBoxValue.StartToEnd -> swipeLeftToRight()
+                SwipeToDismissBoxValue.EndToStart -> swipeRightToLeft()
+                else -> {}
+            }
             val direction = swipeToDismissBoxState.dismissDirection
             if (direction == SwipeToDismissBoxValue.Settled) return@SwipeToDismissBox
             fun <T> config(edit: T, delete: T): T =
                 if (direction == SwipeToDismissBoxValue.StartToEnd) edit else delete
             Card(
-                modifier = Modifier.fillMaxSize().padding(AppDimensions.Medium.component),
+                modifier = Modifier.fillMaxSize().padding(AppDimensions.Medium.component)
+                    .then(modifier),
                 elevation = CardDefaults.cardElevation(
                     defaultElevation = AppDimensions.None.component
                 ),
@@ -60,7 +68,6 @@ fun AppMonitorItemPart(
                     horizontalAlignment = config(Alignment.Start, Alignment.End),
                     verticalArrangement = Arrangement.Center
                 ) {
-
                     Icon(
                         modifier = Modifier.padding(AppDimensions.Large.component),
                         imageVector = config(TablerIcons.Edit, TablerIcons.Trash),
@@ -76,7 +83,8 @@ fun AppMonitorItemPart(
         }
     ) {
         Card(
-            modifier = Modifier.fillMaxWidth().padding(AppDimensions.Medium.component),
+            modifier = Modifier.fillMaxWidth().padding(AppDimensions.Medium.component)
+                .then(modifier),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = AppDimensions.Medium.component
             )

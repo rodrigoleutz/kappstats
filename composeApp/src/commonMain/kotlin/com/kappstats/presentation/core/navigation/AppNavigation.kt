@@ -13,7 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -33,8 +32,6 @@ import com.kappstats.presentation.screen.home.HomeViewModel
 import com.kappstats.presentation.screen.message.MessageScreen
 import com.kappstats.presentation.screen.privacy_and_terms.PrivacyAndTermsScreen
 import com.kappstats.presentation.screen.privacy_and_terms.navigation.privacyAndTermsNavigation
-import com.kappstats.presentation.screen.profile.screen.ProfileProfileScreen
-import com.kappstats.presentation.screen.profile.ProfileViewModel
 import com.kappstats.presentation.screen.profile.navigation.profileNavigation
 import com.kappstats.presentation.screen.settings.SettingsScreen
 import com.kappstats.presentation.screen.settings.SettingsViewModel

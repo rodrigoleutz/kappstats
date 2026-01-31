@@ -33,6 +33,7 @@ import com.kappstats.resources.save
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.Close
+import compose.icons.evaicons.fill.Plus
 import compose.icons.evaicons.fill.Save
 import org.jetbrains.compose.resources.stringResource
 
@@ -82,10 +83,7 @@ fun AppsMonitorSetScreen(
                     label = stringResource(if (id.isNullOrBlank()) Res.string.clear else Res.string.cancel),
                     icon = EvaIcons.Fill.Close,
                     onClick = {
-                        if (id.isNullOrBlank()) {
-                            onEvent(AppsMonitorEvent.SetName(""))
-                            onEvent(AppsMonitorEvent.SetDescription(""))
-                        } else onClickCancel()
+                        onClickCancel()
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Red20,
@@ -96,7 +94,7 @@ fun AppsMonitorSetScreen(
                 ButtonComponent(
                     modifier = Modifier.weight(1f),
                     label = stringResource(if (id.isNullOrBlank()) Res.string.add else Res.string.save),
-                    icon = EvaIcons.Fill.Save,
+                    icon = if (id.isNullOrBlank()) EvaIcons.Fill.Plus else EvaIcons.Fill.Save,
                     onClick = {
                         onClickSave()
                     },

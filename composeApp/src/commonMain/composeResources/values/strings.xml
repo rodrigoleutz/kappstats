@@ -19,8 +19,10 @@
     <string name="current_password_required">Current password is required.</string>
     <string name="dashboard">Dashboard</string>
     <string name="delete">Delete</string>
+    <string name="delete_app_monitor">Delete %1$s app monitor?</string>
     <string name="description">Description</string>
     <string name="edit">Edit</string>
+    <string name="edit_app_monitor">Edit %1$s app monitor?</string>
     <string name="email">Email</string>
     <string name="empty_list">Empty List</string>
     <string name="error_auth_update">Auth update error.</string>

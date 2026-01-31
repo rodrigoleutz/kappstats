@@ -5,6 +5,8 @@
 [![Version](https://img.shields.io/badge/version-development-blue?style=flat-square)](VERSION)
 [![License](https://img.shields.io/badge/license-GPL%202.0-brightgreen.svg?style=flat-square)](LICENSE)
 ![GitLab Release](https://img.shields.io/gitlab/v/release/kappstats%2Fkmp)
+[![pipeline status](https://gitlab.com/kappstats/kmp/badges/main/pipeline.svg)](https://gitlab.com/kappstats/kmp/-/commits/main)
+
 
 # 📈 KAppStats
 
