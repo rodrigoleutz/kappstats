@@ -16,7 +16,6 @@ test-job:
     - apt-get update && apt-get install -y git docker.io libgl1 libfontconfig1 libx11-6
     - chmod +x runClean.sh
     - chmod +x runServerTest.sh
-    - chmod +x runComposeAppTest.sh
-    - chmod +x runTests.sh
   script:
-    - ./runTests.sh
+    - ./runClean.sh
+    - ./runServerTest.sh
