@@ -1,0 +1,4 @@
+services:
+  composeAppTestDocker:
+    image: eclipse-temurin:21-jdk
+    
