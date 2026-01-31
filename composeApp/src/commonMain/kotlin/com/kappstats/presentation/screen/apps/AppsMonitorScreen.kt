@@ -19,6 +19,7 @@ import com.kappstats.components.part.component.card.CardMessageComponent
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.domain.data_state.apps_monitor.AppsMonitorState
 import com.kappstats.presentation.core.state.MainUiState
+import com.kappstats.presentation.screen.apps.part.AppMonitorItemPart
 import com.kappstats.resources.Res
 import com.kappstats.resources.add
 import com.kappstats.resources.empty_list
@@ -57,7 +58,11 @@ fun AppsMonitorScreen(
                 contentPadding = mainUiState.paddingValues
             ) {
                 items(appsMonitorState.mapAppsMonitor.values.toList()) { item ->
-                    Text(text = item.toString())
+                    AppMonitorItemPart(
+                        appMonitor = item,
+                        swipeLeftToRight = {},
+                        swipeRightToLeft = {}
+                    )
                 }
             }
         }
