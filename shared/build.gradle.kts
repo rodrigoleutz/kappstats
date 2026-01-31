@@ -94,5 +94,12 @@ extensions.configure<KspExtension> {
 }
 
 tasks.withType<KspAATask>().configureEach {
+    val envFile = layout.projectDirectory.file(".env").asFile
+    if(!envFile.exists()) {
+        val envSample = layout.projectDirectory.file(".env-sample").asFile
+        if (!envFile.exists() && envSample.exists()) {
+            envSample.copyTo(envFile)
+        }
+    }
     inputs.file(layout.projectDirectory.file(".env"))
 }

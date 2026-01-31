@@ -10,7 +10,7 @@ group = "com.kappstats"
 version = "1.0.0"
 application {
     mainClass.set("com.kappstats.ApplicationKt")
-    
+
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
@@ -79,6 +79,13 @@ ksp {
 
 tasks.named<JavaExec>("run") {
     val envFile = file(".env")
+    if (!envFile.exists()) {
+        val envSample = layout.projectDirectory.file(".env-sample").asFile
+        if (!envFile.exists() && envSample.exists()) {
+            envSample.copyTo(envFile)
+        }
+        inputs.file(layout.projectDirectory.file(".env"))
+    }
     if (envFile.exists()) {
         val envVars = envFile.readLines()
             .mapNotNull { line ->
@@ -88,7 +95,6 @@ tasks.named<JavaExec>("run") {
                     key.trim() to value.trim()
                 } else null
             }.toMap()
-
         environment(envVars)
         println(".env loaded: (${envFile.absolutePath})")
     } else {

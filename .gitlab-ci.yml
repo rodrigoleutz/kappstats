@@ -5,6 +5,7 @@ test-job:
   stage: test-job
   image: eclipse-temurin:21-jdk
   before_script:
+    - apt-get update && apt-get install -y git
     - chmod +x runTests.sh
   script:
     - ./runTests.sh
