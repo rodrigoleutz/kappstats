@@ -41,61 +41,36 @@ fun AppMonitorItemPart(
     SwipeToDismissBox(
         state = swipeToDismissBoxState,
         backgroundContent = {
-            val swipe: Boolean? = when (swipeToDismissBoxState.dismissDirection) {
-                SwipeToDismissBoxValue.StartToEnd -> true
-                SwipeToDismissBoxValue.EndToStart -> false
-                SwipeToDismissBoxValue.Settled -> null
-            }
-            val alignment = when (swipe) {
-                true -> Alignment.Start
-                false -> Alignment.End
-                else -> Alignment.CenterHorizontally
-            }
-            val icon = when (swipe) {
-                true -> TablerIcons.Edit
-                false -> TablerIcons.Trash
-                else -> null
-            }
-            val contentDescription = when (swipe) {
-                true -> Res.string.edit
-                false -> Res.string.delete
-                else -> Res.string.error_unknown
-            }
-            val containerColor = when (swipe) {
-                true -> Green20
-                false -> Red20
-                else -> Color.Transparent
-            }
-            val contentColor = when (swipe) {
-                true -> Color.White
-                false -> Color.White
-                else -> Color.Transparent
-            }
-            swipe?.let {
-                Card(
-                    modifier = Modifier.fillMaxSize().padding(AppDimensions.Medium.component),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = AppDimensions.None.component
-                    ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = containerColor,
-                        contentColor = contentColor
-                    )
+            val direction = swipeToDismissBoxState.dismissDirection
+            if (direction == SwipeToDismissBoxValue.Settled) return@SwipeToDismissBox
+            fun <T> config(edit: T, delete: T): T =
+                if (direction == SwipeToDismissBoxValue.StartToEnd) edit else delete
+            Card(
+                modifier = Modifier.fillMaxSize().padding(AppDimensions.Medium.component),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = AppDimensions.None.component
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = config(Green20, Red20),
+                    contentColor = Color.White
+                )
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = config(Alignment.Start, Alignment.End),
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = alignment,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        icon?.let {
-                            Icon(
-                                modifier = Modifier.padding(AppDimensions.Large.component),
-                                imageVector = icon,
-                                contentDescription = stringResource(contentDescription)
-                            )
-                        }
-                    }
 
+                    Icon(
+                        modifier = Modifier.padding(AppDimensions.Large.component),
+                        imageVector = config(TablerIcons.Edit, TablerIcons.Trash),
+                        contentDescription = stringResource(
+                            config(
+                                Res.string.edit,
+                                Res.string.delete
+                            )
+                        )
+                    )
                 }
             }
         }
