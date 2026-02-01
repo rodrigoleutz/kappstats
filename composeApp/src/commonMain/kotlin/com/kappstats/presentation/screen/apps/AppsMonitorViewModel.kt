@@ -2,10 +2,13 @@ package com.kappstats.presentation.screen.apps
 
 import androidx.lifecycle.viewModelScope
 import com.kappstats.components.part.widget.snackbar.AppSnackbarVisuals
+import com.kappstats.domain.web_socket.actions.apps_monitor.AppsMonitorDeleteAction
 import com.kappstats.domain.web_socket.actions.apps_monitor.AppsMonitorAddAction
+import com.kappstats.domain.web_socket.actions.apps_monitor.AppsMonitorUpdateAction
 import com.kappstats.model.app.AppMonitor
 import com.kappstats.presentation.core.view_model.StateViewModel
 import com.kappstats.resources.Res
+import com.kappstats.resources.failure_delete
 import com.kappstats.resources.failure_load_data
 import com.kappstats.resources.failure_save_data
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,13 +61,19 @@ class AppsMonitorViewModel : StateViewModel() {
 
     fun delete(id: String) {
         viewModelScope.launch {
-
+            val response = AppsMonitorDeleteAction.send(id)
+            if (response.isNullOrBlank())
+                viewModelScope.launch {
+                    snackbarMessage(
+                        message = getString(Res.string.failure_delete),
+                        type = AppSnackbarVisuals.Type.Error
+                    )
+                }
         }
     }
 
     fun loadEdit(id: String) {
         viewModelScope.launch {
-
             val appMonitor = stateHolder.dataState.appsMonitor.value.mapAppsMonitor[id]
                 ?: run {
                     snackbarMessage(
@@ -80,6 +89,24 @@ class AppsMonitorViewModel : StateViewModel() {
                     description = appMonitor.description,
                     members = appMonitor.members
                 )
+            }
+        }
+    }
+
+    fun update(result: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            uiState.value.editAppMonitor?.let { edit ->
+                val appMonitorUpdate = edit.copy(
+                    name = uiState.value.name,
+                    description = uiState.value.description,
+                    members = uiState.value.members
+                )
+                val update = AppsMonitorUpdateAction.send(appMonitorUpdate)
+                if (update == null) snackbarMessage(
+                    message = getString(Res.string.failure_save_data),
+                    type = AppSnackbarVisuals.Type.Error
+                )
+                result(update != null)
             }
         }
     }

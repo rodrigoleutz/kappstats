@@ -41,6 +41,7 @@
     <string name="exit">Exit</string>
     <string name="failure_conflict">Conflict failure.</string>
     <string name="failure_database">Database failure.</string>
+    <string name="failure_delete">Delete failure.</string>
     <string name="failure_exception">Exception failure.</string>
     <string name="failure_load_data">Load data failure.</string>
     <string name="failure_network">Network failure.</string>

@@ -1,5 +1,6 @@
 package com.kappstats.presentation.screen.apps.navigation
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.EntryProviderScope
@@ -37,11 +38,9 @@ fun EntryProviderScope<NavKey>.appsMonitorNavigation(
     entry<AppScreens.AppsMonitor.Add> {
         val viewModel: AppsMonitorViewModel = koinViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-        val appsMonitorState by viewModel.appsMonitorState.collectAsStateWithLifecycle()
         AppsMonitorSetScreen(
             mainUiState = mainUiState,
             uiState = uiState,
-            appsMonitorState = appsMonitorState,
             onEvent = viewModel::onEvent,
             onClickSave = {
                 viewModel.add { result ->
@@ -58,16 +57,18 @@ fun EntryProviderScope<NavKey>.appsMonitorNavigation(
         val id = screen.id
         val viewModel: AppsMonitorViewModel = koinViewModel()
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-        val appsMonitorState by viewModel.appsMonitorState.collectAsStateWithLifecycle()
-        viewModel.loadEdit(id)
+        LaunchedEffect(Unit) {
+            viewModel.loadEdit(id)
+        }
         AppsMonitorSetScreen(
             mainUiState = mainUiState,
             uiState = uiState,
-            appsMonitorState = appsMonitorState,
             onEvent = viewModel::onEvent,
             id = id,
             onClickSave = {
-
+                viewModel.update { result ->
+                    if(result) navBackStack.removeLastOrNull()
+                }
             },
             onClickCancel = {
                 navBackStack.removeLastOrNull()

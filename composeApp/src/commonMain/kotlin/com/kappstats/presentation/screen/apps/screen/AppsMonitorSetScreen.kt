@@ -41,7 +41,6 @@ import org.jetbrains.compose.resources.stringResource
 fun AppsMonitorSetScreen(
     mainUiState: MainUiState,
     uiState: AppsMonitorUiState,
-    appsMonitorState: AppsMonitorState,
     onEvent: (AppsMonitorEvent) -> Unit,
     id: String? = null,
     modifier: Modifier = Modifier,
