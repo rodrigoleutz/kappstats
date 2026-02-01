@@ -9,41 +9,38 @@ import com.kappstats.dto.web_socket.WebSocketRequest
 import com.kappstats.dto.web_socket.WebSocketResponse
 import com.kappstats.dto.web_socket.WsAction
 import com.kappstats.dto.web_socket.WsActionBase
-import com.kappstats.model.app.AppMonitor
-import com.kappstats.util.IdGenerator
-import org.bson.types.ObjectId
 import org.koin.core.component.inject
 
 @WsAction
-object AppsMonitorAddAction : WebSocketContract<AppMonitor, AppMonitor?> {
+object AppsMonitorDeleteAction : WebSocketContract<String, String?> {
 
-    private val repository by inject<AppMonitorRepository>()
+    private val repository: AppMonitorRepository by inject()
 
-    override val base: WsActionBase<AppMonitor, AppMonitor?> =
-        WebSocketEvents.Authenticate.AppsMonitor.Add
+    override val base: WsActionBase<String, String?> =
+        WebSocketEvents.Authenticate.AppsMonitor.Delete
 
     override suspend fun WebSocketRequest.process(
         connectionInfo: ConnectionInfo,
-        data: AppMonitor?
+        data: String?
     ): WebSocketResponse? {
         return try {
             if (connectionInfo !is AuthConnectionInfo)
+                return this.toFailure(WebSocketResponse.Companion.FailureType.Conflict)
+            if (data.isNullOrBlank())
+                return this.toFailure(WebSocketResponse.Companion.FailureType.NoData)
+            val appMonitor = repository.generic.getById(data)
+                ?: return this.toFailure(WebSocketResponse.Companion.FailureType.LoadData)
+            if (appMonitor.owner != connectionInfo.profileId)
                 return this.toFailure(WebSocketResponse.Companion.FailureType.Unauthorized)
-            if (data == null) return this.toFailure(WebSocketResponse.Companion.FailureType.NoData)
-            val dataToAdd = data.copy(
-                id = ObjectId().toHexString(),
-                hashId = IdGenerator.generateHashingId,
-                owner = connectionInfo.profileId
-            )
-            val add = repository.generic.add(dataToAdd)
-                ?: return this.toFailure(WebSocketResponse.Companion.FailureType.SaveData)
+            val delete = repository.generic.deleteById(data)
+            if (!delete) return this.toFailure(WebSocketResponse.Companion.FailureType.Database)
             this.toSuccess(
-                data = add,
-                profileIdList = add.profileIdList
+                data = data,
+                profileIdList = appMonitor.profileIdList
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            this.toFailure(WebSocketResponse.Companion.FailureType.Unknown)
+            this.toFailure(WebSocketResponse.Companion.FailureType.Exception)
         }
     }
 }

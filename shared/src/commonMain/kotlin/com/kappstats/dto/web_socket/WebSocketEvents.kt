@@ -11,6 +11,7 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.PairSerializer
 import kotlinx.serialization.builtins.TripleSerializer
 import kotlinx.serialization.builtins.nullable
+import kotlinx.serialization.builtins.serializer
 
 object WebSocketEvents : WsActionBase<Any?, Any?>(null, "/web_socket", isAuth = false) {
 
@@ -31,11 +32,27 @@ object WebSocketEvents : WsActionBase<Any?, Any?>(null, "/web_socket", isAuth = 
                 isAuth = true
             )
 
-            object GetAll: WsActionBase<Any?, List<AppMonitor>>(
+            object Delete : WsActionBase<String, String?>(
+                parent = AppsMonitor,
+                command = "/delete",
+                inputSerializer = String.serializer(),
+                outputSerializer = String.serializer().nullable,
+                isAuth = true
+            )
+
+            object GetAll : WsActionBase<Any?, List<AppMonitor>>(
                 parent = AppsMonitor,
                 command = "/get_all",
                 inputSerializer = null,
                 outputSerializer = ListSerializer(AppMonitor.serializer()),
+                isAuth = true
+            )
+
+            object Update : WsActionBase<AppMonitor, AppMonitor?>(
+                parent = AppsMonitor,
+                command = "/update",
+                inputSerializer = AppMonitor.serializer(),
+                outputSerializer = AppMonitor.serializer().nullable,
                 isAuth = true
             )
 

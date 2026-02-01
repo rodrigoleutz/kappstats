@@ -15,4 +15,8 @@ data class AppMonitor(
     val members: Map<String, AppMemberType> = emptyMap(),
     override val createdAt: AppDateTime = AppDateTime.now,
     override val updatedAt: List<AppDateTime> = emptyList()
-): Model
+) : Model {
+
+    val profileIdList: List<String>
+        get() = listOf(owner) + members.keys
+}
