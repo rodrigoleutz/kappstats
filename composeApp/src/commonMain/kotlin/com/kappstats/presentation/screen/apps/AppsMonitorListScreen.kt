@@ -41,13 +41,14 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun AppsMonitorScreen(
+fun AppsMonitorListScreen(
     mainUiState: MainUiState,
     uiState: AppsMonitorUiState,
     appsMonitorState: AppsMonitorState,
     onEvent: (AppsMonitorEvent) -> Unit,
     onClickAdd: () -> Unit,
     onEdit: (String) -> Unit,
+    onClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var openDialog: Pair<Boolean, String?> by remember { mutableStateOf(false to null) }
@@ -89,6 +90,9 @@ fun AppsMonitorScreen(
                             isEdit = false
                             openDialog = true to item.id
                             currentSwipeToDismissBoxState = swipeToDismissBoxState
+                        },
+                        onClick = {
+                            onClick(item.id)
                         }
                     )
                 }

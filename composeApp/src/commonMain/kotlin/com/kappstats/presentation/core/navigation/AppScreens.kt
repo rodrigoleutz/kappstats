@@ -7,6 +7,7 @@ import com.kappstats.components.navigation.ComposeRoute
 import com.kappstats.resources.Res
 import com.kappstats.resources.add
 import com.kappstats.resources.apps_monitor
+import com.kappstats.resources.apps_monitor_info
 import com.kappstats.resources.auth
 import com.kappstats.resources.dashboard
 import com.kappstats.resources.edit
@@ -121,6 +122,15 @@ sealed interface AppScreens : ComposeRoute, NavKey {
             override val title: StringResource = Res.string.add
             override val icon: ImageVector = TablerIcons.CodePlus
             override val route: @Serializable Add = this
+        }
+
+        @Serializable
+        data class Info(val id: String): AppScreens {
+            override val title: StringResource
+                get() = Res.string.apps_monitor_info
+            override val icon: ImageVector
+                get() = TablerIcons.Apps
+            override val route: @Serializable Info = this
         }
 
         @Serializable

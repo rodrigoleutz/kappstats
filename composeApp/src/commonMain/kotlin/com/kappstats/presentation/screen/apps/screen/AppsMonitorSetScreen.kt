@@ -19,6 +19,7 @@ import com.kappstats.components.part.component.input.InputTextComponent
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Blue20
 import com.kappstats.components.theme.Red20
+import com.kappstats.components.theme.component_color.InputTextColors
 import com.kappstats.domain.data_state.apps_monitor.AppsMonitorState
 import com.kappstats.presentation.core.state.MainUiState
 import com.kappstats.presentation.screen.apps.AppsMonitorEvent
@@ -57,22 +58,29 @@ fun AppsMonitorSetScreen(
         Column(
             modifier = Modifier.fillMaxWidth().padding(AppDimensions.Medium.component)
         ) {
-            InputTextComponent(
-                modifier = Modifier.fillMaxWidth(),
-                label = stringResource(Res.string.name),
-                value = uiState.name,
-                onChange = {
-                    onEvent(AppsMonitorEvent.SetName(it))
-                }
-            )
-            InputTextComponent(
-                modifier = Modifier.fillMaxWidth(),
-                label = stringResource(Res.string.description),
-                value = uiState.description,
-                onChange = {
-                    onEvent(AppsMonitorEvent.SetDescription(it))
-                }
-            )
+            Spacer(modifier = Modifier.height(AppDimensions.ExtraLarge.component))
+            Column {
+                InputTextComponent(
+                    modifier = Modifier.fillMaxWidth(),
+                    label = stringResource(Res.string.name),
+                    value = uiState.name,
+                    onChange = {
+                        onEvent(AppsMonitorEvent.SetName(it))
+                    },
+                    colors = InputTextColors.outlinedInputTextColors(),
+                    maxLines = 1
+                )
+                InputTextComponent(
+                    modifier = Modifier.fillMaxWidth(),
+                    label = stringResource(Res.string.description),
+                    value = uiState.description,
+                    onChange = {
+                        onEvent(AppsMonitorEvent.SetDescription(it))
+                    },
+                    colors = InputTextColors.outlinedInputTextColors(),
+                    maxLines = 1
+                )
+            }
             Spacer(modifier = Modifier.height(AppDimensions.ExtraLarge.component))
             Row(
                 modifier = Modifier.fillMaxWidth()

@@ -19,6 +19,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import com.kappstats.components.theme.AppDimensions
 import com.kappstats.components.theme.Green20
 import com.kappstats.components.theme.Red20
@@ -38,7 +40,8 @@ fun AppMonitorItemPart(
     swipeToDismissBoxState: SwipeToDismissBoxState,
     modifier: Modifier = Modifier,
     swipeLeftToRight: () -> Unit,
-    swipeRightToLeft: () -> Unit
+    swipeRightToLeft: () -> Unit,
+    onClick: () -> Unit
 ) {
     SwipeToDismissBox(
         state = swipeToDismissBoxState,
@@ -84,10 +87,13 @@ fun AppMonitorItemPart(
     ) {
         Card(
             modifier = Modifier.fillMaxWidth().padding(AppDimensions.Medium.component)
-                .then(modifier),
+                .pointerHoverIcon(PointerIcon.Hand).then(modifier),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = AppDimensions.Medium.component
-            )
+            ),
+            onClick = {
+                onClick()
+            }
         ) {
             Column(
                 modifier = Modifier.padding(AppDimensions.Medium.component)
