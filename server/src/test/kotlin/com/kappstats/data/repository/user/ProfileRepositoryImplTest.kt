@@ -3,6 +3,7 @@ package com.kappstats.data.repository.user
 import com.kappstats.custom_object.username.Username
 import com.kappstats.data.data_source.entity.user.ProfileEntity
 import com.kappstats.data.data_source.remote.api.database.mongo.MongoApi
+import com.kappstats.data.data_source.remote.api.database.mongo.MongoDatabaseImpl
 import com.kappstats.test_util.container.MongoTestContainer
 import com.kappstats.model.user.Profile
 import kotlinx.coroutines.flow.toList
@@ -37,8 +38,9 @@ class ProfileRepositoryImplTest {
 
     @Test
     fun `Check index in collection`() = runTest {
-        val indexNames = profileRepository.generic.database.collection.listIndexes().toList()
-            .map { it.getString("name") }
+        val indexNames =
+            (profileRepository.generic.database as MongoDatabaseImpl)
+                .collection.listIndexes().toList().map { it.getString("name") }
         assertContains(indexNames, "${ProfileEntity::name.name}_1")
         assertContains(indexNames, "${ProfileEntity::username.name}_1")
     }

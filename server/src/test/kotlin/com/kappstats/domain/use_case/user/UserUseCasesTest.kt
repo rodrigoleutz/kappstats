@@ -5,6 +5,7 @@ import com.kappstats.custom_object.email.Email
 import com.kappstats.custom_object.password.Password
 import com.kappstats.custom_object.username.Username
 import com.kappstats.data.data_source.remote.api.database.mongo.MongoApi
+import com.kappstats.data.data_source.remote.api.database.mongo.MongoDatabaseImpl
 import com.kappstats.test_util.container.MongoTestContainer
 import com.kappstats.data.repository.user.AuthRepository
 import com.kappstats.data.repository.user.AuthRepositoryImpl
@@ -95,8 +96,8 @@ class UserUseCasesTest {
     }
 
     suspend fun clearDatabase() {
-        authRepository.generic.database.collection.deleteMany()
-        profileRepository.generic.database.collection.deleteMany()
+        (authRepository.generic.database as MongoDatabaseImpl).collection.deleteMany()
+        (profileRepository.generic.database as MongoDatabaseImpl).collection.deleteMany()
     }
 
     @Test

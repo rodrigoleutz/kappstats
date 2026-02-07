@@ -17,8 +17,7 @@ class AppMonitorRepositoryImpl(
     private val mongoApi: MongoApi
 ) : AppMonitorRepository {
 
-    private val database: Database<AppMonitorEntity> =
-        MongoDatabaseImpl(
+    private val database = MongoDatabaseImpl(
             api = mongoApi,
             clazz = AppMonitorEntity::class,
             TableIndex(

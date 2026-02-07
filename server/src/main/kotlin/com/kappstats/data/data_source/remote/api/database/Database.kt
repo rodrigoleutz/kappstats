@@ -5,7 +5,6 @@ import com.mongodb.kotlin.client.coroutine.MongoCollection
 import kotlin.reflect.KProperty1
 
 interface Database<T: Entity> {
-    val collection: MongoCollection<T>
     suspend fun add(item: T): T?
     suspend fun addMany(items: List<T>): List<T>?
     suspend fun getById(id: String, limit: Int = 100, skip: Int = 0): T?

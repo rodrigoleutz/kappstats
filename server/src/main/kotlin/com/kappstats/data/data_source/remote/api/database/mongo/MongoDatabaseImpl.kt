@@ -23,7 +23,7 @@ class MongoDatabaseImpl<T: Entity>(
     private vararg val indexes: TableIndex<T> = arrayOf(),
 ) : Database<T> {
 
-    override val collection: MongoCollection<T> =
+    val collection: MongoCollection<T> =
         api.database.getCollection(clazz.java.simpleName, clazz.java)
 
     init {
