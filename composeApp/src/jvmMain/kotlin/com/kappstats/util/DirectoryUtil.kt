@@ -1,6 +1,6 @@
 package com.kappstats.util
 
-import com.kappstats.constants.ORGANISATION
+import com.kappstats.constants.ORGANIZATION
 import com.kappstats.constants.PACKAGE_NAME
 import com.kappstats.constants.VERSION
 import kotlinx.io.files.Path
@@ -9,7 +9,7 @@ import net.harawata.appdirs.AppDirsFactory
 
 fun getLocalAppPath(): String {
     val filesDir =
-        AppDirsFactory.getInstance().getUserDataDir(PACKAGE_NAME, VERSION, ORGANISATION)
+        AppDirsFactory.getInstance().getUserDataDir(PACKAGE_NAME, VERSION, ORGANIZATION)
     with(SystemFileSystem) { if (!exists(Path(filesDir))) createDirectories(Path(filesDir)) }
     return filesDir
 }

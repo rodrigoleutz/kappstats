@@ -35,8 +35,17 @@ dependencies {
     implementation(libs.ktor.server.thymeleaf)
     implementation(libs.ktor.server.status.pages)
     implementation(libs.ktor.server.cors)
+    implementation(libs.ktor.server.swagger.ui)
+    implementation(libs.ktor.server.openapi)
+    implementation(libs.swagger.codegen)
+
+    // koin
     implementation(libs.koin.ktor)
+
+    // slf4j
     implementation(libs.koin.logger.slf4j)
+
+    // MongoDB
     implementation(platform(libs.mongodb.driver.bom))
     implementation(libs.mongodb.driver.kotlin.coroutine)
     implementation(libs.bson.kotlin)
