@@ -27,6 +27,7 @@ Para entender partes específicas do sistema, consulte os seguintes guias:
    em tempo real e a definição de `Actions` no módulo `shared`.
 3. **[Autenticação](agents/auth.md)**: Como o fluxo de JWT e autenticação via WebSocket está
    implementado.
+4. **[Swagger e API REST](agents/swagger.md)**: Documentação dos endpoints HTTP disponíveis.
 
 ## Como as Actions funcionam
 

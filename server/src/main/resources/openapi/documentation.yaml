@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  title: KAppStats API
+  description: API para coleta de métricas e estatísticas do KAppStats.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/v1
+    description: Servidor Local
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    SignInRequest:
+      type: object
+      required:
+        - email
+        - password
+        - platform
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        platform:
+          $ref: '#/components/schemas/PlatformData'
+    SignUpRequest:
+      type: object
+      required:
+        - email
+        - password
+        - name
+        - username
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        name:
+          type: string
+        username:
+          type: string
+    PlatformData:
+      type: object
+      properties:
+        os:
+          type: string
+        version:
+          type: string
+        model:
+          type: string
+paths:
+  /user/authenticate:
+    get:
+      summary: Verifica se o token JWT é válido
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Autenticado com sucesso
+        '401':
+          description: Não autorizado
+  /user/sign_in:
+    post:
+      summary: Realiza o login do usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+      responses:
+        '200':
+          description: Login realizado com sucesso
+        '401':
+          description: Credenciais inválidas
+  /user/sign_up:
+    post:
+      summary: Realiza o cadastro de um novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpRequest'
+      responses:
+        '201':
+          description: Usuário criado com sucesso
+        '400':
+          description: Dados inválidos
+  /user/has_username:
+    get:
+      summary: Verifica se um nome de usuário já existe
+      parameters:
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Nome de usuário inválido
+  /app_monitor/test:
+    get:
+      summary: Rota de teste para AppMonitor
+      responses:
+        '200':
+          description: OK
