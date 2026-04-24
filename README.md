@@ -2,6 +2,13 @@
 
 ---
 
+> [!IMPORTANT]
+> **Status do Projeto:** Este repositório não está mais sob desenvolvimento ativo devido à falta de manutenção e novos contribuidores.
+>
+> **Project Status:** This repository is no longer under active development due to a lack of maintenance and new contributors.
+
+---
+
 [![Version](https://img.shields.io/badge/version-development-blue?style=flat-square)](VERSION)
 [![License](https://img.shields.io/badge/license-GPL%202.0-brightgreen.svg?style=flat-square)](LICENSE)
 ![GitLab Release](https://img.shields.io/gitlab/v/release/kappstats%2Fkmp)
